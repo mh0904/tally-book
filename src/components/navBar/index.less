@@ -1,0 +1,34 @@
+.nav-bar {
+  background-color: @background-title;
+  height: 50px;
+  display: flex;
+  gap: 10px;
+  padding-left: 10px;
+  span {
+    color: @text-color;
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    line-height: 50px;
+    transition: color 0.3s ease;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: @primary-color;
+      transition: width 0.3s ease;
+    }
+  }
+  span:hover {
+    color: @primary-color;
+  }
+  .active {
+    &::after {
+      width: 100%; /* 下划线展开至全长 */
+    }
+  }
+}
