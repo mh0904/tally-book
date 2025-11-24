@@ -1,9 +1,20 @@
-// 1. 交易类型字段（收入/支出）
+// 记录方式
+export const recordMode = {
+  label: '记录方式',
+  key: 'mode',
+  options: [
+    { value: 'batch', label: '批量记录' },
+    { value: 'single', label: '单项记录' },
+  ],
+  defaultValue: 'batch',
+  description: '增加批量记录，提升效率',
+}
+
+// 交易类型字段
 export const transactionTypeField = {
   key: 'type',
   label: '交易类型',
   options: [
-    // 可选值列表
     { value: 'income', label: '收入' },
     { value: 'expense', label: '支出' },
   ],
@@ -11,7 +22,7 @@ export const transactionTypeField = {
   description: '区分交易是收入还是支出',
 }
 
-// 2. 交易分类字段（扩展功能，可选）
+// 交易分类字段（扩展功能，可选）
 export const transactionCategoryField = {
   key: 'category',
   label: '交易分类',
@@ -27,7 +38,7 @@ export const transactionCategoryField = {
   description: '交易的具体分类，便于统计',
 }
 
-// 3. 金额字段（带约束的数值字段）
+// 金额字段（带约束的数值字段）
 export const amountField = {
   key: 'amount',
   label: '交易金额',
@@ -43,4 +54,5 @@ export const transactionFields = {
   transactionTypeField,
   transactionCategoryField,
   amountField,
+  recordMode,
 }

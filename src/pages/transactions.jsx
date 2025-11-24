@@ -16,7 +16,8 @@ const Transactions = () => {
         {transactions?.map((item) => (
           <li key={item.id}>
             {item.date}：{item.description}（
-            {item.type === 'income' ? '收入' : '支出'} {item.amount}元）
+            {item.type === 'income' ? '收入' : '支出'} {item.amount}元） 分类：
+            {item.classification}
           </li>
         ))}
       </ul>
