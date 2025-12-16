@@ -1,22 +1,6 @@
 {
   "transactions": [
     {
-      "describe": "拼多多",
-      "amount": 9.5,
-      "date": "2025-12-16",
-      "type": "expense",
-      "id": "1765872749944957",
-      "createdAt": 1765872749944
-    },
-    {
-      "describe": "牛奶",
-      "amount": 17.8,
-      "date": "2025-12-16",
-      "type": "expense",
-      "id": "1765872749944246",
-      "createdAt": 1765872749944
-    },
-    {
       "describe": "桌垫",
       "amount": 8,
       "date": "2025-12-16",
@@ -25,36 +9,82 @@
       "createdAt": 1765872749944
     },
     {
+      "describe": "拖把布",
+      "amount": 6.45,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765872749944804",
+      "createdAt": 1765872749944,
+      "mode": "single",
+      "classification": "transport",
+      "updatedAt": 1765872940105
+    },
+    {
+      "describe": "拼多多",
+      "amount": 9.5,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765874358382310",
+      "createdAt": 1765874358382
+    },
+    {
       "describe": "牛奶",
       "amount": 17.8,
       "date": "2025-12-16",
       "type": "expense",
-      "id": "1765872749944779",
-      "createdAt": 1765872749944
+      "id": "1765874358382700",
+      "createdAt": 1765874358382
     },
     {
-      "describe": "榴莲",
+      "describe": "桌垫",
+      "amount": 8,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765874358382018",
+      "createdAt": 1765874358382
+    },
+    {
+      "describe": "牛奶",
+      "amount": 17.8,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765874358382408",
+      "createdAt": 1765874358382
+    },
+    {
+      "describe": "榴莲9999",
       "amount": 111.4,
       "date": "2025-12-16",
       "type": "expense",
-      "id": "1765872749944244",
-      "createdAt": 1765872749944
+      "id": "1765874358382828",
+      "createdAt": 1765874358382,
+      "mode": "single",
+      "classification": "other",
+      "updatedAt": 1765876378857
     },
     {
       "describe": "香蕉",
       "amount": 3.6,
       "date": "2025-12-16",
       "type": "expense",
-      "id": "1765872749944547",
-      "createdAt": 1765872749944
+      "id": "1765874358382778",
+      "createdAt": 1765874358382
     },
     {
       "describe": "拖把布",
       "amount": 6.45,
       "date": "2025-12-16",
       "type": "expense",
-      "id": "1765872749944804",
-      "createdAt": 1765872749944
+      "id": "1765874358382266",
+      "createdAt": 1765874358382
+    },
+    {
+      "describe": "多多买菜",
+      "amount": 28.72,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765874358382800",
+      "createdAt": 1765874358382
     }
   ]
 }

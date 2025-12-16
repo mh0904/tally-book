@@ -3,6 +3,11 @@ const { getMonthData, writeMonthData, DATA_DIR } = require('./fileHelper')
 const { generateId } = require('./idGenerator')
 const fs = require('fs')
 
+// ⚠️ 确保安装 dayjs 和 isBetween 插件
+const dayjs = require('dayjs')
+const isBetween = require('dayjs/plugin/isBetween')
+dayjs.extend(isBetween)
+
 /**
  * 验证数据中是否存在 date 字段。
  * @param {object} data - 交易数据对象。
@@ -46,16 +51,37 @@ const processTransaction = (item, transactions) => {
   return newItem
 }
 
-// --- 数据查找函数 ---
-
 /**
- * 【优化】获取所有交易数据 (注意：在大数据量下会影响性能)。
- * @returns {Array} 所有交易记录的扁平数组。
+ * 【核心查询函数】获取所有交易记录，支持按查询参数进行筛选，并聚合文件系统数据。
+ *
+ * @param {object} params - 查询参数对象。
+ * @param {string} params.startDate - 开始日期 (YYYY-MM-DD)。
+ * @param {string} params.endDate - 结束日期 (YYYY-MM-DD)。
+ * @param {string} params.type - 交易类型。
+ * @param {string} params.classification - 交易分类。
+ * @param {string} params.describe - 描述关键词。
+ * @returns {Array} 筛选后的交易记录数组。
  */
-const getAllTransactions = () => {
-  const allTransactions = []
 
-  // 优化：使用 try-catch 处理 DATA_DIR 不存在的情况
+const getAllTransactions = (params = {}) => {
+  const allTransactions = []
+  const { startDate, endDate, type, classification, describe } = params
+
+  console.log(888888, params)
+
+  // 预先计算需要检查的月份文件，用于性能优化
+  let requiredMonths = new Set()
+  if (startDate && endDate) {
+    let current = dayjs(startDate).startOf('month')
+    const end = dayjs(endDate).startOf('month')
+
+    // 遍历 startDate 和 endDate 之间的所有月份
+    while (current.isBefore(end) || current.isSame(end)) {
+      requiredMonths.add(current.format('YYYY-MM'))
+      current = current.add(1, 'month')
+    }
+  }
+
   try {
     const files = fs
       .readdirSync(DATA_DIR)
@@ -63,14 +89,62 @@ const getAllTransactions = () => {
 
     for (const file of files) {
       const monthKey = file.replace('.json', '')
-      // 优化：如果 monthData 存在且 transactions 是数组才进行合并
+
+      // 优化 1: 如果提供了日期范围，只读取相关月份的文件
+      if (requiredMonths.size > 0 && !requiredMonths.has(monthKey)) {
+        continue // 跳过不必要的月份文件读取
+      }
+
       const monthData = getMonthData(monthKey)
+
       if (monthData && Array.isArray(monthData.transactions)) {
-        allTransactions.push(...monthData.transactions)
+        // 筛选该月份的交易记录
+        const filteredMonthTransactions = monthData.transactions.filter(
+          (item) => {
+            let isMatch = true
+
+            // --- 日期范围筛选 ---
+            if (startDate && endDate) {
+              const itemDate = dayjs(item.date)
+              const start = dayjs(startDate)
+              // [) 半开区间，确保 endDate 当天包含
+              isMatch =
+                isMatch &&
+                itemDate.isBetween(
+                  start,
+                  dayjs(endDate).add(1, 'day'),
+                  'day',
+                  '[)'
+                )
+            }
+
+            // --- 交易类型筛选 ---
+            if (type) {
+              isMatch = isMatch && item.type === type
+            }
+
+            // --- 交易分类筛选 ---
+            if (classification) {
+              isMatch = isMatch && item.classification === classification
+            }
+
+            // --- 描述关键词筛选 (模糊匹配) ---
+            if (describe) {
+              const lowerCaseDescribe = describe.toLowerCase()
+              isMatch =
+                isMatch &&
+                item.describe &&
+                item.describe.toLowerCase().includes(lowerCaseDescribe)
+            }
+
+            return isMatch
+          }
+        )
+
+        allTransactions.push(...filteredMonthTransactions)
       }
     }
   } catch (e) {
-    // 如果目录不存在，返回空数组而不是崩溃
     if (e.code === 'ENOENT') {
       console.warn(`数据目录 ${DATA_DIR} 不存在，返回空数据。`)
       return []

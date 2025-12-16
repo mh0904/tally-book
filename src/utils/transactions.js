@@ -1,8 +1,8 @@
 import request from './request'
 
 // 获取所有记录
-export const getAllTransactions = () => {
-  return request.get('/transactions')
+export const getAllTransactions = (data) => {
+  return request.get('/transactions', { params: data })
 }
 
 // 获取单条记录（根据 ID）

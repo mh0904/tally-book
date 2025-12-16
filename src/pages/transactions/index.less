@@ -1,3 +1,27 @@
 .transaction {
   padding: 10px;
+  // 针对查询表单的折行间距优化
+  .search-form-wrap {
+    .ant-form-item {
+      // 增加 Form.Item 元素右侧和底部的外边距，以在折行时创建间隙
+      margin-right: 24px; // 控制水平间距
+      margin-bottom: 16px; // 控制垂直间距（折行时的行间距）
+    }
+
+    // Ant Design 的 inline 布局默认使用 flex，这里可以确保它生效
+    display: flex;
+    flex-wrap: wrap; // 确保元素在空间不足时折行
+  }
+
+  // 如果需要更严格地控制 Form.Item 内部的 Space/Button 间距
+  .ant-row.ant-form-item-row {
+    .ant-form-item-control {
+      // 如果查询按钮组使用了 Space，确保间距一致
+      .ant-space {
+        .ant-btn {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
 }

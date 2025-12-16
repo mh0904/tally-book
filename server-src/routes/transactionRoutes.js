@@ -35,13 +35,61 @@ const setupTransactionRoutes = (server) => {
     }
   })
 
-  // 查询所有交易
+  // 查询所有交易（已改造，支持筛选）
   server.get('/transactions', (req, res) => {
     try {
-      const allTransactions = getAllTransactions()
+      // 1. 获取所有原始数据
+      const allTransactions = getAllTransactions(req.query)
+      // 2. 从请求中获取查询参数
+      const params = req.query
+      const { startDate, endDate, type, classification, describe } = params
+      let filteredTransactions = allTransactions
+      // 3. 应用筛选逻辑
+      if (Object.keys(params).length > 0) {
+        filteredTransactions = allTransactions.filter((item) => {
+          let isMatch = true
+          // --- 日期范围筛选 ---
+          if (startDate && endDate) {
+            const itemDate = dayjs(item.date)
+            const start = dayjs(startDate)
+            // 使用 isBetween，确保 endDate 当天的数据也包含在内 (半开区间)
+            isMatch =
+              isMatch &&
+              itemDate.isBetween(
+                start,
+                dayjs(endDate).add(1, 'day'),
+                'day',
+                '[)'
+              )
+          }
+
+          // --- 交易类型筛选 ---
+          if (type) {
+            isMatch = isMatch && item.type === type
+          }
+
+          // --- 交易分类筛选 ---
+          if (classification) {
+            isMatch = isMatch && item.classification === classification
+          }
+
+          // --- 描述关键词筛选 (模糊匹配) ---
+          if (describe) {
+            const lowerCaseDescribe = describe.toLowerCase()
+            isMatch =
+              isMatch &&
+              item.describe &&
+              item.describe.toLowerCase().includes(lowerCaseDescribe)
+          }
+
+          return isMatch
+        })
+      }
+
+      // 4. 返回筛选后的数据
       res.json({
         code: 200,
-        data: allTransactions,
+        data: filteredTransactions,
         msg: '查询交易成功',
       })
     } catch (error) {
