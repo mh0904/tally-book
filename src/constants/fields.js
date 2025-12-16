@@ -49,10 +49,3 @@ export const amountField = {
   unit: '元', // 单位
   description: '交易的具体金额，支持两位小数',
 }
-
-export const transactionFields = {
-  transactionTypeField,
-  transactionCategoryField,
-  amountField,
-  recordMode,
-}

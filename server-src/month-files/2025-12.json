@@ -1,0 +1,22 @@
+{
+  "transactions": [
+    {
+      "mode": "single",
+      "date": "2025-12-16",
+      "type": "expense",
+      "classification": "food",
+      "amount": 23,
+      "describe": "新增一条测试",
+      "id": "1765867575629954"
+    },
+    {
+      "mode": "single",
+      "date": "2025-12-16",
+      "type": "expense",
+      "classification": "food",
+      "amount": 23,
+      "describe": "新增一条测试",
+      "id": "1765867583450011"
+    }
+  ]
+}

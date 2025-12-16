@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // 导入页面组件
 import Home from './pages/home'
-import Transactions from './pages/transactions'
-import AddTransaction from './pages/addTransaction/index'
+import Transactions from './pages/transactions/index.jsx'
+import AddTransaction from './pages/addTransaction/index.jsx'
 // 导入导航栏
 import Navbar from './components/navBar'
 

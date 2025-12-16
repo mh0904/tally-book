@@ -9,11 +9,11 @@ let linkList = [
     link: '/',
   },
   {
-    title: '记账记录',
+    title: '账单',
     link: '/transactions',
   },
   {
-    title: '添加记录',
+    title: '111',
     link: '/add',
   },
 ]

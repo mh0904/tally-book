@@ -6,12 +6,15 @@ const request = axios.create({
   timeout: 5000, // 请求超时时间（5秒）
   headers: {
     'Content-Type': 'application/json', // 默认请求头
+    Accept: 'application/json',
   },
+  transformRequest: [(data) => JSON.stringify(data)],
 })
 
 // 请求拦截器（发送请求前处理）
 request.interceptors.request.use(
   (config) => {
+    console.log('请求体:', config.data)
     // 可在此添加 token 等公共参数
     // 例如：config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
     return config

@@ -1,29 +1,31 @@
 import request from './request'
 
-// 记账记录相关接口
-export const transactionApi = {
-  // 获取所有记录
-  getAllTransactions: () => {
-    return request.get('/transactions') //
-  },
+// 获取所有记录
+export const getAllTransactions = () => {
+  return request.get('/transactions')
+}
 
-  // 获取单条记录（根据 ID）
-  getTransactionsById: (id) => {
-    return request.get(`/transactions/${id}`)
-  },
+// 获取单条记录（根据 ID）
+export const getTransactionsById = (id) => {
+  return request.get(`/transactions/${id}`)
+}
 
-  // 添加新记录
-  addTransactions: (data) => {
-    return request.post('/transactions', data)
-  },
+// 添加新记录
+export const addTransactions = (data) => {
+  return request.post('/transactions', data)
+}
 
-  // 更新记录
-  updateTransactions: (id, data) => {
-    return request.put(`/transactions/${id}`, data)
-  },
+// 批量添加记录
+export const batchAddTransactions = (dataList) => {
+  return request.post('/transactions/batch', dataList)
+}
 
-  // 删除记录
-  deleteTransactions: (id) => {
-    return request.delete(`/transactions/${id}`)
-  },
+// 更新记录
+export const updateTransactions = (id, data) => {
+  return request.put(`/transactions/${id}`, data)
+}
+
+// 删除记录
+export const deleteTransactions = (id) => {
+  return request.delete(`/transactions/${id}`)
 }

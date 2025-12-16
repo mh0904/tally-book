@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm run react-start\" \"npm run server\"",
     "react-start": "set PORT=3333 && craco start",
-    "server": "json-server --watch db.json --port 5000",
+    "server": "nodemon server-src/index.js",
     "build": "craco build"
   },
   "repository": {
@@ -22,6 +22,7 @@
   "dependencies": {
     "antd": "^5.29.1",
     "axios": "^1.13.2",
+    "json-server": "^0.17.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.26.0"
@@ -31,9 +32,9 @@
     "concurrently": "^9.2.1",
     "craco-less": "^3.0.1",
     "http-proxy-middleware": "^3.0.5",
-    "json-server": "^1.0.0-beta.3",
     "less": "^4.4.2",
     "less-loader": "^12.3.0",
+    "nodemon": "^3.1.11",
     "react-scripts": "^5.0.1"
   },
   "browserslist": {
