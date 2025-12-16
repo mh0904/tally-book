@@ -249,6 +249,79 @@ const deleteTransaction = (id) => {
 
 // --- 统一导出 ---
 
+/**
+ * 导出所有交易数据
+ * @returns {Object} 包含所有交易数据的对象
+ */
+const exportAllTransactions = () => {
+  const allData = {};
+  const files = fs
+    .readdirSync(DATA_DIR)
+    .filter((file) => file.endsWith('.json'));
+
+  for (const file of files) {
+    const monthKey = file.replace('.json', '');
+    const monthData = getMonthData(monthKey);
+    allData[monthKey] = monthData;
+  }
+
+  return allData;
+};
+
+/**
+ * 导入交易数据
+ * @param {Object} data - 要导入的交易数据，格式与导出的相同
+ * @returns {Object} 导入结果
+ */
+const importTransactions = (data) => {
+  let importedCount = 0;
+  let errorCount = 0;
+
+  try {
+    // 遍历每个月份的数据
+    for (const [monthKey, monthData] of Object.entries(data)) {
+      if (monthData.transactions && Array.isArray(monthData.transactions)) {
+        // 获取目标月份现有的数据
+        const existingData = getMonthData(monthKey);
+        const existingTransactions = existingData.transactions || [];
+        
+        // 处理新数据并添加到现有数据中
+        for (const transaction of monthData.transactions) {
+          try {
+            // 验证必要字段
+            if (transaction.date && transaction.amount && transaction.type) {
+              // 为导入的数据生成新的ID，避免冲突
+              const processedItem = processTransaction(transaction, existingTransactions);
+              existingTransactions.push(processedItem);
+              importedCount++;
+            } else {
+              errorCount++;
+            }
+          } catch (error) {
+            errorCount++;
+            console.error(`导入交易失败: ${error.message}`);
+          }
+        }
+        
+        // 写入更新后的数据
+        writeMonthData(monthKey, { transactions: existingTransactions });
+      }
+    }
+
+    return {
+      success: true,
+      imported: importedCount,
+      errors: errorCount
+    };
+  } catch (error) {
+    console.error(`导入数据失败: ${error.message}`);
+    return {
+      success: false,
+      message: error.message
+    };
+  }
+};
+
 module.exports = {
   validateDateField,
   extractMonthKey,
@@ -257,4 +330,6 @@ module.exports = {
   findTransactionLocation, // 新增：可供其他 helper 使用
   updateTransaction, // 关键：新增的更新逻辑
   deleteTransaction, // 新增：删除逻辑
+  exportAllTransactions, // 新增：导出所有数据
+  importTransactions // 新增：导入数据
 }

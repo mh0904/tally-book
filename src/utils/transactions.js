@@ -29,3 +29,13 @@ export const updateTransactions = (id, data) => {
 export const deleteTransactions = (id) => {
   return request.delete(`/transactions/${id}`)
 }
+
+// 导出所有数据
+export const exportAllTransactions = () => {
+  return request.get('/transactions/export')
+}
+
+// 导入数据
+export const importTransactions = (data) => {
+  return request.post('/transactions/import', data)
+}

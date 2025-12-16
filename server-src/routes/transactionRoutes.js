@@ -6,6 +6,8 @@ const {
   getAllTransactions,
   updateTransaction,
   deleteTransaction,
+  exportAllTransactions,
+  importTransactions,
 } = require('../utils/transactionHelper')
 
 // 处理交易相关路由
@@ -210,6 +212,61 @@ const setupTransactionRoutes = (server) => {
         code: 500,
         data: null,
         msg: `删除失败：${error.message}`,
+      })
+    }
+  })
+
+  // 导出所有交易数据
+  server.get('/transactions/export', (req, res) => {
+    try {
+      const allData = exportAllTransactions()
+      res.json({
+        code: 200,
+        data: allData,
+        msg: '数据导出成功'
+      })
+    } catch (error) {
+      console.error('导出数据失败:', error)
+      res.status(500).json({
+        code: 500,
+        data: null,
+        msg: `导出数据失败：${error.message}`
+      })
+    }
+  })
+
+  // 导入交易数据
+  server.post('/transactions/import', (req, res) => {
+    try {
+      const importData = req.body
+      if (!importData || typeof importData !== 'object') {
+        return res.status(400).json({
+          code: 400,
+          data: null,
+          msg: '导入数据格式错误'
+        })
+      }
+
+      const result = importTransactions(importData)
+      if (result.success) {
+        res.json({
+          code: 200,
+          data: null,
+          msg: `数据导入成功，共导入 ${result.imported} 条记录，${result.errors} 条记录导入失败`
+        })
+      } else {
+        res.status(500).json({
+          code: 500,
+          data: null,
+          msg: `数据导入失败: ${result.message}`
+        })
+      }
+    } catch (error) {
+      console.error('导入数据失败:', error)
+      res.status(500).json({
+        code: 500,
+        data: null,
+        msg: `导入数据失败：${error.message}`
       })
     }
   })

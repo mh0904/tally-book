@@ -11,7 +11,11 @@ import {
   Select,
   Radio,
   Modal,
+  message,
+  Upload,
 } from 'antd'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import * as XLSX from 'xlsx'
 const { RangePicker } = DatePicker
 import {
   recordMode,
@@ -25,6 +29,8 @@ import {
   getAllTransactions,
   updateTransactions,
   deleteTransactions,
+  exportAllTransactions,
+  importTransactions,
 } from '../../utils/transactions'
 const dateFormat = 'YYYY-MM-DD'
 
@@ -37,6 +43,8 @@ const Transactions = () => {
   const [searchForm] = Form.useForm() // 用于查询的表单
   const mode = Form.useWatch('mode', form)
   const [searchParams, setSearchParams] = useState({})
+  const [importModalVisible, setImportModalVisible] = useState(false)
+  const [importFile, setImportFile] = useState(null)
 
   const columns = [
     {
@@ -94,10 +102,12 @@ const Transactions = () => {
     try {
       const { code, data } = await getAllTransactions(params)
       if (code === 200) {
-        setTransactions(data)
+        // 确保data是数组类型
+        setTransactions(Array.isArray(data) ? data : [])
       }
     } catch (error) {
-      console.log('获取交易记录失败:', error)
+      console.error('获取数据失败:', error)
+      message.error('获取数据失败')
     }
   }, [])
 
@@ -263,6 +273,202 @@ const Transactions = () => {
     }
   }
 
+  {/* 导出数据函数 */}
+  const handleExport = async () => {
+    try {
+      // 使用当前查询到的数据（transactions状态）而不是调用API获取全部数据
+      const allTransactions = transactions
+      
+      // 检查是否有数据可导出
+      if (allTransactions.length === 0) {
+        message.info('没有数据可以导出')
+        return
+      }
+      
+      // 准备Excel数据，将对象数组转换为适合Excel的格式
+      const excelData = allTransactions.map(item => ({
+        'ID': item.id,
+        '日期': item.date,
+        '类型': item.type === 1 ? '支出' : '收入',
+        '分类': item.classification,
+        '金额': item.amount,
+        '描述': item.describe
+      }))
+      
+      // 创建工作簿和工作表
+      const worksheet = XLSX.utils.json_to_sheet(excelData)
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, '交易记录')
+      
+      // 设置列宽
+      worksheet['!cols'] = [
+        { wch: 20 }, // ID列宽
+        { wch: 15 }, // 日期列宽
+        { wch: 10 }, // 类型列宽
+        { wch: 15 }, // 分类列宽
+        { wch: 15 }, // 金额列宽
+        { wch: 50 }  // 描述列宽
+      ]
+      
+      // 设置所有单元格居中对齐
+      // 获取工作表中的范围
+      const range = XLSX.utils.decode_range(worksheet['!ref'])
+      
+      // 定义居中对齐样式
+      const centerAlignment = {
+        alignment: {
+          horizontal: 'center',
+          vertical: 'center'
+        }
+      }
+      
+      // 为每个单元格应用居中样式
+      for (let R = range.s.r; R <= range.e.r; ++R) {
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+          const cellAddress = XLSX.utils.encode_cell({ r: R, c: C })
+          if (!worksheet[cellAddress]) {
+            worksheet[cellAddress] = { v: '' }
+          }
+          worksheet[cellAddress].s = centerAlignment
+        }
+      }
+      
+      // 生成Excel文件并下载
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+      const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `transactions_${new Date().toISOString().slice(0, 10)}.xlsx`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      message.success('数据导出成功')
+    } catch (error) {
+      console.error('导出数据失败:', error)
+      message.error('数据导出失败')
+    }
+  }
+
+  {/* 导入数据模态框函数 */}
+  const handleImportModal = () => {
+    setImportModalVisible(true)
+  }
+
+  {/* 处理文件上传 */}
+  const handleFileUpload = (file) => {
+    const isJSON = file.type === 'application/json' || file.name.endsWith('.json')
+    const isExcel = file.name.endsWith('.xlsx') || file.name.endsWith('.xls')
+    
+    if (!isJSON && !isExcel) {
+      message.error('请选择 JSON 或 Excel 文件')
+      return false
+    }
+    setImportFile(file)
+    return false // 返回 false 阻止自动上传
+  }
+
+  {/* 导入数据函数 */}
+  const handleImport = async () => {
+    if (!importFile) {
+      message.error('请选择要导入的文件')
+      return
+    }
+
+    try {
+      const reader = new FileReader()
+      
+      // 检查文件类型
+      if (importFile.name.endsWith('.json')) {
+        // 处理JSON文件
+        reader.readAsText(importFile)
+        reader.onload = async (e) => {
+          try {
+            const data = JSON.parse(e.target.result)
+            const response = await importTransactions(data)
+            if (response.code === 200) {
+              message.success('数据导入成功')
+              setImportModalVisible(false)
+              setImportFile(null)
+              await fetchTransactions(searchParams) // 刷新列表
+            } else {
+              message.error(`数据导入失败：${response.msg}`)
+            }
+          } catch (error) {
+            console.error('解析 JSON 文件失败:', error)
+            message.error('JSON 文件格式错误')
+          }
+        }
+      } else if (importFile.name.endsWith('.xlsx') || importFile.name.endsWith('.xls')) {
+        // 处理Excel文件
+        reader.readAsArrayBuffer(importFile)
+        reader.onload = async (e) => {
+          try {
+            // 解析Excel文件
+            const workbook = XLSX.read(e.target.result, { type: 'array' })
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+            const excelData = XLSX.utils.sheet_to_json(worksheet)
+            
+            // 转换数据格式为后端期望的格式
+            const formattedData = {}
+            
+            excelData.forEach(item => {
+              // 跳过表头行
+              if (item['ID'] === 'ID' || item['ID'] === undefined) return
+              
+              // 转换类型
+              const type = item['类型'] === '支出' ? 1 : 2
+              
+              // 提取月份
+              const date = item['日期']
+              const monthKey = date.substring(0, 7) // 格式：YYYY-MM
+              
+              // 创建月份数据结构
+              if (!formattedData[monthKey]) {
+                formattedData[monthKey] = { transactions: [] }
+              }
+              
+              // 添加交易记录
+              formattedData[monthKey].transactions.push({
+                date: date,
+                type: type,
+                classification: item['分类'],
+                amount: item['金额'],
+                describe: item['描述']
+              })
+            })
+            
+            // 发送到后端
+            const response = await importTransactions(formattedData)
+            if (response.code === 200) {
+              message.success('数据导入成功')
+              setImportModalVisible(false)
+              setImportFile(null)
+              await fetchTransactions(searchParams) // 刷新列表
+            } else {
+              message.error(`数据导入失败：${response.msg}`)
+            }
+          } catch (error) {
+            console.error('解析 Excel 文件失败:', error)
+            message.error('Excel 文件格式错误')
+          }
+        }
+      } else {
+        message.error('请选择 JSON 或 Excel 文件')
+      }
+    } catch (error) {
+      console.error('导入数据失败:', error)
+      message.error('数据导入失败')
+    }
+  }
+
+  {/* 关闭导入模态框 */}
+  const handleImportCancel = () => {
+    setImportModalVisible(false)
+    setImportFile(null)
+  }
+
   return (
     <div className="transaction">
       {/* 查询表单区域 */}
@@ -309,6 +515,12 @@ const Transactions = () => {
             </Button>
             <Button type="primary" onClick={() => showModal('add')}>
               新增
+            </Button>
+            <Button type="primary" icon={<DownloadOutlined />} onClick={handleExport}>
+              导出数据
+            </Button>
+            <Button type="primary" icon={<UploadOutlined />} onClick={handleImportModal}>
+              导入数据
             </Button>
           </Space>
         </Form.Item>
@@ -433,6 +645,29 @@ const Transactions = () => {
             </Form.Item>
           )}
         </Form>
+      </Modal>
+
+      {/* 导入数据模态框 */}
+      <Modal
+        title="导入数据"
+        open={importModalVisible}
+        onOk={handleImport}
+        onCancel={handleImportCancel}
+        okText="导入"
+        cancelText="取消"
+      >
+        <div style={{ marginBottom: 16 }}>
+          <p>请选择要导入的 JSON 文件</p>
+          <Upload
+            beforeUpload={handleFileUpload}
+            fileList={importFile ? [importFile] : []}
+            onRemove={() => setImportFile(null)}
+            maxCount={1}
+          >
+            <Button icon={<UploadOutlined />}>选择文件</Button>
+          </Upload>
+        </div>
+        {importFile && <p style={{ marginTop: 8 }}>已选择文件：{importFile.name}</p>}
       </Modal>
     </div>
   )

@@ -52,7 +52,7 @@
       "createdAt": 1765874358382
     },
     {
-      "describe": "榴莲9999",
+      "describe": "榴莲99990000",
       "amount": 111.4,
       "date": "2025-12-16",
       "type": "expense",
@@ -60,7 +60,7 @@
       "createdAt": 1765874358382,
       "mode": "single",
       "classification": "other",
-      "updatedAt": 1765876378857
+      "updatedAt": 1765879914971
     },
     {
       "describe": "香蕉",
@@ -85,6 +85,104 @@
       "type": "expense",
       "id": "1765874358382800",
       "createdAt": 1765874358382
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 8,
+      "describe": "桌垫",
+      "id": "1765879893415170",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "classification": "transport",
+      "amount": 6.45,
+      "describe": "拖把布",
+      "id": "1765879893415077",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 9.5,
+      "describe": "拼多多",
+      "id": "1765879893415529",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 17.8,
+      "describe": "牛奶",
+      "id": "1765879893415698",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 8,
+      "describe": "桌垫",
+      "id": "1765879893415303",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 17.8,
+      "describe": "牛奶",
+      "id": "1765879893415177",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "classification": "other",
+      "amount": 111.4,
+      "describe": "榴莲9999",
+      "id": "1765879893415676",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 3.6,
+      "describe": "香蕉",
+      "id": "1765879893415681",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 6.45,
+      "describe": "拖把布",
+      "id": "1765879893415718",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 28.72,
+      "describe": "多多买菜",
+      "id": "1765879893415046",
+      "createdAt": 1765879893415
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 28.72,
+      "describe": "多多买菜",
+      "id": "1765880469370381",
+      "createdAt": 1765880469370
+    },
+    {
+      "date": "2025-12-16",
+      "type": 2,
+      "amount": 28.72,
+      "describe": "多多买菜",
+      "id": "1765880469370562",
+      "createdAt": 1765880469370
     }
   ]
 }
