@@ -4,6 +4,8 @@ const {
   extractMonthKey,
   processTransaction,
   getAllTransactions,
+  updateTransaction,
+  deleteTransaction,
 } = require('../utils/transactionHelper')
 
 // 处理交易相关路由
@@ -19,9 +21,17 @@ const setupTransactionRoutes = (server) => {
       const processedItem = processTransaction(newItem, transactions)
       transactions.push(processedItem)
       writeMonthData(monthKey, { transactions })
-      res.status(200).json(processedItem)
+      res.json({
+        code: 200,
+        data: processedItem,
+        msg: '账单添加成功',
+      })
     } catch (error) {
-      res.status(400).json({ error: error.message })
+      res.status(500).json({
+        code: 500,
+        data: null,
+        msg: `账单添加失败 ${error.message}`,
+      })
     }
   })
 
@@ -39,6 +49,40 @@ const setupTransactionRoutes = (server) => {
         code: 500,
         data: null,
         msg: `查询交易失败：${error.message}`,
+      })
+    }
+  })
+
+  // 【新增】更新单条交易记录 (PUT)
+  server.put('/transactions/:id', (req, res) => {
+    try {
+      const id = req.params.id // 从 URL 参数中获取要更新的 ID
+      const updatedItem = req.body // 从请求体中获取更新的数据
+      if (updatedItem.date) {
+        validateDateField(updatedItem)
+      }
+      const result = updateTransaction(id, updatedItem)
+
+      if (!result) {
+        return res.status(404).json({ error: `未找到 ID 为 ${id} 的交易记录` })
+      }
+      const { monthKey, updatedTransaction } = result
+      const monthData = getMonthData(monthKey)
+      // 替换/更新 monthData.transactions 中的数据
+
+      // 假设 updateTransaction 已经处理了 monthData 的更新
+      // 这里我们直接将包含已更新 transactions 的 monthData 写回
+      writeMonthData(monthKey, { transactions: monthData.transactions })
+      res.json({
+        code: 200,
+        data: updatedTransaction,
+        msg: '账单更新成功',
+      })
+    } catch (error) {
+      res.status(500).json({
+        code: 500,
+        data: null,
+        msg: `账单更新失败 ${error.message}`,
       })
     }
   })
@@ -74,9 +118,51 @@ const setupTransactionRoutes = (server) => {
       // 写入对应月份文件
       writeMonthData(monthKey, { transactions })
       // 返回处理后的结果
-      res.status(200).json(processedItems)
+      res.json({
+        code: 200,
+        data: processedItems,
+        msg: '批量添加交易成功',
+      })
     } catch (error) {
-      res.status(400).json({ error: error.message })
+      res.status(500).json({
+        code: 500,
+        data: null,
+        msg: `批量添加交易失败 ${error.message}`,
+      })
+    }
+  })
+
+  // 【新增】删除单条交易记录 (DELETE)
+  server.delete('/transactions/:id', (req, res) => {
+    try {
+      const id = req.params.id // 从 URL 参数中获取 ID
+
+      // 调用删除辅助函数，它会处理查找和文件写入
+      const deletedTransaction = deleteTransaction(id)
+
+      if (!deletedTransaction) {
+        // 如果 helper 返回 null，表示未找到
+        return res.status(404).json({
+          code: 404,
+          data: null,
+          msg: `未找到 ID 为 ${id} 的交易记录`,
+        })
+      }
+
+      // 返回被删除的记录，并发送 200 或 204 No Content
+      // 这里返回 200 并带上数据，方便前端确认
+      res.status(200).json({
+        code: 200,
+        data: deletedTransaction,
+        msg: `成功删除 ID 为 ${id} 的交易记录`,
+      })
+    } catch (error) {
+      // 捕获可能的文件操作错误等
+      res.status(500).json({
+        code: 500,
+        data: null,
+        msg: `删除失败：${error.message}`,
+      })
     }
   })
 }

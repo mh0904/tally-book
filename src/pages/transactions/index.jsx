@@ -24,6 +24,7 @@ import {
   batchAddTransactions,
   getAllTransactions,
   updateTransactions,
+  deleteTransactions,
 } from '../../utils/transactions'
 const dateFormat = 'YYYY-MM-DD'
 
@@ -128,16 +129,20 @@ const Transactions = () => {
       form.resetFields()
       form.setFieldsValue({
         mode: 'batch',
+        id: '',
       })
     } else {
       setModalTitle('编辑')
       form.setFieldsValue({
         ...value,
+        id: value.id,
         mode: 'single',
         date: dayjs(value.date),
       })
     }
   }
+
+  // 更新列表
 
   // 提交表单
   const handleOk = async () => {
@@ -162,6 +167,9 @@ const Transactions = () => {
       }
       try {
         let res = await batchAddTransactions(params)
+        if (res.code === 200) {
+          await initPage()
+        }
       } catch (error) {
         console.log(error)
       } finally {
@@ -173,20 +181,23 @@ const Transactions = () => {
     // 单条数据的处理
     if (mode === 'single') {
       try {
-        params = {
-          ...values,
-          date,
-        }
         if (modalTitle === '新增') {
-          let res = await addTransactions(params)
-          return
+          let res = await addTransactions({
+            ...values,
+            date,
+          })
+          if (res.code === 200) {
+            await initPage()
+          }
         }
-
         if (modalTitle === '编辑') {
-          console.log(99999, params)
-
-          let res = await updateTransactions(params)
-          return
+          let res = await updateTransactions(values.id, {
+            ...values,
+            date,
+          })
+          if (res.code === 200) {
+            await initPage()
+          }
         }
       } catch (error) {
         console.log(error)
@@ -202,8 +213,12 @@ const Transactions = () => {
     setOpen(false)
   }
 
-  const deleteList = (item) => {
-    console.log(99999, item)
+  // 数据删除
+  const deleteList = async (item) => {
+    let res = await deleteTransactions(item.id, item)
+    if (res.code === 200) {
+      await initPage()
+    }
   }
 
   useEffect(() => {
@@ -238,6 +253,11 @@ const Transactions = () => {
             mode,
           }}
         >
+          {/* 使用一个隐藏的 Input，确保它被 Form 追踪 */}
+          <Form.Item name="id" noStyle>
+            <Input type="hidden" />
+          </Form.Item>
+
           <Form.Item
             name="mode"
             label="记录方式"

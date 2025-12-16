@@ -1,22 +1,60 @@
 {
   "transactions": [
     {
-      "mode": "single",
+      "describe": "拼多多",
+      "amount": 9.5,
       "date": "2025-12-16",
       "type": "expense",
-      "classification": "food",
-      "amount": 23,
-      "describe": "新增一条测试",
-      "id": "1765867575629954"
+      "id": "1765872749944957",
+      "createdAt": 1765872749944
     },
     {
-      "mode": "single",
+      "describe": "牛奶",
+      "amount": 17.8,
       "date": "2025-12-16",
       "type": "expense",
-      "classification": "food",
-      "amount": 23,
-      "describe": "新增一条测试",
-      "id": "1765867583450011"
+      "id": "1765872749944246",
+      "createdAt": 1765872749944
+    },
+    {
+      "describe": "桌垫",
+      "amount": 8,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765872749944531",
+      "createdAt": 1765872749944
+    },
+    {
+      "describe": "牛奶",
+      "amount": 17.8,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765872749944779",
+      "createdAt": 1765872749944
+    },
+    {
+      "describe": "榴莲",
+      "amount": 111.4,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765872749944244",
+      "createdAt": 1765872749944
+    },
+    {
+      "describe": "香蕉",
+      "amount": 3.6,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765872749944547",
+      "createdAt": 1765872749944
+    },
+    {
+      "describe": "拖把布",
+      "amount": 6.45,
+      "date": "2025-12-16",
+      "type": "expense",
+      "id": "1765872749944804",
+      "createdAt": 1765872749944
     }
   ]
 }
