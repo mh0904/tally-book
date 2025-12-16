@@ -166,6 +166,11 @@ const findTransactionLocation = (id) => {
     .filter((file) => file.endsWith('.json'))
 
   for (const file of files) {
+    // 跳过undefined.json文件，避免无效的文件读取
+    if (file === 'undefined.json') {
+      continue
+    }
+    
     const monthKey = file.replace('.json', '')
     const monthData = getMonthData(monthKey)
     const transactions = monthData.transactions || []
@@ -275,6 +280,7 @@ const exportAllTransactions = () => {
  */
 const importTransactions = (data) => {
   let importedCount = 0;
+  let updatedCount = 0;
   let errorCount = 0;
 
   try {
@@ -290,10 +296,35 @@ const importTransactions = (data) => {
           try {
             // 验证必要字段
             if (transaction.date && transaction.amount && transaction.type) {
-              // 为导入的数据生成新的ID，避免冲突
-              const processedItem = processTransaction(transaction, existingTransactions);
-              existingTransactions.push(processedItem);
-              importedCount++;
+              // 检查是否有ID
+              if (transaction.id) {
+                // 有ID，检查是否存在于现有数据中
+                const location = findTransactionLocation(transaction.id);
+                if (location) {
+                  // ID存在，更新记录
+                  const updatedItem = {
+                    ...transaction,
+                    // 确保月份与文件月份一致
+                    date: transaction.date
+                  };
+                  const updatedTransaction = updateTransaction(transaction.id, updatedItem);
+                  if (updatedTransaction) {
+                    updatedCount++;
+                  } else {
+                    errorCount++;
+                  }
+                } else {
+                  // ID不存在，新增记录
+                  const processedItem = processTransaction(transaction, existingTransactions);
+                  existingTransactions.push(processedItem);
+                  importedCount++;
+                }
+              } else {
+                // 没有ID，新增记录
+                const processedItem = processTransaction(transaction, existingTransactions);
+                existingTransactions.push(processedItem);
+                importedCount++;
+              }
             } else {
               errorCount++;
             }
@@ -311,6 +342,7 @@ const importTransactions = (data) => {
     return {
       success: true,
       imported: importedCount,
+      updated: updatedCount,
       errors: errorCount
     };
   } catch (error) {

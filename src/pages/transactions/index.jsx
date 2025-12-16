@@ -264,7 +264,7 @@ const Transactions = () => {
   // 数据删除
   const deleteList = async (item) => {
     try {
-      let res = await deleteTransactions(item.id, item)
+      let res = await deleteTransactions(item.id)
       if (res.code === 200) {
         await fetchTransactions(searchParams) // 刷新列表
       }
@@ -431,6 +431,7 @@ const Transactions = () => {
               
               // 添加交易记录
               formattedData[monthKey].transactions.push({
+                id: item['ID'], // 包含ID字段，支持更新操作
                 date: date,
                 type: type,
                 classification: item['分类'],
