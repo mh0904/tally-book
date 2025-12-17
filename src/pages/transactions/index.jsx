@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
+import "dayjs/locale/zh-cn"; // 导入中文本地化插件
+
+dayjs.locale("zh-cn"); // 全局使用中文本地化
 import {
   Table,
   Space,
@@ -113,14 +116,27 @@ const Transactions = () => {
 
   // 初始加载和查询
   useEffect(() => {
-    fetchTransactions(searchParams);
-  }, [searchParams, fetchTransactions]);
+    // 设置默认日期范围为最近一个月
+    // const endDate = dayjs(); // 当前日期
+    // const startDate = endDate.subtract(1, 'month'); // 一个月前
+    // 设置搜索表单的默认值
+    // searchForm.setFieldsValue({
+    //   dateRange: [startDate, endDate]
+    // });
+    
+    // 更新搜索参数并获取数据
+    // const defaultParams = {
+    //   startDate: startDate.format(dateFormat),
+    //   endDate: endDate.format(dateFormat)
+    // };
+    // setSearchParams(defaultParams);
+    fetchTransactions(searchParams)
+  }, [fetchTransactions, searchParams]);
 
   // 查询操作
   const onSearch = async (values) => {
     const { dateRange, ...restValues } = values;
     let params = { ...restValues };
-
     if (dateRange && dateRange.length === 2) {
       // 格式化日期范围
       params.startDate = dateRange[0]
@@ -130,7 +146,6 @@ const Transactions = () => {
         ? dateRange[1].format(dateFormat)
         : undefined;
     }
-
     // 排除值为 undefined 或空的字段
     Object.keys(params).forEach((key) => {
       if (
@@ -141,7 +156,6 @@ const Transactions = () => {
         delete params[key];
       }
     });
-
     setSearchParams(params);
   };
 
@@ -576,7 +590,15 @@ const Transactions = () => {
         dataSource={transactions}
         bordered
         rowKey="id"
-        footer={() => "Footer"} // 暂时移除 Footer，保持简洁
+        footer={() => {
+          // 计算当前查询列表的金额总额
+          const totalAmount = transactions.reduce((sum, item) => sum + (item.amount || 0), 0);
+          return (
+            <div style={{ textAlign: 'center', fontWeight: 'bold', paddingRight: '30px' }}>
+              总金额: ￥{totalAmount.toFixed(2)}
+            </div>
+          );
+        }}
       />
 
       {/* 新增/编辑 Modal (保持不变) */}
@@ -596,6 +618,7 @@ const Transactions = () => {
           validateMessages={validateMessages}
           initialValues={{
             mode: "single", // 默认单条
+            year: dayjs(dayjs(), "YYYY"),
             date: dayjs(dayjs(), dateFormat),
             type: transactionTypeField.defaultValue,
             classification: transactionCategoryField.defaultValue,
