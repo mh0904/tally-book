@@ -1,0 +1,589 @@
+{
+  "transactions": [
+    {
+      "describe": "淘宝",
+      "amount": 0.87,
+      "date": "2025-06-01",
+      "type": "支出",
+      "id": "1765964676362774",
+      "classification": "购物",
+      "createdAt": 1765964676362
+    },
+    {
+      "describe": "拼多多",
+      "amount": 5,
+      "date": "2025-06-01",
+      "type": "支出",
+      "id": "1765964676363724",
+      "classification": "购物",
+      "createdAt": 1765964676363
+    },
+    {
+      "describe": "话费",
+      "amount": 47,
+      "date": "2025-06-01",
+      "type": "支出",
+      "id": "1765964676366961",
+      "classification": "其他",
+      "createdAt": 1765964676366
+    },
+    {
+      "describe": "芒果",
+      "amount": 5,
+      "date": "2025-06-01",
+      "type": "支出",
+      "id": "1765964676368451",
+      "classification": "其他",
+      "createdAt": 1765964676368
+    },
+    {
+      "describe": "豆腐乳",
+      "amount": 0.38,
+      "date": "2025-06-01",
+      "type": "支出",
+      "id": "1765964676370832",
+      "classification": "其他",
+      "createdAt": 1765964676370
+    },
+    {
+      "describe": "零食",
+      "amount": 28.07,
+      "date": "2025-06-01",
+      "type": "支出",
+      "id": "1765964676371220",
+      "classification": "其他",
+      "createdAt": 1765964676371
+    },
+    {
+      "describe": "榴莲",
+      "amount": 106.7,
+      "date": "2025-06-01",
+      "type": "支出",
+      "id": "1765964676373791",
+      "classification": "其他",
+      "createdAt": 1765964676373
+    },
+    {
+      "describe": "水电费",
+      "amount": 69,
+      "date": "2025-06-02",
+      "type": "支出",
+      "id": "1765964676375191",
+      "classification": "住房",
+      "createdAt": 1765964676375
+    },
+    {
+      "describe": "买菜",
+      "amount": 11.19,
+      "date": "2025-06-02",
+      "type": "支出",
+      "id": "1765964676376544",
+      "classification": "其他",
+      "createdAt": 1765964676376
+    },
+    {
+      "describe": "淘宝",
+      "amount": 0.51,
+      "date": "2025-06-02",
+      "type": "支出",
+      "id": "1765964676377958",
+      "classification": "购物",
+      "createdAt": 1765964676377
+    },
+    {
+      "describe": "菜板架子",
+      "amount": 0.2,
+      "date": "2025-06-02",
+      "type": "支出",
+      "id": "1765964676379939",
+      "classification": "其他",
+      "createdAt": 1765964676379
+    },
+    {
+      "describe": "房租",
+      "amount": 2100,
+      "date": "2025-06-02",
+      "type": "支出",
+      "id": "1765964676380101",
+      "classification": "住房",
+      "createdAt": 1765964676380
+    },
+    {
+      "describe": "香皂",
+      "amount": 1,
+      "date": "2025-06-02",
+      "type": "支出",
+      "id": "1765964676381150",
+      "classification": "其他",
+      "createdAt": 1765964676381
+    },
+    {
+      "describe": "荔枝",
+      "amount": 10.04,
+      "date": "2025-06-02",
+      "type": "支出",
+      "id": "1765964676382113",
+      "classification": "其他",
+      "createdAt": 1765964676382
+    },
+    {
+      "describe": "充电",
+      "amount": 1.6,
+      "date": "2025-06-03",
+      "type": "支出",
+      "id": "1765964676384790",
+      "classification": "其他",
+      "createdAt": 1765964676384
+    },
+    {
+      "describe": "地铁",
+      "amount": 10,
+      "date": "2025-06-03",
+      "type": "支出",
+      "id": "1765964676385972",
+      "classification": "交通",
+      "createdAt": 1765964676385
+    },
+    {
+      "describe": "单车",
+      "amount": 1.5,
+      "date": "2025-06-03",
+      "type": "支出",
+      "id": "1765964676386460",
+      "classification": "其他",
+      "createdAt": 1765964676386
+    },
+    {
+      "describe": "地铁",
+      "amount": 10,
+      "date": "2025-06-04",
+      "type": "支出",
+      "id": "1765964676388682",
+      "classification": "交通",
+      "createdAt": 1765964676388
+    },
+    {
+      "describe": "酸枣糕",
+      "amount": 6.38,
+      "date": "2025-06-04",
+      "type": "支出",
+      "id": "1765964676389127",
+      "classification": "其他",
+      "createdAt": 1765964676389
+    },
+    {
+      "describe": "充电",
+      "amount": 2,
+      "date": "2025-06-05",
+      "type": "支出",
+      "id": "1765964676391056",
+      "classification": "其他",
+      "createdAt": 1765964676391
+    },
+    {
+      "describe": "给爸",
+      "amount": 2000,
+      "date": "2025-06-05",
+      "type": "支出",
+      "id": "1765964676392995",
+      "classification": "其他",
+      "createdAt": 1765964676392
+    },
+    {
+      "describe": "地铁",
+      "amount": 10,
+      "date": "2025-06-05",
+      "type": "支出",
+      "id": "1765964676393319",
+      "classification": "交通",
+      "createdAt": 1765964676393
+    },
+    {
+      "describe": "单车",
+      "amount": 1.5,
+      "date": "2025-06-05",
+      "type": "支出",
+      "id": "1765964676395496",
+      "classification": "其他",
+      "createdAt": 1765964676395
+    },
+    {
+      "describe": "好特卖",
+      "amount": 17.8,
+      "date": "2025-06-05",
+      "type": "支出",
+      "id": "1765964676396845",
+      "classification": "其他",
+      "createdAt": 1765964676396
+    },
+    {
+      "describe": "单车卡",
+      "amount": 13,
+      "date": "2025-06-05",
+      "type": "支出",
+      "id": "1765964676397905",
+      "classification": "其他",
+      "createdAt": 1765964676397
+    },
+    {
+      "describe": "拼多多",
+      "amount": 0.98,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676399055",
+      "classification": "购物",
+      "createdAt": 1765964676399
+    },
+    {
+      "describe": "地铁",
+      "amount": 10,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676400206",
+      "classification": "交通",
+      "createdAt": 1765964676400
+    },
+    {
+      "describe": "好特卖",
+      "amount": 9.31,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676402423",
+      "classification": "其他",
+      "createdAt": 1765964676402
+    },
+    {
+      "describe": "拼多多",
+      "amount": 6.9,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676404179",
+      "classification": "购物",
+      "createdAt": 1765964676404
+    },
+    {
+      "describe": "抖音",
+      "amount": 15,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676405874",
+      "classification": "其他",
+      "createdAt": 1765964676405
+    },
+    {
+      "describe": "料酒",
+      "amount": 6,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676407613",
+      "classification": "其他",
+      "createdAt": 1765964676407
+    },
+    {
+      "describe": "美团优选",
+      "amount": 9,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676408317",
+      "classification": "其他",
+      "createdAt": 1765964676408
+    },
+    {
+      "describe": "彩椒",
+      "amount": 8.9,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676411290",
+      "classification": "其他",
+      "createdAt": 1765964676411
+    },
+    {
+      "describe": "多多买菜",
+      "amount": 18.94,
+      "date": "2025-06-06",
+      "type": "支出",
+      "id": "1765964676413675",
+      "classification": "其他",
+      "createdAt": 1765964676413
+    },
+    {
+      "describe": "买菜",
+      "amount": 46.82,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676415399",
+      "classification": "其他",
+      "createdAt": 1765964676415
+    },
+    {
+      "describe": "拼多多",
+      "amount": 42.31,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676417129",
+      "classification": "购物",
+      "createdAt": 1765964676417
+    },
+    {
+      "describe": "纯牛奶",
+      "amount": 17.1,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676418997",
+      "classification": "其他",
+      "createdAt": 1765964676418
+    },
+    {
+      "describe": "内裤",
+      "amount": 13.4,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676420389",
+      "classification": "其他",
+      "createdAt": 1765964676420
+    },
+    {
+      "describe": "充电",
+      "amount": 1.53,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676422285",
+      "classification": "其他",
+      "createdAt": 1765964676422
+    },
+    {
+      "describe": "买菜",
+      "amount": 10.06,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676424218",
+      "classification": "其他",
+      "createdAt": 1765964676424
+    },
+    {
+      "describe": "面粉",
+      "amount": 0.99,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676425294",
+      "classification": "其他",
+      "createdAt": 1765964676425
+    },
+    {
+      "describe": "丝瓜",
+      "amount": 8.9,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676427835",
+      "classification": "其他",
+      "createdAt": 1765964676427
+    },
+    {
+      "describe": "瑞幸",
+      "amount": 15.68,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676428992",
+      "classification": "其他",
+      "createdAt": 1765964676428
+    },
+    {
+      "describe": "燃气费",
+      "amount": 30,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676430558",
+      "classification": "住房",
+      "createdAt": 1765964676430
+    },
+    {
+      "describe": "樱桃",
+      "amount": 18,
+      "date": "2025-06-07",
+      "type": "支出",
+      "id": "1765964676431384",
+      "classification": "其他",
+      "createdAt": 1765964676431
+    },
+    {
+      "describe": "话费",
+      "amount": 97.5,
+      "date": "2025-06-08",
+      "type": "支出",
+      "id": "1765964676433082",
+      "classification": "其他",
+      "createdAt": 1765964676433
+    },
+    {
+      "describe": "拼多多",
+      "amount": 6.9,
+      "date": "2025-06-08",
+      "type": "支出",
+      "id": "1765964676435048",
+      "classification": "购物",
+      "createdAt": 1765964676435
+    },
+    {
+      "describe": "茄子",
+      "amount": 5.28,
+      "date": "2025-06-08",
+      "type": "支出",
+      "id": "1765964676436657",
+      "classification": "其他",
+      "createdAt": 1765964676436
+    },
+    {
+      "describe": "买菜",
+      "amount": 22.48,
+      "date": "2025-06-08",
+      "type": "支出",
+      "id": "1765964676439787",
+      "classification": "其他",
+      "createdAt": 1765964676439
+    },
+    {
+      "describe": "豆浆",
+      "amount": 4,
+      "date": "2025-06-08",
+      "type": "支出",
+      "id": "1765964676442954",
+      "classification": "其他",
+      "createdAt": 1765964676442
+    },
+    {
+      "describe": "桃子",
+      "amount": 4.97,
+      "date": "2025-06-08",
+      "type": "支出",
+      "id": "1765964676444927",
+      "classification": "其他",
+      "createdAt": 1765964676444
+    },
+    {
+      "describe": "零食",
+      "amount": 23.5,
+      "date": "2025-06-08",
+      "type": "支出",
+      "id": "1765964676446840",
+      "classification": "其他",
+      "createdAt": 1765964676446
+    },
+    {
+      "describe": "充电",
+      "amount": 0.21,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676449802",
+      "classification": "其他",
+      "createdAt": 1765964676449
+    },
+    {
+      "describe": "袋子",
+      "amount": 0.12,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676451975",
+      "classification": "其他",
+      "createdAt": 1765964676451
+    },
+    {
+      "describe": "地铁",
+      "amount": 10,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676454751",
+      "classification": "交通",
+      "createdAt": 1765964676454
+    },
+    {
+      "describe": "拼多多",
+      "amount": 11.06,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676457013",
+      "classification": "购物",
+      "createdAt": 1765964676457
+    },
+    {
+      "describe": "厨房纸",
+      "amount": 0.2,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676460650",
+      "classification": "其他",
+      "createdAt": 1765964676460
+    },
+    {
+      "describe": "驱蚊水",
+      "amount": 0.73,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676462503",
+      "classification": "其他",
+      "createdAt": 1765964676462
+    },
+    {
+      "describe": "打印",
+      "amount": 2,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676465298",
+      "classification": "其他",
+      "createdAt": 1765964676465
+    },
+    {
+      "describe": "臭豆腐",
+      "amount": 10,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676468405",
+      "classification": "其他",
+      "createdAt": 1765964676468
+    },
+    {
+      "describe": "充电",
+      "amount": 1.93,
+      "date": "2025-06-09",
+      "type": "支出",
+      "id": "1765964676470300",
+      "classification": "其他",
+      "createdAt": 1765964676470
+    },
+    {
+      "describe": "地铁",
+      "amount": 10,
+      "date": "2025-06-10",
+      "type": "支出",
+      "id": "1765964676472735",
+      "classification": "交通",
+      "createdAt": 1765964676472
+    },
+    {
+      "describe": "退票",
+      "amount": 44.5,
+      "date": "2025-06-10",
+      "type": "支出",
+      "id": "1765964676475960",
+      "classification": "其他",
+      "createdAt": 1765964676475
+    },
+    {
+      "describe": "牙膏",
+      "amount": 9.45,
+      "date": "2025-06-10",
+      "type": "支出",
+      "id": "1765964676477585",
+      "classification": "其他",
+      "createdAt": 1765964676477
+    },
+    {
+      "describe": "杏子",
+      "amount": 6.29,
+      "date": "2025-06-10",
+      "type": "支出",
+      "id": "1765964676479501",
+      "classification": "其他",
+      "createdAt": 1765964676479
+    }
+  ]
+}

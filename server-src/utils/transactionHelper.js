@@ -34,17 +34,54 @@ const extractMonthKey = (date) => {
 }
 
 /**
- * 处理单个交易项：验证日期并生成 ID。
+ * 自动分类规则：根据交易描述关键词匹配分类
+ */
+const categoryRules = [
+  { category: '餐饮', keywords: ['餐饮', '吃饭', '餐厅', '饭店', '快餐', '美食', '午餐', '晚餐', '早餐', '外卖', '食堂'] },
+  { category: '购物', keywords: ['购物', '商场', '超市', '淘宝', '京东', '拼多多', '网购', '衣服', '鞋子', '化妆品', '电子产品'] },
+  { category: '交通', keywords: ['交通', '地铁', '公交', '打车', '出租车', '滴滴', '共享单车', '油费', '停车费', '机票', '火车票', '汽车票', '高铁', '火车', '飞机'] },
+  { category: '住房', keywords: ['房租', '水电', '燃气', '物业费', '暖气费', '维修费', '家具', '装修'] },
+  { category: '工资', keywords: ['工资', '奖金', '绩效', '提成', '补贴', '收入'] },
+  { category: '其他', keywords: [] } // 默认分类
+]
+
+/**
+ * 根据交易描述自动匹配分类
+ * @param {string} describe - 交易描述
+ * @returns {string} 匹配的分类
+ */
+const autoClassify = (describe) => {
+  if (!describe || typeof describe !== 'string') {
+    return '其他' // 默认分类
+  }
+  
+  // 转换为小写以便匹配
+  const lowerDescribe = describe.toLowerCase()
+  
+  // 遍历分类规则，寻找匹配的关键词
+  for (const rule of categoryRules) {
+    if (rule.keywords.some(keyword => lowerDescribe.includes(keyword.toLowerCase()))) {
+      return rule.category
+    }
+  }
+  
+  return '其他' // 默认分类
+}
+
+/**
+ * 处理单个交易项：验证日期、生成 ID 和自动分类。
  * @param {object} item - 原始交易项。
  * @param {Array} transactions - 当前月份的交易数组 (用于生成 ID)。
- * @returns {object} 带有 ID 的新交易项。
+ * @returns {object} 带有 ID 和分类的新交易项。
  */
 const processTransaction = (item, transactions) => {
   validateDateField(item)
   // 保留已有ID，没有才生成新ID
+  // 保留已有分类，没有则自动分类
   const newItem = {
     ...item,
     id: item.id || generateId(transactions),
+    classification: item.classification || autoClassify(item.describe),
     // 保留已有创建时间，没有才生成新时间
     createdAt: item.createdAt || Date.now(),
   }
