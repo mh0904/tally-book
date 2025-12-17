@@ -691,7 +691,7 @@ const Transactions = () => {
               <Input.TextArea
                 autoSize={{ minRows: 10, maxRows: 10 }}
                 placeholder="请输入多日批量描述,例如:8月1号拼多多9.5元8月2号吸油棉4.9元"
-                maxLength={1000}
+                maxLength={100000}
               />
             </Form.Item>
           )}

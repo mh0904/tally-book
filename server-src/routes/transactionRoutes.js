@@ -102,23 +102,34 @@ const setupTransactionRoutes = (server) => {
       }
       
       const processedItems = []
+      const monthDataMap = new Map() // 按月份存储数据，减少文件IO
       
-      // 为每条数据单独处理
+      // 第一阶段：处理所有记录并按月份分组
       for (const item of batchData) {
         validateDateField(item)
         // 为每条记录单独提取年份和月份
         const monthKey = extractMonthKey(item.date)
-        const monthData = getMonthData(monthKey)
+        
+        // 获取或创建该月份的数据
+        if (!monthDataMap.has(monthKey)) {
+          const monthData = getMonthData(monthKey)
+          monthDataMap.set(monthKey, monthData)
+        }
+        
+        const monthData = monthDataMap.get(monthKey)
         const transactions = monthData.transactions
         
         // 处理单条记录
         const processedItem = processTransaction(item, transactions)
         // 添加到当前月份的交易列表
         transactions.push(processedItem)
-        // 写入对应月份文件
-        writeMonthData(monthKey, { transactions })
         // 记录处理后的结果
         processedItems.push(processedItem)
+      }
+      
+      // 第二阶段：按月份批量写入文件（减少IO次数）
+      for (const [monthKey, monthData] of monthDataMap.entries()) {
+        writeMonthData(monthKey, { transactions: monthData.transactions })
       }
       
       // 返回处理后的结果
