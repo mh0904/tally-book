@@ -92,7 +92,7 @@ const setupTransactionRoutes = (server) => {
     }
   })
 
-  // 批量添加交易（所有记录日期相同）
+  // 批量添加交易（支持不同日期）
   server.post('/transactions/batch', (req, res) => {
     try {
       const batchData = req.body
@@ -100,28 +100,27 @@ const setupTransactionRoutes = (server) => {
       if (!Array.isArray(batchData) || batchData.length === 0) {
         throw new Error('请求体必须是非空数组')
       }
-      // 提取第一条数据的日期（所有记录日期相同）
-      const firstItem = batchData[0]
-      validateDateField(firstItem)
-      // 统一提取年-月（所有记录共用）
-      const monthKey = extractMonthKey(firstItem.date)
-      const monthData = getMonthData(monthKey)
-      const transactions = monthData.transactions
-
-      // 为每条数据生成ID并处理
-      const processedItems = batchData.map((item) => {
-        // 确保所有记录日期一致
-        if (item.date !== firstItem.date) {
-          throw new Error(
-            `日期不一致：${item.date} 与 ${firstItem.date} 不匹配`
-          )
-        }
-        return processTransaction(item, transactions)
-      })
-      // 批量追加数据
-      transactions.push(...processedItems)
-      // 写入对应月份文件
-      writeMonthData(monthKey, { transactions })
+      
+      const processedItems = []
+      
+      // 为每条数据单独处理
+      for (const item of batchData) {
+        validateDateField(item)
+        // 为每条记录单独提取年份和月份
+        const monthKey = extractMonthKey(item.date)
+        const monthData = getMonthData(monthKey)
+        const transactions = monthData.transactions
+        
+        // 处理单条记录
+        const processedItem = processTransaction(item, transactions)
+        // 添加到当前月份的交易列表
+        transactions.push(processedItem)
+        // 写入对应月份文件
+        writeMonthData(monthKey, { transactions })
+        // 记录处理后的结果
+        processedItems.push(processedItem)
+      }
+      
       // 返回处理后的结果
       res.json({
         code: 200,

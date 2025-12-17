@@ -174,6 +174,19 @@ const Transactions = () => {
     },
   };
 
+  // 日期转换工具函数：将「x月x号」转为「YYYY-MM-DD」
+  const formatDate = (dateStr,year) => {
+    // 提取月份和日期（如：8月3号 → 月=8，日=3）
+    const monthMatch = dateStr.match(/(\d+)月/);
+    const dayMatch = dateStr.match(/(\d+)号/);
+    if (!monthMatch || !dayMatch) return ""; // 异常日期返回空（可根据需求调整）
+    // 补零：单数字月份/日期转为两位（如8→08，3→03）
+    const month = monthMatch[1].padStart(2, "0");
+    const day = dayMatch[1].padStart(2, "0");
+    // 固定拼接2022年
+    return `${year}-${month}-${day}`;
+  };
+
   // 新增或者编辑一条记录
   const showModal = (value) => {
     setOpen(true);
@@ -181,7 +194,7 @@ const Transactions = () => {
       setModalTitle("新增");
       form.resetFields();
       form.setFieldsValue({
-        mode: "batch",
+        mode: "severalDaysBatch",
         id: "",
         date: dayjs(dayjs(), dateFormat),
         type: transactionTypeField.defaultValue,
@@ -206,12 +219,13 @@ const Transactions = () => {
       let values = form.getFieldsValue();
       const date = dayjs(values.date).format(dateFormat);
 
-      // 批量记录的逻辑
-      if (mode === "batch") {
+      // 单日批量记录的逻辑
+      // 充电2.95元，电费86元，途虎141.14元，拼多多37.98元，洗衣液13.8元，南瓜4.45元，管道疏通4.455元，真空袋3.6元
+      if (mode === "oddDaysBatch") {
         const regex = /([^0-9.元]+?)(\d+\.?\d*)元/g;
         let match;
         const params = [];
-        while ((match = regex.exec(values.batchDescribe)) !== null) {
+        while ((match = regex.exec(values.oddDaysBatchDescribe)) !== null) {
           const describe = match[1].replace(/[，。、]/g, "").trim();
           const amount = parseFloat(match[2]);
           params.push({
@@ -220,6 +234,49 @@ const Transactions = () => {
             date,
             type: values.type,
           });
+        }
+        let res = await batchAddTransactions(params);
+        if (res.code === 200) {
+          await fetchTransactions(searchParams); // 刷新列表
+        }
+      }
+
+      // 多日批量记录的逻辑
+      if (mode === "severalDaysBatch") {
+        // 1. 匹配日期+对应消费项的正则（先拆分不同日期的消费组）
+        const dateConsumeRegex = /(\d+月\d+号)([\s\S]*?)(?=\d+月\d+号|$)/g;
+        // 2. 复用原消费项解析正则（解析单个消费项：描述+金额）
+        const consumeItemRegex = /([^0-9.元]+?)(\d+\.?\d*)元/g;
+
+        // 第一步：拆分每个日期对应的消费组
+        let dateConsumeMatch;
+        const params = [];
+        while (
+          (dateConsumeMatch = dateConsumeRegex.exec(
+            values.severalDaysBatchDescribe
+          )) !== null
+        ) {
+          const originalDate = dateConsumeMatch[1]; // 原始日期（如8月3号）
+          const formattedDate = formatDate(originalDate, dayjs(values.year).format("YYYY")); // 转换为2022-08-03
+          if (!formattedDate) continue; // 跳过解析失败的日期
+          const consumeStr = dateConsumeMatch[2]; // 提取该日期下的所有消费项（如：充电2.95元，电费86元）
+          // 第二步：解析当前日期下的每个消费项（复用原逻辑）
+          let itemMatch;
+          // 重置消费项正则的lastIndex（避免循环中正则匹配异常）
+          consumeItemRegex.lastIndex = 0;
+          while ((itemMatch = consumeItemRegex.exec(consumeStr)) !== null) {
+            // 清洗描述（去掉标点、空格）
+            const describe = itemMatch[1].replace(/[，。、]/g, "").trim();
+            // 转换金额为数字
+            const amount = parseFloat(itemMatch[2]);
+            // 组装参数（date为当前解析的日期，替换原固定date）
+            params.push({
+              describe,
+              amount,
+              date: formattedDate,
+              type: values.type,
+            });
+          }
         }
         let res = await batchAddTransactions(params);
         if (res.code === 200) {
@@ -273,9 +330,7 @@ const Transactions = () => {
     }
   };
 
-  {
-    /* 导出数据函数 */
-  }
+  // 导出数据函数
   const handleExport = async () => {
     try {
       // 使用当前查询到的数据（transactions状态）而不是调用API获取全部数据
@@ -357,16 +412,12 @@ const Transactions = () => {
     }
   };
 
-  {
-    /* 导入数据模态框函数 */
-  }
+  //  导入数据模态框函数
   const handleImportModal = () => {
     setImportModalVisible(true);
   };
 
-  {
-    /* 处理文件上传 */
-  }
+  // 处理文件上传
   const handleFileUpload = (file) => {
     const isJSON =
       file.type === "application/json" || file.name.endsWith(".json");
@@ -380,9 +431,7 @@ const Transactions = () => {
     return false; // 返回 false 阻止自动上传
   };
 
-  {
-    /* 导入数据函数 */
-  }
+  // 导入数据函数
   const handleImport = async () => {
     if (!importFile) {
       message.error("请选择要导入的文件");
@@ -449,9 +498,7 @@ const Transactions = () => {
     }
   };
 
-  {
-    /* 关闭导入模态框 */
-  }
+  // 关闭导入模态框
   const handleImportCancel = () => {
     setImportModalVisible(false);
     setImportFile(null);
@@ -521,7 +568,7 @@ const Transactions = () => {
           </Space>
         </Form.Item>
       </Form>
-      {/*  */}
+
       {/* 交易列表表格 */}
       <Table
         size="small"
@@ -537,6 +584,7 @@ const Transactions = () => {
         title={modalTitle}
         open={open}
         onOk={handleOk}
+        width={700}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
@@ -544,9 +592,8 @@ const Transactions = () => {
           {...layout}
           name="nest-messages"
           form={form}
-          style={{ maxWidth: 600 }}
+          style={{ maxWidth: 700 }}
           validateMessages={validateMessages}
-          // initialValues 依赖于 showModal 中设置的值，这里只需设置默认值
           initialValues={{
             mode: "single", // 默认单条
             date: dayjs(dayjs(), dateFormat),
@@ -575,9 +622,17 @@ const Transactions = () => {
             />
           </Form.Item>
 
-          <Form.Item name="date" label="日期" rules={[{ required: true }]}>
-            <DatePicker format={dateFormat} />
-          </Form.Item>
+          {mode !== "severalDaysBatch" && (
+            <Form.Item name="date" label="日期" rules={[{ required: true }]}>
+              <DatePicker format={dateFormat} />
+            </Form.Item>
+          )}
+
+          {mode === "severalDaysBatch" && (
+            <Form.Item name="year" label="年份" rules={[{ required: true }]}>
+              <DatePicker picker="year" />
+            </Form.Item>
+          )}
 
           <Form.Item name="type" label="类型" rules={[{ required: true }]}>
             <Radio.Group
@@ -586,25 +641,40 @@ const Transactions = () => {
             />
           </Form.Item>
 
-          {/* 批量模式的输入 */}
-          {mode === "batch" &&
-            modalTitle === "新增" && ( // 仅在新增且批量模式下显示
-              <Form.Item
-                tooltip="格式：描述1金额1元 描述2金额2元"
-                name="batchDescribe"
-                label="描述"
-                rules={[{ required: true, message: "请输入批量描述内容" }]}
-              >
-                <Input.TextArea
-                  autoSize={{ minRows: 3, maxRows: 10 }}
-                  placeholder="请输入批量描述，例如：购买咖啡15元 晚餐60元"
-                  maxLength={1000}
-                />
-              </Form.Item>
-            )}
+          {/* 单日批量模式的输入  && modalTitle === "新增" */}
+          {mode === "oddDaysBatch" && (
+            <Form.Item
+              tooltip="格式:拼多多9.5元,牛奶17.8元"
+              name="oddDaysBatchDescribe"
+              label="描述"
+              rules={[{ required: true, message: "请输入批量描述内容" }]}
+            >
+              <Input.TextArea
+                autoSize={{ minRows: 5, maxRows: 10 }}
+                placeholder="请输入批量描述,例如:拼多多9.5元,牛奶17.8元"
+                maxLength={1000}
+              />
+            </Form.Item>
+          )}
+
+          {/* 多日批量模式的输入  && modalTitle === "新增" */}
+          {mode === "severalDaysBatch" && (
+            <Form.Item
+              tooltip="格式:8月1号拼多多9.5元8月2号吸油棉4.9元"
+              name="severalDaysBatchDescribe"
+              label="描述"
+              rules={[{ required: true, message: "请输入批量描述内容" }]}
+            >
+              <Input.TextArea
+                autoSize={{ minRows: 10, maxRows: 10 }}
+                placeholder="请输入多日批量描述,例如:8月1号拼多多9.5元8月2号吸油棉4.9元"
+                maxLength={1000}
+              />
+            </Form.Item>
+          )}
 
           {/* 单条模式或编辑模式的输入 */}
-          {mode !== "batch" && (
+          {mode === "single" && (
             <Form.Item
               name="classification"
               label="分类"
@@ -618,7 +688,7 @@ const Transactions = () => {
             </Form.Item>
           )}
 
-          {mode !== "batch" && (
+          {mode === "single" && (
             <Form.Item
               name="amount"
               label="金额"
@@ -635,7 +705,7 @@ const Transactions = () => {
             </Form.Item>
           )}
 
-          {mode !== "batch" && (
+          {mode === "single" && (
             <Form.Item name="describe" label="描述">
               <Input.TextArea />
             </Form.Item>

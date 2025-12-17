@@ -3,8 +3,9 @@ export const recordMode = {
   label: '记录方式',
   key: 'mode',
   options: [
-    { value: 'batch', label: '批量记录' },
-    { value: 'single', label: '单项记录' },
+    { value: 'severalDaysBatch', label: '多日批量' },
+    { value: 'oddDaysBatch', label: '单日批量' },
+    { value: 'single', label: '单条记录' },
   ],
   defaultValue: 'batch',
   description: '增加批量记录，提升效率',
