@@ -15,10 +15,10 @@ export const transactionTypeField = {
   key: 'type',
   label: '交易类型',
   options: [
-    { value: 'income', label: '收入' },
-    { value: 'expense', label: '支出' },
+    { value: '收入', label: '收入' },
+    { value: '支出', label: '支出' },
   ],
-  defaultValue: 'expense',
+  defaultValue: '支出',
   description: '区分交易是收入还是支出',
 }
 
@@ -27,14 +27,14 @@ export const transactionCategoryField = {
   key: 'category',
   label: '交易分类',
   options: [
-    { value: 'salary', label: '工资' },
-    { value: 'food', label: '餐饮' },
-    { value: 'shopping', label: '购物' },
-    { value: 'transport', label: '交通' },
-    { value: 'housing', label: '住房' },
-    { value: 'other', label: '其他' },
+    { value: '工资', label: '工资' },
+    { value: '餐饮', label: '餐饮' },
+    { value: '购物', label: '购物' },
+    { value: '交通', label: '交通' },
+    { value: '住房', label: '住房' },
+    { value: '其他', label: '其他' },
   ],
-  defaultValue: 'other',
+  defaultValue: '其他',
   description: '交易的具体分类，便于统计',
 }
 

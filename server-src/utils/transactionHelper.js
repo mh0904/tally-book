@@ -41,12 +41,12 @@ const extractMonthKey = (date) => {
  */
 const processTransaction = (item, transactions) => {
   validateDateField(item)
-  // 更好的做法是将 generateId 移到外部，仅依赖时间戳或 UUID，避免传入整个数组。
+  // 保留已有ID，没有才生成新ID
   const newItem = {
     ...item,
-    id: generateId(transactions),
-    // 增加创建时间戳，便于排序和追踪
-    createdAt: Date.now(),
+    id: item.id || generateId(transactions),
+    // 保留已有创建时间，没有才生成新时间
+    createdAt: item.createdAt || Date.now(),
   }
   return newItem
 }
@@ -284,8 +284,10 @@ const importTransactions = (data) => {
   let errorCount = 0;
 
   try {
+    console.log('导入数据接收:', JSON.stringify(data));
     // 遍历每个月份的数据
     for (const [monthKey, monthData] of Object.entries(data)) {
+      console.log('处理月份:', monthKey, '数据:', JSON.stringify(monthData));
       if (monthData.transactions && Array.isArray(monthData.transactions)) {
         // 获取目标月份现有的数据
         const existingData = getMonthData(monthKey);
@@ -310,6 +312,11 @@ const importTransactions = (data) => {
                   const updatedTransaction = updateTransaction(transaction.id, updatedItem);
                   if (updatedTransaction) {
                     updatedCount++;
+                    // 更新内存中的现有交易列表
+                    const index = existingTransactions.findIndex(t => String(t.id) === String(transaction.id));
+                    if (index !== -1) {
+                      existingTransactions[index] = updatedTransaction;
+                    }
                   } else {
                     errorCount++;
                   }
@@ -334,7 +341,7 @@ const importTransactions = (data) => {
           }
         }
         
-        // 写入更新后的数据
+        // 写入更新后的数据（新增的记录）
         writeMonthData(monthKey, { transactions: existingTransactions });
       }
     }

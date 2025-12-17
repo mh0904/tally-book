@@ -5,7 +5,7 @@ module.exports = function (app) {
   app.use(
     '/api', // 前端请求路径前缀
     createProxyMiddleware({
-      target: 'http://localhost:5000', // 代理目标地址（json-server）
+      target: 'http://localhost:5001', // 代理目标地址（json-server）
       changeOrigin: true, // 支持跨域
       pathRewrite: { '^/api': '' }, // 去掉请求路径中的 /api 前缀
     })
