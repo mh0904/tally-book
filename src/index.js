@@ -13,9 +13,10 @@ dayjs.locale('zh-cn')
 // 导入页面组件
 import Home from './pages/home'
 import Transactions from './pages/transactions/index.jsx'
-import AddTransaction from './pages/addTransaction/index.jsx'
+import Chart from './pages/chart/index.jsx'
+
 // 导入导航栏
-import Navbar from './components/navBar'
+import Navbar from './components/navBar/index.jsx'
 
 // 根组件（包含导航栏和路由出口）
 const App = () => {
@@ -25,7 +26,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/transactions" element={<Transactions />} />
-        <Route path="/add" element={<AddTransaction />} />
+        <Route path="/chart" element={<Chart />} />
       </Routes>
     </div>
   )

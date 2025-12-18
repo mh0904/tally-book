@@ -14,7 +14,7 @@ let linkList = [
   },
   {
     title: '图表',
-    link: '/add',
+    link: '/chart',
   },
 ]
 
