@@ -102,13 +102,19 @@ const processTransaction = (item, transactions) => {
 
 const getAllTransactions = (params = {}) => {
   const allTransactions = []
-  const { startDate, endDate, type, classification, describe } = params
+  const { startDate, endDate, type, classification, describe, month } = params
 
   console.log(888888, params)
 
   // 预先计算需要检查的月份文件，用于性能优化
   let requiredMonths = new Set()
-  if (startDate && endDate) {
+  
+  // 如果提供了month参数，只查询该月份
+  if (month) {
+    requiredMonths.add(month)
+  }
+  // 否则按日期范围查询
+  else if (startDate && endDate) {
     let current = dayjs(startDate).startOf('month')
     const end = dayjs(endDate).startOf('month')
 
