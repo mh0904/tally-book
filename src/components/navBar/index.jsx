@@ -13,7 +13,7 @@ let linkList = [
     link: '/transactions',
   },
   {
-    title: '图形化',
+    title: '图表',
     link: '/add',
   },
 ]
