@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run react-start\" \"npm run server\"",
-    "react-start": "set PORT=3333 && craco start",
+    "react-start": "PORT=3333 craco start",
     "server": "nodemon server-src/index.js",
     "build": "craco build"
   },
@@ -21,8 +21,10 @@
   },
   "dependencies": {
     "@ant-design/charts": "^2.6.6",
+    "@ant-design/icons": "^6.1.1",
     "antd": "^5.29.1",
     "axios": "^1.13.2",
+    "dayjs": "^1.11.20",
     "json-server": "^0.17.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
