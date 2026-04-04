@@ -14,6 +14,7 @@ dayjs.locale('zh-cn')
 import Home from './pages/home'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
+import DailyBills from './pages/dailyBills/index.jsx'
 
 // 导入导航栏
 import Navbar from './components/navBar/index.jsx'
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/chart" element={<Chart />} />
+        <Route path="/daily-bills" element={<DailyBills />} />
       </Routes>
     </div>
   )

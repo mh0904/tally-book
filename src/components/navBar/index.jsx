@@ -16,6 +16,10 @@ let linkList = [
     title: '图表',
     link: '/chart',
   },
+  {
+    title: '每日账单',
+    link: '/daily-bills',
+  },
 ]
 
 const Navbar = () => {
