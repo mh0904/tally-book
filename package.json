@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm run dev",
     "dev": "concurrently \"npm run react-start\" \"npm run server\"",
-    "react-start": "PORT=3333 craco start",
+    "react-start": "set \"PORT=3333\" && craco start",
     "server": "nodemon server-src/index.js",
     "build": "craco build"
   },

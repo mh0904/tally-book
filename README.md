@@ -7,8 +7,8 @@ npm start
 ```
 
 启动后会同时开启两个服务：
-- React 前端：访问 http://localhost:3000
-- Node.js 后端：访问 http://localhost:5000/transactions 可查看示例数据
+- React 前端：访问 http://localhost:3333
+- Node.js 后端：访问 http://localhost:5511/transactions 可查看示例数据
 
 ## 项目结构
 ```

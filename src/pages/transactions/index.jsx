@@ -592,7 +592,10 @@ const Transactions = () => {
         rowKey="id"
         footer={() => {
           // 计算当前查询列表的金额总额
-          const totalAmount = transactions.reduce((sum, item) => sum + (item.amount || 0), 0);
+          const totalAmount = transactions.reduce(
+            (sum, item) => sum + (Number(item.amount) || 0),
+            0
+          );
           return (
             <div style={{ textAlign: 'center', fontWeight: 'bold', paddingRight: '30px' }}>
               总金额: ￥{totalAmount.toFixed(2)}

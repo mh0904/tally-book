@@ -1,30 +1,33 @@
 .chart-container {
-  padding: 20px;
-  min-height: 100vh;
-  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .chart-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  background-color: white;
-  padding: 20px;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 
-  h1 {
+  h3 {
     margin: 0;
-    color: #333;
-    font-size: 24px;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 650;
   }
 
   .month-selector {
     select {
+      min-width: 132px;
       padding: 8px 16px;
       border: 1px solid #d9d9d9;
-      border-radius: 4px;
+      border-radius: 6px;
+      background: #fff;
       font-size: 14px;
       cursor: pointer;
       transition: all 0.3s;
@@ -54,7 +57,7 @@
 .charts-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
 
   @media (max-width: 1200px) {
     grid-template-columns: 1fr;
@@ -62,16 +65,18 @@
 }
 
 .chart-item {
+  min-width: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   background-color: white;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 
   h2 {
     margin: 0 0 20px 0;
-    color: #333;
-    font-size: 18px;
-    font-weight: 500;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 650;
   }
 
   .chart-content {
@@ -83,6 +88,27 @@
     .no-data {
       font-size: 16px;
       color: #999;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .chart-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+
+    .month-selector,
+    .month-selector select {
+      width: 100%;
+    }
+  }
+
+  .chart-item {
+    padding: 16px;
+
+    .chart-content {
+      height: 320px;
     }
   }
 }

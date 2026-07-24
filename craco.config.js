@@ -9,6 +9,18 @@ let variables = {
 }
 
 module.exports = {
+  webpack: {
+    configure: (webpackConfig) => {
+      webpackConfig.ignoreWarnings = [
+        ...(webpackConfig.ignoreWarnings || []),
+        {
+          module: /node_modules[\\/]@antv[\\/]/,
+          message: /Failed to parse source map/,
+        },
+      ]
+      return webpackConfig
+    },
+  },
   // 只有一个 plugins 数组
   plugins: [
     {
