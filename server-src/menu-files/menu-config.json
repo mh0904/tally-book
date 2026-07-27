@@ -64,6 +64,14 @@
         "path": "/role-config",
         "enabled": true,
         "sort": 2
+      },
+      {
+        "id": "user-config",
+        "title": "用户管理",
+        "icon": "user",
+        "path": "/user-config",
+        "enabled": true,
+        "sort": 3
       }
     ]
   },

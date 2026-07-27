@@ -1,0 +1,153 @@
+.user-config-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.user-config-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 18px;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+
+  span {
+    display: block;
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 13px;
+  }
+}
+
+.user-config-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.user-list-panel,
+.user-editor-panel {
+  min-height: 520px;
+  padding: 18px;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-list-item {
+  display: grid;
+  width: 100%;
+  min-height: 68px;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s ease, background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover,
+  &.active {
+    border-color: #60a5fa;
+    background: #f8fbff;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+  }
+}
+
+.user-list-icon {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #eef6ff;
+  color: #2563eb;
+  font-size: 16px;
+}
+
+.user-list-content {
+  min-width: 0;
+
+  strong,
+  em {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: #111827;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 650;
+  }
+
+  em {
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 12px;
+    font-style: normal;
+  }
+}
+
+.user-edit-form {
+  max-width: 760px;
+}
+
+.user-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+
+  &.small {
+    grid-template-columns: 160px minmax(0, 1fr);
+  }
+}
+
+.user-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .user-config-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .user-config-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .user-list-panel,
+  .user-editor-panel {
+    min-height: auto;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 680px) {
+  .user-form-row,
+  .user-form-row.small {
+    grid-template-columns: 1fr;
+  }
+}

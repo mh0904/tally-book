@@ -1,0 +1,13 @@
+[
+  {
+    "id": "admin",
+    "username": "admin",
+    "name": "管理员",
+    "roleId": "admin",
+    "enabled": true,
+    "sort": 1,
+    "passwordSalt": "tally-book-admin-salt",
+    "passwordHash": "e88b1e038195646a1ccc375e65bdf92fd0d122db79f0530bb398a28f77766bf9",
+    "builtin": true
+  }
+]

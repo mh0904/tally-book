@@ -1,30 +1,39 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { login as loginUser } from '../../api/users'
 import './index.less'
 
 const DEFAULT_USERNAME = 'admin'
-const DEFAULT_PASSWORD = 'admin'
 
 const Login = ({ onLogin }) => {
   const [form] = Form.useForm()
+  const [loading, setLoading] = React.useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const fromPath = location.state?.from?.pathname || '/'
 
-  const handleFinish = (values) => {
-    if (
-      values.username === DEFAULT_USERNAME &&
-      values.password === DEFAULT_PASSWORD
-    ) {
-      onLogin(values.username)
-      message.success('登录成功')
+  const handleFinish = async (values) => {
+    setLoading(true)
+
+    try {
+      const { code, data, msg } = await loginUser(values)
+
+      if (code !== 200) {
+        throw new Error(msg || '登录失败')
+      }
+
+      onLogin(data)
+      message.success(msg || '登录成功')
       navigate(fromPath, { replace: true })
       return
+    } catch (error) {
+      message.error(error.message || '账号或密码错误')
+      form.setFieldsValue({ password: '' })
+    } finally {
+      setLoading(false)
     }
-
-    message.error('账号或密码错误')
-    form.setFieldsValue({ password: '' })
   }
 
   return (
@@ -71,7 +80,13 @@ const Login = ({ onLogin }) => {
             />
           </Form.Item>
 
-          <Button block htmlType="submit" size="large" type="primary">
+          <Button
+            block
+            htmlType="submit"
+            loading={loading}
+            size="large"
+            type="primary"
+          >
             登录
           </Button>
         </Form>

@@ -3,6 +3,7 @@ const jsonServer = require('json-server')
 const { setupMenuRoutes } = require('./routes/menu-routes')
 const { setupRoleRoutes } = require('./routes/role-routes')
 const { setupTransactionRoutes } = require('./routes/transaction-routes')
+const { setupUserRoutes } = require('./routes/user-routes')
 
 // 创建服务器实例
 const server = jsonServer.create()
@@ -16,6 +17,7 @@ server.use(jsonServer.bodyParser)
 setupMenuRoutes(server)
 setupRoleRoutes(server)
 setupTransactionRoutes(server)
+setupUserRoutes(server)
 
 // 启动服务器
 const PORT = process.env.PORT || 5511

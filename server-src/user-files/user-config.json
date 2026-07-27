@@ -1,0 +1,24 @@
+[
+  {
+    "id": "admin",
+    "username": "admin",
+    "name": "管理员",
+    "roleId": "admin",
+    "enabled": true,
+    "sort": 1,
+    "passwordSalt": "tally-book-admin-salt",
+    "passwordHash": "e88b1e038195646a1ccc375e65bdf92fd0d122db79f0530bb398a28f77766bf9",
+    "builtin": true
+  },
+  {
+    "id": "user-1785131049003-33nfpv",
+    "username": "13040689881",
+    "name": "访客",
+    "roleId": "finance-manager",
+    "enabled": true,
+    "sort": 2,
+    "passwordSalt": "5b19bf3cb06ebcdfbdf8ef4c500cda93",
+    "passwordHash": "6442d502720e4a5df52180018043a2eb4d5da9fb976628ece038ca0b9a76d552",
+    "builtin": false
+  }
+]

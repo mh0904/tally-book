@@ -12,10 +12,8 @@ import {
 } from 'react-router-dom'
 import { Avatar, ConfigProvider, Dropdown, Tag, message } from 'antd'
 import {
-  CheckOutlined,
   DownOutlined,
   LogoutOutlined,
-  SafetyOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import zhCN from 'antd/locale/zh_CN'
@@ -29,6 +27,7 @@ import Home from './pages/home'
 import Login from './pages/login'
 import MenuConfig from './pages/menu-config'
 import RoleConfig from './pages/role-config'
+import UserConfig from './pages/user-config'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
 import DailyBills from './pages/daily-bills/index.jsx'
@@ -43,11 +42,18 @@ import {
 } from './config/roles'
 import { getMenus, updateMenus } from './api/menus'
 import { getRoles, updateRoles } from './api/roles'
+import { getUsers, updateUsers } from './api/users'
+import {
+  ADMIN_USER_ID,
+  getUserDisplayName,
+  normalizeUsers,
+} from './config/users'
 
 // 导入导航栏
 import Sidebar from './components/sidebar/index.jsx'
 
 const AUTH_KEY = 'tally-book-login'
+const USER_ID_KEY = 'tally-book-user-id'
 const USER_KEY = 'tally-book-user'
 const ROLE_KEY = 'tally-book-role'
 const AVATAR_COLOR_KEY = 'tally-book-avatar-color'
@@ -63,6 +69,8 @@ const AVATAR_COLORS = [
 ]
 
 const getUserName = () => localStorage.getItem(USER_KEY) || 'admin'
+
+const getUserId = () => localStorage.getItem(USER_ID_KEY) || ADMIN_USER_ID
 
 const getSavedRoleId = () => localStorage.getItem(ROLE_KEY) || ADMIN_ROLE_ID
 
@@ -126,6 +134,10 @@ const pageMeta = {
     title: '角色管理',
     description: '角色与菜单权限维护',
   },
+  '/user-config': {
+    title: '用户管理',
+    description: '登录账号与密码维护',
+  },
 }
 
 // 根组件（包含导航栏和路由出口）
@@ -136,25 +148,34 @@ const App = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
   const [menus, setMenus] = React.useState([])
   const [roles, setRoles] = React.useState([])
+  const [users, setUsers] = React.useState([])
   const [isAuthenticated, setIsAuthenticated] = React.useState(
     () => localStorage.getItem(AUTH_KEY) === 'true'
   )
+  const [currentUserId, setCurrentUserId] = React.useState(getUserId)
   const [userName, setUserName] = React.useState(getUserName)
   const [currentRoleId, setCurrentRoleId] = React.useState(getSavedRoleId)
   const [avatarColor, setAvatarColor] = React.useState(getAvatarColor)
   const avatarText = React.useMemo(() => getAvatarText(userName), [userName])
+  const currentUser = React.useMemo(() => {
+    return users.find((user) => user.id === currentUserId) || null
+  }, [currentUserId, users])
   const enabledRoles = React.useMemo(
     () => roles.filter((role) => role.enabled !== false),
     [roles]
   )
   const currentRole = React.useMemo(() => {
+    if (currentUser) {
+      return enabledRoles.find((role) => role.id === currentUser.roleId) || null
+    }
+
     return (
       enabledRoles.find((role) => role.id === currentRoleId) ||
       enabledRoles.find((role) => role.id === ADMIN_ROLE_ID) ||
       enabledRoles[0] ||
       null
     )
-  }, [currentRoleId, enabledRoles])
+  }, [currentRoleId, currentUser, enabledRoles])
   const visibleMenus = React.useMemo(
     () => filterMenuTreeByRole(menus, currentRole),
     [menus, currentRole]
@@ -167,7 +188,9 @@ const App = () => {
     () => getAccessibleMenuPaths(visibleMenus),
     [visibleMenus]
   )
-  const accessReady = Boolean(menus.length > 0 && roles.length > 0 && currentRole)
+  const accessReady = Boolean(
+    menus.length > 0 && roles.length > 0 && users.length > 0 && currentRole
+  )
 
   const refreshMenus = React.useCallback(async () => {
     const { code, data, msg } = await getMenus()
@@ -193,12 +216,32 @@ const App = () => {
     return refreshedRoles
   }, [])
 
-  const handleLogin = (name) => {
-    const nextUserName = String(name || 'admin').trim() || 'admin'
-    const nextRoleId = getSavedRoleId()
+  const refreshUsers = React.useCallback(async () => {
+    const { code, data, msg } = await getUsers()
+
+    if (code !== 200) {
+      throw new Error(msg || '用户加载失败')
+    }
+
+    const refreshedUsers = normalizeUsers(data)
+    setUsers(refreshedUsers)
+    return refreshedUsers
+  }, [])
+
+  const handleLogin = (user) => {
+    const nextUser = user || {
+      id: ADMIN_USER_ID,
+      name: 'admin',
+      roleId: ADMIN_ROLE_ID,
+      username: 'admin',
+    }
+    const nextUserName = getUserDisplayName(nextUser)
+    const nextRoleId = nextUser.roleId || ADMIN_ROLE_ID
     localStorage.setItem(AUTH_KEY, 'true')
+    localStorage.setItem(USER_ID_KEY, nextUser.id)
     localStorage.setItem(USER_KEY, nextUserName)
     localStorage.setItem(ROLE_KEY, nextRoleId)
+    setCurrentUserId(nextUser.id)
     setUserName(nextUserName)
     setCurrentRoleId(nextRoleId)
     setAvatarColor(getAvatarColor())
@@ -207,6 +250,8 @@ const App = () => {
 
   const handleLogout = () => {
     localStorage.removeItem(AUTH_KEY)
+    localStorage.removeItem(USER_ID_KEY)
+    localStorage.removeItem(ROLE_KEY)
     setIsAuthenticated(false)
   }
 
@@ -215,9 +260,10 @@ const App = () => {
 
     const fetchAppConfig = async () => {
       try {
-        const [menusResult, rolesResult] = await Promise.all([
+        const [menusResult, rolesResult, usersResult] = await Promise.all([
           getMenus(),
           getRoles(),
+          getUsers(),
         ])
 
         if (!mounted) {
@@ -234,6 +280,12 @@ const App = () => {
           setRoles(normalizeRoles(rolesResult.data))
         } else {
           message.error(rolesResult.msg || '角色加载失败')
+        }
+
+        if (usersResult.code === 200) {
+          setUsers(normalizeUsers(usersResult.data))
+        } else {
+          message.error(usersResult.msg || '用户加载失败')
         }
       } catch (error) {
         // request 拦截器已经做了统一错误提示，这里保留默认菜单兜底。
@@ -268,6 +320,59 @@ const App = () => {
 
     return refreshRoles()
   }
+
+  const handleUsersChange = async (nextUsers) => {
+    const normalizedUsers = normalizeUsers(nextUsers)
+    const { code, msg } = await updateUsers(normalizedUsers)
+
+    if (code !== 200) {
+      throw new Error(msg || '用户保存失败')
+    }
+
+    return refreshUsers()
+  }
+
+  React.useEffect(() => {
+    if (!isAuthenticated || !users.length) {
+      return
+    }
+
+    if (!currentUser || currentUser.enabled === false) {
+      handleLogout()
+      message.warning('当前用户不可用，请重新登录')
+      return
+    }
+
+    if (
+      roles.length > 0 &&
+      !roles.some(
+        (role) => role.id === currentUser.roleId && role.enabled !== false
+      )
+    ) {
+      handleLogout()
+      message.warning('当前用户角色不可用，请重新登录')
+      return
+    }
+
+    const nextUserName = getUserDisplayName(currentUser)
+
+    if (nextUserName !== userName) {
+      localStorage.setItem(USER_KEY, nextUserName)
+      setUserName(nextUserName)
+    }
+
+    if (currentUser.roleId && currentUser.roleId !== currentRoleId) {
+      localStorage.setItem(ROLE_KEY, currentUser.roleId)
+      setCurrentRoleId(currentUser.roleId)
+    }
+  }, [
+    currentRoleId,
+    currentUser,
+    isAuthenticated,
+    roles,
+    userName,
+    users.length,
+  ])
 
   React.useEffect(() => {
     if (!currentRole?.id || currentRole.id === currentRoleId) {
@@ -313,32 +418,10 @@ const App = () => {
       return
     }
 
-    if (key?.startsWith('role:')) {
-      const nextRoleId = key.replace('role:', '')
-      const nextRole = enabledRoles.find((role) => role.id === nextRoleId)
-
-      if (!nextRole) {
-        message.warning('角色不可用')
-        return
-      }
-
-      localStorage.setItem(ROLE_KEY, nextRole.id)
-      setCurrentRoleId(nextRole.id)
-      message.success(`已切换为${nextRole.name}`)
-      return
-    }
-
     if (key === 'logout') {
       handleLogout()
     }
   }
-
-  const roleMenuItems = enabledRoles.map((role) => ({
-    key: `role:${role.id}`,
-    disabled: role.id === currentRole?.id,
-    icon: role.id === currentRole?.id ? <CheckOutlined /> : <SafetyOutlined />,
-    label: role.name,
-  }))
 
   const userMenuItems = [
     {
@@ -350,10 +433,9 @@ const App = () => {
       type: 'divider',
     },
     {
-      key: 'role-switch',
-      icon: <SafetyOutlined />,
+      key: 'role-label',
+      disabled: true,
       label: `当前角色：${currentRole?.name || '未加载'}`,
-      children: roleMenuItems,
     },
     {
       type: 'divider',
@@ -461,6 +543,19 @@ const App = () => {
                   onRolesChange={handleRolesChange}
                   onRolesRefresh={refreshRoles}
                   roles={roles}
+                />
+              )}
+            />
+            <Route
+              path="/user-config"
+              element={renderProtectedPage(
+                '/user-config',
+                <UserConfig
+                  currentUserId={currentUserId}
+                  onUsersChange={handleUsersChange}
+                  onUsersRefresh={refreshUsers}
+                  roles={roles}
+                  users={users}
                 />
               )}
             />
