@@ -62,10 +62,59 @@ a {
     font-size: 13px;
   }
 
-  .admin-date {
-    color: #4b5563;
+}
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-date {
+  color: #4b5563;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.user-trigger {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 9px 3px 3px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: #4b5563;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+
+  .user-avatar {
+    flex: 0 0 30px;
+    color: #fff;
     font-size: 14px;
-    white-space: nowrap;
+    font-weight: 700;
+    line-height: 30px;
+  }
+
+  .user-name {
+    display: inline;
+    margin-top: 0;
+    color: #1f2937;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .user-caret {
+    color: #6b7280;
+    font-size: 12px;
   }
 }
 
@@ -100,8 +149,18 @@ a {
   .admin-topbar {
     min-height: auto;
     align-items: flex-start;
+    flex-direction: column;
     gap: 8px;
     padding: 16px;
+  }
+
+  .admin-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .user-trigger {
+    padding-right: 8px;
   }
 
   .admin-content {

@@ -2,8 +2,15 @@
 import React from 'react'
 import './index.less'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { ConfigProvider } from 'antd'
+import {
+  BrowserRouter,
+  Navigate,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom'
+import { Avatar, ConfigProvider, Dropdown, message } from 'antd'
+import { DownOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import zhCN from 'antd/locale/zh_CN'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
@@ -12,12 +19,64 @@ import 'dayjs/locale/zh-cn'
 dayjs.locale('zh-cn')
 // 导入页面组件
 import Home from './pages/home'
+import Login from './pages/login'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
 import DailyBills from './pages/dailyBills/index.jsx'
 
 // 导入导航栏
 import Navbar from './components/navBar/index.jsx'
+
+const AUTH_KEY = 'tally-book-login'
+const USER_KEY = 'tally-book-user'
+const AVATAR_COLOR_KEY = 'tally-book-avatar-color'
+const AVATAR_COLORS = [
+  '#14b8a6',
+  '#0ea5e9',
+  '#6366f1',
+  '#8b5cf6',
+  '#ec4899',
+  '#f97316',
+  '#22c55e',
+  '#64748b',
+]
+
+const getUserName = () => localStorage.getItem(USER_KEY) || 'admin'
+
+const getAvatarText = (name) => {
+  const normalizedName = String(name || '').trim()
+
+  if (!normalizedName) {
+    return 'U'
+  }
+
+  const chineseInitial = normalizedName.match(/[\u4e00-\u9fff]/)
+  if (chineseInitial) {
+    return chineseInitial[0]
+  }
+
+  const englishInitial = normalizedName.match(/[a-zA-Z]/)
+  if (englishInitial) {
+    return englishInitial[0].toUpperCase()
+  }
+
+  return normalizedName[0].toUpperCase()
+}
+
+const createAvatarColor = () =>
+  AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)]
+
+const getAvatarColor = () => {
+  const savedColor = localStorage.getItem(AVATAR_COLOR_KEY)
+
+  if (savedColor) {
+    return savedColor
+  }
+
+  const nextColor = createAvatarColor()
+  localStorage.setItem(AVATAR_COLOR_KEY, nextColor)
+  return nextColor
+}
 
 const pageMeta = {
   '/': {
@@ -43,6 +102,66 @@ const App = () => {
   const location = useLocation()
   const currentPage = pageMeta[location.pathname] || pageMeta['/']
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
+  const [isAuthenticated, setIsAuthenticated] = React.useState(
+    () => localStorage.getItem(AUTH_KEY) === 'true'
+  )
+  const [userName, setUserName] = React.useState(getUserName)
+  const [avatarColor, setAvatarColor] = React.useState(getAvatarColor)
+  const avatarText = React.useMemo(() => getAvatarText(userName), [userName])
+
+  const handleLogin = (name) => {
+    const nextUserName = String(name || 'admin').trim() || 'admin'
+    localStorage.setItem(AUTH_KEY, 'true')
+    localStorage.setItem(USER_KEY, nextUserName)
+    setUserName(nextUserName)
+    setAvatarColor(getAvatarColor())
+    setIsAuthenticated(true)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem(AUTH_KEY)
+    setIsAuthenticated(false)
+  }
+
+  const handleUserMenuClick = ({ key }) => {
+    if (key === 'profile') {
+      message.info('个人中心暂未开放')
+      return
+    }
+
+    if (key === 'logout') {
+      handleLogout()
+    }
+  }
+
+  const userMenuItems = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: '个人中心',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'logout',
+      danger: true,
+      icon: <LogoutOutlined />,
+      label: '退出登录',
+    },
+  ]
+
+  if (location.pathname === '/login') {
+    if (isAuthenticated) {
+      return <Navigate to="/" replace />
+    }
+
+    return <Login onLogin={handleLogin} />
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace state={{ from: location }} />
+  }
 
   return (
     <div className="admin-shell">
@@ -56,7 +175,26 @@ const App = () => {
             <h1>{currentPage.title}</h1>
             <span>{currentPage.description}</span>
           </div>
-          <div className="admin-date">{dayjs().format('YYYY年MM月DD日')}</div>
+          <div className="admin-actions">
+            <div className="admin-date">{dayjs().format('YYYY年MM月DD日')}</div>
+            <Dropdown
+              menu={{ items: userMenuItems, onClick: handleUserMenuClick }}
+              placement="bottomRight"
+              trigger={['click']}
+            >
+              <button className="user-trigger" type="button">
+                <Avatar
+                  className="user-avatar"
+                  size={30}
+                  style={{ backgroundColor: avatarColor }}
+                >
+                  {avatarText}
+                </Avatar>
+                <span className="user-name">{userName}</span>
+                <DownOutlined className="user-caret" />
+              </button>
+            </Dropdown>
+          </div>
         </header>
         <section className="admin-content">
           <Routes>
