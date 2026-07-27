@@ -4,6 +4,12 @@ const {
   verifyUserLogin,
   writeUserConfig,
 } = require('../utils/user-helper')
+const {
+  sendError,
+  sendFail,
+  sendResponse,
+  sendSuccess,
+} = require('../utils/response-helper')
 
 const setupUserRoutes = (server) => {
   // 校验用户登录账号和密码。
@@ -12,41 +18,26 @@ const setupUserRoutes = (server) => {
       const user = verifyUserLogin(req.body?.username, req.body?.password)
 
       if (!user) {
-        return res.json({
+        return sendResponse(res, {
           code: 401,
           data: null,
           msg: '账号或密码错误',
+          status: 200,
         })
       }
 
-      res.json({
-        code: 200,
-        data: user,
-        msg: '登录成功',
-      })
+      sendSuccess(res, user, '登录成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `登录失败：${error.message}`,
-      })
+      sendError(res, '登录失败', error)
     }
   })
 
   // 获取用户账号配置列表，不返回密码哈希、盐或明文密码字段。
   server.get('/users', (req, res) => {
     try {
-      res.json({
-        code: 200,
-        data: getSafeUserConfig(),
-        msg: '查询用户成功',
-      })
+      sendSuccess(res, getSafeUserConfig(), '查询用户成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `查询用户失败：${error.message}`,
-      })
+      sendError(res, '查询用户失败', error)
     }
   })
 
@@ -56,41 +47,21 @@ const setupUserRoutes = (server) => {
       const users = req.body
 
       if (!Array.isArray(users)) {
-        return res.status(400).json({
-          code: 400,
-          data: null,
-          msg: '用户数据必须是数组',
-        })
+        return sendFail(res, '用户数据必须是数组')
       }
 
-      res.json({
-        code: 200,
-        data: writeUserConfig(users),
-        msg: '用户保存成功',
-      })
+      sendSuccess(res, writeUserConfig(users), '用户保存成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `用户保存失败：${error.message}`,
-      })
+      sendError(res, '用户保存失败', error)
     }
   })
 
   // 将用户配置恢复为默认配置。
   server.post('/users/reset', (req, res) => {
     try {
-      res.json({
-        code: 200,
-        data: resetUserConfig(),
-        msg: '用户已恢复默认',
-      })
+      sendSuccess(res, resetUserConfig(), '用户已恢复默认')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `恢复默认用户失败：${error.message}`,
-      })
+      sendError(res, '恢复默认用户失败', error)
     }
   })
 }

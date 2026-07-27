@@ -115,9 +115,7 @@ const processTransaction = (item, transactions) => {
 const getAllTransactions = (params = {}) => {
   const allTransactions = []
   const { startDate, endDate, type, classification, describe, month } = params
-
   console.log(888888, params)
-
   // 预先计算需要检查的月份文件，用于性能优化
   let requiredMonths = new Set()
   

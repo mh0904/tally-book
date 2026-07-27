@@ -1,5 +1,10 @@
 const { getMonthData, writeMonthData } = require('../utils/file-helper')
 const {
+  sendError,
+  sendFail,
+  sendSuccess,
+} = require('../utils/response-helper')
+const {
   validateDateField,
   extractMonthKey,
   processTransaction,
@@ -23,17 +28,9 @@ const setupTransactionRoutes = (server) => {
       const processedItem = processTransaction(newItem, transactions)
       transactions.push(processedItem)
       writeMonthData(monthKey, { transactions })
-      res.json({
-        code: 200,
-        data: processedItem,
-        msg: '账单添加成功',
-      })
+      sendSuccess(res, processedItem, '账单添加成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `账单添加失败 ${error.message}`,
-      })
+      sendError(res, '账单添加失败', error)
     }
   })
 
@@ -44,17 +41,9 @@ const setupTransactionRoutes = (server) => {
       const allTransactions = getAllTransactions(req.query)
 
       // 返回筛选后的数据
-      res.json({
-        code: 200,
-        data: allTransactions,
-        msg: '查询交易成功',
-      })
+      sendSuccess(res, allTransactions, '查询交易成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `查询交易失败：${error.message}`,
-      })
+      sendError(res, '查询交易失败', error)
     }
   })
 
@@ -66,29 +55,15 @@ const setupTransactionRoutes = (server) => {
       if (updatedItem.date) {
         validateDateField(updatedItem)
       }
-      const result = updateTransaction(id, updatedItem)
+      const updatedTransaction = updateTransaction(id, updatedItem)
 
-      if (!result) {
-        return res.status(404).json({ error: `未找到 ID 为 ${id} 的交易记录` })
+      if (!updatedTransaction) {
+        return sendFail(res, `未找到 ID 为 ${id} 的交易记录`, 404)
       }
-      const { monthKey, updatedTransaction } = result
-      const monthData = getMonthData(monthKey)
-      // 替换/更新 monthData.transactions 中的数据
 
-      // 假设 updateTransaction 已经处理了 monthData 的更新
-      // 这里我们直接将包含已更新 transactions 的 monthData 写回
-      writeMonthData(monthKey, { transactions: monthData.transactions })
-      res.json({
-        code: 200,
-        data: updatedTransaction,
-        msg: '账单更新成功',
-      })
+      sendSuccess(res, updatedTransaction, '账单更新成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `账单更新失败 ${error.message}`,
-      })
+      sendError(res, '账单更新失败', error)
     }
   })
 
@@ -133,17 +108,9 @@ const setupTransactionRoutes = (server) => {
       }
       
       // 返回处理后的结果
-      res.json({
-        code: 200,
-        data: processedItems,
-        msg: '批量添加交易成功',
-      })
+      sendSuccess(res, processedItems, '批量添加交易成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `批量添加交易失败 ${error.message}`,
-      })
+      sendError(res, '批量添加交易失败', error)
     }
   })
 
@@ -157,27 +124,15 @@ const setupTransactionRoutes = (server) => {
 
       if (!deletedTransaction) {
         // 如果 helper 返回 null，表示未找到
-        return res.status(404).json({
-          code: 404,
-          data: null,
-          msg: `未找到 ID 为 ${id} 的交易记录`,
-        })
+        return sendFail(res, `未找到 ID 为 ${id} 的交易记录`, 404)
       }
 
       // 返回被删除的记录，并发送 200 或 204 No Content
       // 这里返回 200 并带上数据，方便前端确认
-      res.status(200).json({
-        code: 200,
-        data: deletedTransaction,
-        msg: `成功删除 ID 为 ${id} 的交易记录`,
-      })
+      sendSuccess(res, deletedTransaction, `成功删除 ID 为 ${id} 的交易记录`)
     } catch (error) {
       // 捕获可能的文件操作错误等
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `删除失败：${error.message}`,
-      })
+      sendError(res, '删除失败', error)
     }
   })
 
@@ -185,18 +140,10 @@ const setupTransactionRoutes = (server) => {
   server.get('/transactions/export', (req, res) => {
     try {
       const allData = exportAllTransactions()
-      res.json({
-        code: 200,
-        data: allData,
-        msg: '数据导出成功'
-      })
+      sendSuccess(res, allData, '数据导出成功')
     } catch (error) {
       console.error('导出数据失败:', error)
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `导出数据失败：${error.message}`
-      })
+      sendError(res, '导出数据失败', error)
     }
   })
 
@@ -205,34 +152,22 @@ const setupTransactionRoutes = (server) => {
     try {
       const importData = req.body
       if (!importData || typeof importData !== 'object') {
-        return res.status(400).json({
-          code: 400,
-          data: null,
-          msg: '导入数据格式错误'
-        })
+        return sendFail(res, '导入数据格式错误')
       }
 
       const result = importTransactions(importData)
       if (result.success) {
-        res.json({
-          code: 200,
-          data: null,
-          msg: `数据导入成功，共导入 ${result.imported} 条记录，${result.errors} 条记录导入失败`
-        })
+        sendSuccess(
+          res,
+          null,
+          `数据导入成功，共导入 ${result.imported} 条记录，${result.errors} 条记录导入失败`
+        )
       } else {
-        res.status(500).json({
-          code: 500,
-          data: null,
-          msg: `数据导入失败: ${result.message}`
-        })
+        sendFail(res, `数据导入失败: ${result.message}`, 500)
       }
     } catch (error) {
       console.error('导入数据失败:', error)
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `导入数据失败：${error.message}`
-      })
+      sendError(res, '导入数据失败', error)
     }
   })
 }

@@ -4,6 +4,11 @@ const {
   resetTransactionCategoryConfig,
   writeTransactionCategoryConfig,
 } = require('../utils/transaction-category-helper')
+const {
+  sendError,
+  sendFail,
+  sendSuccess,
+} = require('../utils/response-helper')
 
 const setupTransactionCategoryRoutes = (server) => {
   // 获取当前交易分类配置，可通过 type=收入/支出 筛选。
@@ -15,34 +20,22 @@ const setupTransactionCategoryRoutes = (server) => {
         ? categories.filter((item) => item.type === type)
         : categories
 
-      res.json({
-        code: 200,
-        data: filteredCategories,
-        msg: '查询交易分类成功',
-      })
+      sendSuccess(res, filteredCategories, '查询交易分类成功')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `查询交易分类失败：${error.message}`,
-      })
+      sendError(res, '查询交易分类失败', error)
     }
   })
 
   // 获取默认交易分类配置。
   server.get('/transaction-categories/default', (req, res) => {
     try {
-      res.json({
-        code: 200,
-        data: getDefaultTransactionCategoryConfig(),
-        msg: '查询默认交易分类成功',
-      })
+      sendSuccess(
+        res,
+        getDefaultTransactionCategoryConfig(),
+        '查询默认交易分类成功'
+      )
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `查询默认交易分类失败：${error.message}`,
-      })
+      sendError(res, '查询默认交易分类失败', error)
     }
   })
 
@@ -52,41 +45,25 @@ const setupTransactionCategoryRoutes = (server) => {
       const categories = req.body
 
       if (!Array.isArray(categories)) {
-        return res.status(400).json({
-          code: 400,
-          data: null,
-          msg: '交易分类数据必须是数组',
-        })
+        return sendFail(res, '交易分类数据必须是数组')
       }
 
-      res.json({
-        code: 200,
-        data: writeTransactionCategoryConfig(categories),
-        msg: '交易分类保存成功',
-      })
+      sendSuccess(
+        res,
+        writeTransactionCategoryConfig(categories),
+        '交易分类保存成功'
+      )
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `交易分类保存失败：${error.message}`,
-      })
+      sendError(res, '交易分类保存失败', error)
     }
   })
 
   // 将交易分类恢复为默认配置。
   server.post('/transaction-categories/reset', (req, res) => {
     try {
-      res.json({
-        code: 200,
-        data: resetTransactionCategoryConfig(),
-        msg: '交易分类已恢复默认',
-      })
+      sendSuccess(res, resetTransactionCategoryConfig(), '交易分类已恢复默认')
     } catch (error) {
-      res.status(500).json({
-        code: 500,
-        data: null,
-        msg: `恢复默认交易分类失败：${error.message}`,
-      })
+      sendError(res, '恢复默认交易分类失败', error)
     }
   })
 }
