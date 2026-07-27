@@ -34,7 +34,7 @@ import {
   deleteTransactions,
   exportAllTransactions,
   importTransactions,
-} from "../../utils/transactions";
+} from "../../api/transactions";
 const dateFormat = "YYYY-MM-DD";
 
 const Transactions = () => {

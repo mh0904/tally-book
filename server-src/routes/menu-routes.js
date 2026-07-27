@@ -3,7 +3,7 @@ const {
   getMenuConfig,
   resetMenuConfig,
   writeMenuConfig,
-} = require('../utils/menuHelper')
+} = require('../utils/menu-helper')
 
 const setupMenuRoutes = (server) => {
   server.get('/menus', (req, res) => {

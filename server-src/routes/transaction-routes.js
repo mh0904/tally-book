@@ -1,4 +1,4 @@
-const { getMonthData, writeMonthData } = require('../utils/fileHelper')
+const { getMonthData, writeMonthData } = require('../utils/file-helper')
 const {
   validateDateField,
   extractMonthKey,
@@ -8,7 +8,7 @@ const {
   deleteTransaction,
   exportAllTransactions,
   importTransactions,
-} = require('../utils/transactionHelper')
+} = require('../utils/transaction-helper')
 
 // 处理交易相关路由
 const setupTransactionRoutes = (server) => {

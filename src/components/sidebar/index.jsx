@@ -1,4 +1,4 @@
-// src/components/Navbar.js
+// src/components/sidebar/index.jsx
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import {
@@ -7,7 +7,7 @@ import {
   MenuUnfoldOutlined,
   RightOutlined,
 } from '@ant-design/icons'
-import { renderMenuIcon } from '../../common/menuIcons'
+import { renderMenuIcon } from '../../common/menu-icons'
 import './index.less'
 
 const getActiveParentKeys = (menus, pathname, parentKeys = []) => {
@@ -38,7 +38,7 @@ const hasActiveChild = (item, pathname) => {
   return item.children?.some((child) => hasActiveChild(child, pathname))
 }
 
-const Navbar = ({ collapsed, menus = [], onToggle }) => {
+const Sidebar = ({ collapsed, menus = [], onToggle }) => {
   const location = useLocation()
   const [openKeys, setOpenKeys] = React.useState(() => new Set(['business']))
 
@@ -160,4 +160,4 @@ const Navbar = ({ collapsed, menus = [], onToggle }) => {
     </aside>
   )
 }
-export default Navbar
+export default Sidebar

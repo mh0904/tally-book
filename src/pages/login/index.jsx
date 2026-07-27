@@ -1,7 +1,7 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
-import './login.less'
+import './index.less'
 
 const DEFAULT_USERNAME = 'admin'
 const DEFAULT_PASSWORD = 'admin'

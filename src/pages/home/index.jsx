@@ -5,7 +5,7 @@ import {
   PieChartOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons'
-import './home.less'
+import './index.less'
 
 const quickLinks = [
   {
@@ -44,7 +44,11 @@ const Home = () => {
 
       <section className="home-quick-grid">
         {quickLinks.map((item) => (
-          <Link className="home-quick-item page-panel" key={item.link} to={item.link}>
+          <Link
+            className="home-quick-item page-panel"
+            key={item.link}
+            to={item.link}
+          >
             <span className="home-quick-icon">{item.icon}</span>
             <strong>{item.title}</strong>
             <em>{item.desc}</em>
@@ -54,4 +58,5 @@ const Home = () => {
     </div>
   )
 }
+
 export default Home

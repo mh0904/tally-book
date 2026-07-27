@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Pie, Column } from "@ant-design/charts";
-import { getAllTransactions } from "../../utils/transactions";
+import { getAllTransactions } from "../../api/transactions";
 import { transactionCategoryField } from "../../constants/fields";
 import "./index.less";
 

@@ -1,7 +1,7 @@
 // server-src/index.js
 const jsonServer = require('json-server')
-const { setupMenuRoutes } = require('./routes/menuRoutes')
-const { setupTransactionRoutes } = require('./routes/transactionRoutes')
+const { setupMenuRoutes } = require('./routes/menu-routes')
+const { setupTransactionRoutes } = require('./routes/transaction-routes')
 
 // 创建服务器实例
 const server = jsonServer.create()

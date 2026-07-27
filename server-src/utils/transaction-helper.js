@@ -1,6 +1,6 @@
-// server-src/utils/transactionHelper.js
-const { getMonthData, writeMonthData, DATA_DIR } = require('./fileHelper')
-const { generateId } = require('./idGenerator')
+// server-src/utils/transaction-helper.js
+const { getMonthData, writeMonthData, DATA_DIR } = require('./file-helper')
+const { generateId } = require('./id-generator')
 const fs = require('fs')
 
 // ⚠️ 确保安装 dayjs 和 isBetween 插件

@@ -1,4 +1,4 @@
-import request from './request'
+import request from '../utils/request'
 
 // 获取所有记录
 export const getAllTransactions = (data) => {

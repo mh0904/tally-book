@@ -1,4 +1,4 @@
-// server-src/utils/fileHelper.js
+// server-src/utils/file-helper.js
 const fs = require('fs')
 const path = require('path')
 

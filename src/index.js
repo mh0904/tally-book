@@ -20,15 +20,15 @@ dayjs.locale('zh-cn')
 // 导入页面组件
 import Home from './pages/home'
 import Login from './pages/login'
-import MenuConfig from './pages/menuConfig'
+import MenuConfig from './pages/menu-config'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
-import DailyBills from './pages/dailyBills/index.jsx'
+import DailyBills from './pages/daily-bills/index.jsx'
 import { normalizeMenuTree } from './config/menu'
-import { getMenus, updateMenus } from './utils/menus'
+import { getMenus, updateMenus } from './api/menus'
 
 // 导入导航栏
-import Navbar from './components/navBar/index.jsx'
+import Sidebar from './components/sidebar/index.jsx'
 
 const AUTH_KEY = 'tally-book-login'
 const USER_KEY = 'tally-book-user'
@@ -224,7 +224,7 @@ const App = () => {
 
   return (
     <div className="admin-shell">
-      <Navbar
+      <Sidebar
         collapsed={sidebarCollapsed}
         menus={menus}
         onToggle={() => setSidebarCollapsed((value) => !value)}

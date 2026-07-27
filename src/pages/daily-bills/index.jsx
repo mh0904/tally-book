@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { List, Card, Tag, Typography, message, DatePicker, Empty, Spin } from "antd";
 import dayjs from "dayjs";
-import { getAllTransactions } from "../../utils/transactions";
+import { getAllTransactions } from "../../api/transactions";
 import { transactionCategoryField } from "../../constants/fields";
 import "./index.less";
 

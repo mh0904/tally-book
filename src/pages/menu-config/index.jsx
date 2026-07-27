@@ -19,11 +19,11 @@ import {
   ReloadOutlined,
   SaveOutlined,
 } from '@ant-design/icons'
-import { MENU_ICON_OPTIONS, renderMenuIcon } from '../../common/menuIcons'
+import { MENU_ICON_OPTIONS, renderMenuIcon } from '../../common/menu-icons'
 import {
   sortMenuTree,
 } from '../../config/menu'
-import { resetMenus } from '../../utils/menus'
+import { resetMenus } from '../../api/menus'
 import './index.less'
 
 const { Text } = Typography
