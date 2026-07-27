@@ -6,6 +6,7 @@ const {
 } = require('../utils/role-helper')
 
 const setupRoleRoutes = (server) => {
+  // 获取当前角色和角色菜单权限配置。
   server.get('/roles', (req, res) => {
     try {
       res.json({
@@ -22,6 +23,7 @@ const setupRoleRoutes = (server) => {
     }
   })
 
+  // 获取默认角色和角色菜单权限配置。
   server.get('/roles/default', (req, res) => {
     try {
       res.json({
@@ -38,6 +40,7 @@ const setupRoleRoutes = (server) => {
     }
   })
 
+  // 保存角色和角色菜单权限配置。
   server.put('/roles', (req, res) => {
     try {
       const roles = req.body
@@ -64,6 +67,7 @@ const setupRoleRoutes = (server) => {
     }
   })
 
+  // 将角色配置恢复为默认配置。
   server.post('/roles/reset', (req, res) => {
     try {
       res.json({

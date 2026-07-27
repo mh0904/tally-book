@@ -42,12 +42,14 @@ import {
 } from './config/roles'
 import { getMenus, updateMenus } from './api/menus'
 import { getRoles, updateRoles } from './api/roles'
+import { getTransactionCategories } from './api/transaction-categories'
 import { getUsers, updateUsers } from './api/users'
 import {
   ADMIN_USER_ID,
   getUserDisplayName,
   normalizeUsers,
 } from './config/users'
+import { normalizeTransactionCategoryField } from './config/transaction-categories'
 
 // 导入导航栏
 import Sidebar from './components/sidebar/index.jsx'
@@ -148,6 +150,8 @@ const App = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
   const [menus, setMenus] = React.useState([])
   const [roles, setRoles] = React.useState([])
+  const [transactionCategoryField, setTransactionCategoryField] =
+    React.useState(() => normalizeTransactionCategoryField())
   const [users, setUsers] = React.useState([])
   const [isAuthenticated, setIsAuthenticated] = React.useState(
     () => localStorage.getItem(AUTH_KEY) === 'true'
@@ -260,10 +264,16 @@ const App = () => {
 
     const fetchAppConfig = async () => {
       try {
-        const [menusResult, rolesResult, usersResult] = await Promise.all([
+        const [
+          menusResult,
+          rolesResult,
+          usersResult,
+          categoriesResult,
+        ] = await Promise.all([
           getMenus(),
           getRoles(),
           getUsers(),
+          getTransactionCategories(),
         ])
 
         if (!mounted) {
@@ -286,6 +296,14 @@ const App = () => {
           setUsers(normalizeUsers(usersResult.data))
         } else {
           message.error(usersResult.msg || '用户加载失败')
+        }
+
+        if (categoriesResult.code === 200) {
+          setTransactionCategoryField(
+            normalizeTransactionCategoryField(categoriesResult.data)
+          )
+        } else {
+          message.error(categoriesResult.msg || '交易分类加载失败')
         }
       } catch (error) {
         // request 拦截器已经做了统一错误提示，这里保留默认菜单兜底。
@@ -513,15 +531,24 @@ const App = () => {
             />
             <Route
               path="/transactions"
-              element={renderProtectedPage('/transactions', <Transactions />)}
+              element={renderProtectedPage(
+                '/transactions',
+                <Transactions transactionCategoryField={transactionCategoryField} />
+              )}
             />
             <Route
               path="/chart"
-              element={renderProtectedPage('/chart', <Chart />)}
+              element={renderProtectedPage(
+                '/chart',
+                <Chart transactionCategoryField={transactionCategoryField} />
+              )}
             />
             <Route
               path="/bill-calendar"
-              element={renderProtectedPage('/bill-calendar', <BillCalendar />)}
+              element={renderProtectedPage(
+                '/bill-calendar',
+                <BillCalendar transactionCategoryField={transactionCategoryField} />
+              )}
             />
             <Route
               path="/menu-config"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Pie, Column } from "@ant-design/charts";
 import { getAllTransactions } from "../../api/transactions";
-import { transactionCategoryField } from "../../constants/fields";
+import { transactionCategoryField as defaultTransactionCategoryField } from "../../constants/fields";
 import "./index.less";
 
 const roundAmount = (value) => {
@@ -15,9 +15,16 @@ const formatPercent = (value) => `${((Number(value) || 0) * 100).toFixed(1)}%`;
 const incomeCategoryValues = ["工资"];
 const defaultExpenseCategory = "其他";
 
-const getExpenseCategoryOptions = (data) => {
-  const expenseOptions = transactionCategoryField.options.filter(
-    (item) => !incomeCategoryValues.includes(item.value)
+const getExpenseCategoryOptions = (
+  data,
+  transactionCategoryField = defaultTransactionCategoryField
+) => {
+  const categoryOptions =
+    transactionCategoryField.options?.length
+      ? transactionCategoryField.options
+      : defaultTransactionCategoryField.options;
+  const expenseOptions = categoryOptions.filter(
+    (item) => item.type !== "收入" && !incomeCategoryValues.includes(item.value)
   );
   const optionValues = new Set(expenseOptions.map((item) => item.value));
   const extraOptions = Array.from(
@@ -32,7 +39,9 @@ const getExpenseCategoryOptions = (data) => {
   return [...expenseOptions, ...extraOptions];
 };
 
-const Chart = () => {
+const Chart = ({
+  transactionCategoryField = defaultTransactionCategoryField,
+}) => {
   const [transactionData, setTransactionData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState("2025-09"); // 默认显示当前月份
@@ -57,11 +66,14 @@ const Chart = () => {
       }
     };
     fetchData();
-  }, [selectedMonth]);
+  }, [selectedMonth, transactionCategoryField]);
 
   // 处理图表数据
   const processChartData = (data) => {
-    const expenseCategoryOptions = getExpenseCategoryOptions(data);
+    const expenseCategoryOptions = getExpenseCategoryOptions(
+      data,
+      transactionCategoryField
+    );
 
     // 按分类统计支出
     const initialCategoryStats = expenseCategoryOptions.reduce((acc, item) => {

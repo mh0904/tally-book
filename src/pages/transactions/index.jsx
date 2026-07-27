@@ -23,7 +23,7 @@ const { RangePicker } = DatePicker;
 import {
   recordMode,
   transactionTypeField,
-  transactionCategoryField,
+  transactionCategoryField as defaultTransactionCategoryField,
 } from "../../constants/fields";
 import "./index.less";
 import {
@@ -37,7 +37,9 @@ import {
 } from "../../api/transactions";
 const dateFormat = "YYYY-MM-DD";
 
-const Transactions = () => {
+const Transactions = ({
+  transactionCategoryField = defaultTransactionCategoryField,
+}) => {
   const [transactions, setTransactions] = useState([]);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -45,9 +47,31 @@ const Transactions = () => {
   const [form] = Form.useForm(); // 用于新增/编辑 Modal 的表单
   const [searchForm] = Form.useForm(); // 用于查询的表单
   const mode = Form.useWatch("mode", form);
+  const transactionType = Form.useWatch("type", form);
   const [searchParams, setSearchParams] = useState({});
   const [importModalVisible, setImportModalVisible] = useState(false);
   const [importFile, setImportFile] = useState(null);
+  const categoryOptions =
+    transactionCategoryField.options?.length
+      ? transactionCategoryField.options
+      : defaultTransactionCategoryField.options;
+  const getDefaultCategoryValue = (type = transactionTypeField.defaultValue) => {
+    const fallbackValue = type === "收入" ? "其他收入" : "其他";
+
+    return (
+      categoryOptions.find(
+        (item) => item.type === type && item.value === fallbackValue
+      )?.value ||
+      categoryOptions.find((item) => item.type === type)?.value ||
+      transactionCategoryField.defaultValue ||
+      categoryOptions[0]?.value ||
+      defaultTransactionCategoryField.defaultValue
+    );
+  };
+  const defaultCategoryValue = getDefaultCategoryValue();
+  const formCategoryOptions = transactionType
+    ? categoryOptions.filter((item) => !item.type || item.type === transactionType)
+    : categoryOptions;
 
   const columns = [
     {
@@ -71,10 +95,10 @@ const Transactions = () => {
       title: "分类",
       dataIndex: "classification",
       render: (value) => {
-        const label = transactionCategoryField.options.find(
+        const label = categoryOptions.find(
           (item) => item.value === value
         )?.label;
-        return <span>{label}</span>;
+        return <span>{label || value || "未分类"}</span>;
       },
       align: "center",
     },
@@ -212,7 +236,7 @@ const Transactions = () => {
         id: "",
         date: dayjs(dayjs(), dateFormat),
         type: transactionTypeField.defaultValue,
-        classification: transactionCategoryField.defaultValue,
+        classification: defaultCategoryValue,
       });
     } else {
       setModalTitle("编辑");
@@ -546,7 +570,7 @@ const Transactions = () => {
             placeholder="请选择分类"
             allowClear
             style={{ width: 120 }}
-            options={transactionCategoryField.options}
+            options={categoryOptions}
           />
         </Form.Item>
 
@@ -624,7 +648,7 @@ const Transactions = () => {
             year: dayjs(dayjs(), "YYYY"),
             date: dayjs(dayjs(), dateFormat),
             type: transactionTypeField.defaultValue,
-            classification: transactionCategoryField.defaultValue,
+            classification: defaultCategoryValue,
           }}
         >
           {/* 使用一个隐藏的 Input，确保它被 Form 追踪 */}
@@ -663,6 +687,11 @@ const Transactions = () => {
           <Form.Item name="type" label="类型" rules={[{ required: true }]}>
             <Radio.Group
               options={transactionTypeField.options}
+              onChange={(event) => {
+                form.setFieldsValue({
+                  classification: getDefaultCategoryValue(event.target.value),
+                });
+              }}
               style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
             />
           </Form.Item>
@@ -708,7 +737,7 @@ const Transactions = () => {
               rules={[{ required: true, message: "请选择分类" }]}
             >
               <Radio.Group
-                options={transactionCategoryField.options}
+                options={formCategoryOptions}
                 style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
               />
             </Form.Item>

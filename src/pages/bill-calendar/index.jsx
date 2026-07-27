@@ -23,7 +23,7 @@ import {
 import dayjs from 'dayjs'
 import { getAllTransactions } from '../../api/transactions'
 import {
-  transactionCategoryField,
+  transactionCategoryField as defaultTransactionCategoryField,
   transactionTypeField,
 } from '../../constants/fields'
 import './index.less'
@@ -43,10 +43,14 @@ const createEmptySummary = (date) => ({
 
 const formatAmount = (value) => Number(value || 0).toFixed(2)
 
-const getCategoryLabel = (value) => {
+const getCategoryLabel = (value, transactionCategoryField) => {
+  const categoryOptions =
+    transactionCategoryField.options?.length
+      ? transactionCategoryField.options
+      : defaultTransactionCategoryField.options
+
   return (
-    transactionCategoryField.options.find((item) => item.value === value)
-      ?.label ||
+    categoryOptions.find((item) => item.value === value)?.label ||
     value ||
     '未分类'
   )
@@ -54,7 +58,9 @@ const getCategoryLabel = (value) => {
 
 const isIncomeTransaction = (item) => item.type === INCOME_TYPE
 
-const BillCalendar = () => {
+const BillCalendar = ({
+  transactionCategoryField = defaultTransactionCategoryField,
+}) => {
   const [loading, setLoading] = React.useState(false)
   const [transactions, setTransactions] = React.useState([])
   const [selectedDate, setSelectedDate] = React.useState(dayjs())
@@ -344,7 +350,10 @@ const BillCalendar = () => {
                     <List.Item className="bill-detail-item">
                       <div className="detail-item-main">
                         <Tag color={income ? 'success' : 'error'}>
-                          {getCategoryLabel(item.classification)}
+                          {getCategoryLabel(
+                            item.classification,
+                            transactionCategoryField
+                          )}
                         </Tag>
                         <div>
                           <Text strong>{item.describe || '未填写描述'}</Text>

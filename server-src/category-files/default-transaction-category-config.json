@@ -1,0 +1,242 @@
+[
+  {
+    "value": "工资",
+    "label": "工资",
+    "type": "收入",
+    "keywords": ["工资", "薪资", "薪水", "月薪", "收入"],
+    "enabled": true,
+    "sort": 1
+  },
+  {
+    "value": "奖金",
+    "label": "奖金",
+    "type": "收入",
+    "keywords": ["奖金", "绩效", "年终奖", "提成", "补贴"],
+    "enabled": true,
+    "sort": 2
+  },
+  {
+    "value": "兼职收入",
+    "label": "兼职收入",
+    "type": "收入",
+    "keywords": ["兼职", "副业", "稿费", "劳务", "外快"],
+    "enabled": true,
+    "sort": 3
+  },
+  {
+    "value": "理财收益",
+    "label": "理财收益",
+    "type": "收入",
+    "keywords": ["理财", "利息", "基金", "分红", "收益"],
+    "enabled": true,
+    "sort": 4
+  },
+  {
+    "value": "红包收入",
+    "label": "红包收入",
+    "type": "收入",
+    "keywords": ["红包", "转账", "礼金"],
+    "enabled": true,
+    "sort": 5
+  },
+  {
+    "value": "报销收入",
+    "label": "报销收入",
+    "type": "收入",
+    "keywords": ["报销", "退款", "返现", "退费"],
+    "enabled": true,
+    "sort": 6
+  },
+  {
+    "value": "其他收入",
+    "label": "其他收入",
+    "type": "收入",
+    "keywords": [],
+    "enabled": true,
+    "sort": 7
+  },
+  {
+    "value": "餐饮",
+    "label": "餐饮",
+    "type": "支出",
+    "keywords": ["餐饮", "吃饭", "餐厅", "饭店", "快餐", "美食", "午餐", "晚餐", "早餐", "外卖", "食堂", "奶茶", "咖啡"],
+    "enabled": true,
+    "sort": 101
+  },
+  {
+    "value": "购物",
+    "label": "购物",
+    "type": "支出",
+    "keywords": ["购物", "商场", "超市", "淘宝", "京东", "拼多多", "网购", "买菜", "零食"],
+    "enabled": true,
+    "sort": 102
+  },
+  {
+    "value": "交通",
+    "label": "交通",
+    "type": "支出",
+    "keywords": ["交通", "地铁", "公交", "打车", "出租车", "滴滴", "共享单车", "机票", "火车票", "汽车票", "高铁", "火车", "飞机"],
+    "enabled": true,
+    "sort": 103
+  },
+  {
+    "value": "住房",
+    "label": "住房",
+    "type": "支出",
+    "keywords": ["房租", "租金", "房贷", "物业费", "暖气费", "家具", "装修"],
+    "enabled": true,
+    "sort": 104
+  },
+  {
+    "value": "水电燃气",
+    "label": "水电燃气",
+    "type": "支出",
+    "keywords": ["水费", "电费", "燃气", "天然气", "煤气"],
+    "enabled": true,
+    "sort": 105
+  },
+  {
+    "value": "通讯网络",
+    "label": "通讯网络",
+    "type": "支出",
+    "keywords": ["话费", "手机费", "宽带", "流量", "网费", "通讯"],
+    "enabled": true,
+    "sort": 106
+  },
+  {
+    "value": "医疗健康",
+    "label": "医疗健康",
+    "type": "支出",
+    "keywords": ["医院", "药", "体检", "门诊", "挂号", "医疗", "保健"],
+    "enabled": true,
+    "sort": 107
+  },
+  {
+    "value": "教育学习",
+    "label": "教育学习",
+    "type": "支出",
+    "keywords": ["课程", "培训", "学费", "书", "教材", "考试", "学习"],
+    "enabled": true,
+    "sort": 108
+  },
+  {
+    "value": "娱乐休闲",
+    "label": "娱乐休闲",
+    "type": "支出",
+    "keywords": ["电影", "游戏", "娱乐", "KTV", "演出", "门票", "酒吧"],
+    "enabled": true,
+    "sort": 109
+  },
+  {
+    "value": "旅行出行",
+    "label": "旅行出行",
+    "type": "支出",
+    "keywords": ["旅游", "旅行", "酒店", "住宿", "景区", "民宿", "签证"],
+    "enabled": true,
+    "sort": 110
+  },
+  {
+    "value": "日用百货",
+    "label": "日用百货",
+    "type": "支出",
+    "keywords": ["日用品", "百货", "纸巾", "洗衣液", "清洁", "家居"],
+    "enabled": true,
+    "sort": 111
+  },
+  {
+    "value": "服饰美容",
+    "label": "服饰美容",
+    "type": "支出",
+    "keywords": ["衣服", "鞋", "服饰", "美容", "护肤", "化妆", "理发", "美甲"],
+    "enabled": true,
+    "sort": 112
+  },
+  {
+    "value": "数码电器",
+    "label": "数码电器",
+    "type": "支出",
+    "keywords": ["手机", "电脑", "耳机", "数码", "电器", "家电", "充电器"],
+    "enabled": true,
+    "sort": 113
+  },
+  {
+    "value": "运动健身",
+    "label": "运动健身",
+    "type": "支出",
+    "keywords": ["健身", "运动", "球馆", "瑜伽", "游泳", "跑步"],
+    "enabled": true,
+    "sort": 114
+  },
+  {
+    "value": "人情礼金",
+    "label": "人情礼金",
+    "type": "支出",
+    "keywords": ["礼金", "红包", "请客", "婚礼", "生日", "礼物"],
+    "enabled": true,
+    "sort": 115
+  },
+  {
+    "value": "育儿亲子",
+    "label": "育儿亲子",
+    "type": "支出",
+    "keywords": ["育儿", "亲子", "奶粉", "玩具", "托班", "儿童"],
+    "enabled": true,
+    "sort": 116
+  },
+  {
+    "value": "保险",
+    "label": "保险",
+    "type": "支出",
+    "keywords": ["保险", "保费", "车险", "医保", "社保"],
+    "enabled": true,
+    "sort": 117
+  },
+  {
+    "value": "车辆",
+    "label": "车辆",
+    "type": "支出",
+    "keywords": ["油费", "停车费", "保养", "维修", "洗车", "充电", "过路费"],
+    "enabled": true,
+    "sort": 118
+  },
+  {
+    "value": "订阅会员",
+    "label": "订阅会员",
+    "type": "支出",
+    "keywords": ["会员", "订阅", "年费", "月费", "网盘", "视频会员"],
+    "enabled": true,
+    "sort": 119
+  },
+  {
+    "value": "办公",
+    "label": "办公",
+    "type": "支出",
+    "keywords": ["办公", "文具", "打印", "快递", "软件"],
+    "enabled": true,
+    "sort": 120
+  },
+  {
+    "value": "维修维护",
+    "label": "维修维护",
+    "type": "支出",
+    "keywords": ["维修", "维护", "疏通", "安装", "修理"],
+    "enabled": true,
+    "sort": 121
+  },
+  {
+    "value": "税费手续费",
+    "label": "税费手续费",
+    "type": "支出",
+    "keywords": ["税", "手续费", "服务费", "利息", "滞纳金"],
+    "enabled": true,
+    "sort": 122
+  },
+  {
+    "value": "其他",
+    "label": "其他",
+    "type": "支出",
+    "keywords": [],
+    "enabled": true,
+    "sort": 999
+  }
+]

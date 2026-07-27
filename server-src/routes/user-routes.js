@@ -6,6 +6,7 @@ const {
 } = require('../utils/user-helper')
 
 const setupUserRoutes = (server) => {
+  // 校验用户登录账号和密码。
   server.post('/login', (req, res) => {
     try {
       const user = verifyUserLogin(req.body?.username, req.body?.password)
@@ -32,6 +33,7 @@ const setupUserRoutes = (server) => {
     }
   })
 
+  // 获取用户账号配置列表，不返回密码哈希、盐或明文密码字段。
   server.get('/users', (req, res) => {
     try {
       res.json({
@@ -48,6 +50,7 @@ const setupUserRoutes = (server) => {
     }
   })
 
+  // 保存用户账号、密码、启用状态和角色绑定配置。
   server.put('/users', (req, res) => {
     try {
       const users = req.body
@@ -74,6 +77,7 @@ const setupUserRoutes = (server) => {
     }
   })
 
+  // 将用户配置恢复为默认配置。
   server.post('/users/reset', (req, res) => {
     try {
       res.json({

@@ -1,6 +1,7 @@
 // server-src/utils/transaction-helper.js
 const { getMonthData, writeMonthData, DATA_DIR } = require('./file-helper')
 const { generateId } = require('./id-generator')
+const { getTransactionCategoryConfig } = require('./transaction-category-helper')
 const fs = require('fs')
 
 // ⚠️ 确保安装 dayjs 和 isBetween 插件
@@ -33,26 +34,38 @@ const extractMonthKey = (date) => {
   return `${parts[0]}-${parts[1]}`
 }
 
-/**
- * 自动分类规则：根据交易描述关键词匹配分类
- */
-const categoryRules = [
-  { category: '餐饮', keywords: ['餐饮', '吃饭', '餐厅', '饭店', '快餐', '美食', '午餐', '晚餐', '早餐', '外卖', '食堂'] },
-  { category: '购物', keywords: ['购物', '商场', '超市', '淘宝', '京东', '拼多多', '网购', '衣服', '鞋子', '化妆品', '电子产品'] },
-  { category: '交通', keywords: ['交通', '地铁', '公交', '打车', '出租车', '滴滴', '共享单车', '油费', '停车费', '机票', '火车票', '汽车票', '高铁', '火车', '飞机'] },
-  { category: '住房', keywords: ['房租', '水电', '燃气', '物业费', '暖气费', '维修费', '家具', '装修'] },
-  { category: '工资', keywords: ['工资', '奖金', '绩效', '提成', '补贴', '收入'] },
-  { category: '其他', keywords: [] } // 默认分类
-]
+const getEnabledCategoriesByType = (type) => {
+  const categories = getTransactionCategoryConfig().filter(
+    (item) => item.enabled !== false
+  )
+
+  if (!type) {
+    return categories
+  }
+
+  return categories.filter((item) => item.type === type)
+}
+
+const getDefaultCategory = (type) => {
+  const categories = getEnabledCategoriesByType(type)
+  const fallbackValue = type === '收入' ? '其他收入' : '其他'
+  return (
+    categories.find((item) => item.value === fallbackValue)?.value ||
+    categories[0]?.value ||
+    fallbackValue
+  )
+}
 
 /**
  * 根据交易描述自动匹配分类
  * @param {string} describe - 交易描述
  * @returns {string} 匹配的分类
  */
-const autoClassify = (describe) => {
+const autoClassify = (describe, type) => {
+  const categoryRules = getEnabledCategoriesByType(type)
+
   if (!describe || typeof describe !== 'string') {
-    return '其他' // 默认分类
+    return getDefaultCategory(type)
   }
   
   // 转换为小写以便匹配
@@ -61,11 +74,11 @@ const autoClassify = (describe) => {
   // 遍历分类规则，寻找匹配的关键词
   for (const rule of categoryRules) {
     if (rule.keywords.some(keyword => lowerDescribe.includes(keyword.toLowerCase()))) {
-      return rule.category
+      return rule.value
     }
   }
   
-  return '其他' // 默认分类
+  return getDefaultCategory(type)
 }
 
 /**
@@ -81,7 +94,7 @@ const processTransaction = (item, transactions) => {
   const newItem = {
     ...item,
     id: item.id || generateId(transactions),
-    classification: item.classification || autoClassify(item.describe),
+    classification: item.classification || autoClassify(item.describe, item.type),
     // 保留已有创建时间，没有才生成新时间
     createdAt: item.createdAt || Date.now(),
   }

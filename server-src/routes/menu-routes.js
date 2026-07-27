@@ -6,6 +6,7 @@ const {
 } = require('../utils/menu-helper')
 
 const setupMenuRoutes = (server) => {
+  // 获取当前后台菜单树配置。
   server.get('/menus', (req, res) => {
     try {
       res.json({
@@ -22,6 +23,7 @@ const setupMenuRoutes = (server) => {
     }
   })
 
+  // 获取默认后台菜单树配置。
   server.get('/menus/default', (req, res) => {
     try {
       res.json({
@@ -38,6 +40,7 @@ const setupMenuRoutes = (server) => {
     }
   })
 
+  // 保存后台菜单树配置。
   server.put('/menus', (req, res) => {
     try {
       const menus = req.body
@@ -64,6 +67,7 @@ const setupMenuRoutes = (server) => {
     }
   })
 
+  // 将后台菜单树恢复为默认配置。
   server.post('/menus/reset', (req, res) => {
     try {
       res.json({
