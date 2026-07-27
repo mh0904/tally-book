@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom'
 import {
   CalendarOutlined,
   HomeOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
   PieChartOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons'
@@ -31,15 +33,24 @@ let linkList = [
   },
 ]
 
-const Navbar = () => {
+const Navbar = ({ collapsed, onToggle }) => {
   return (
-    <aside className="nav-bar">
+    <aside className={collapsed ? 'nav-bar collapsed' : 'nav-bar'}>
       <div className="brand">
         <div className="brand-mark">T</div>
-        <div>
+        <div className="brand-info">
           <div className="brand-title">Tally Book</div>
           <div className="brand-subtitle">账本后台</div>
         </div>
+        <button
+          aria-label={collapsed ? '展开菜单' : '收起菜单'}
+          className="sidebar-toggle"
+          onClick={onToggle}
+          title={collapsed ? '展开菜单' : '收起菜单'}
+          type="button"
+        >
+          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </button>
       </div>
       <nav className="nav-menu">
         {linkList.map((item) => {
@@ -50,10 +61,11 @@ const Navbar = () => {
               }
               end={item.link === '/'}
               key={item.link}
+              title={item.title}
               to={item.link}
             >
               <span className="nav-icon">{item.icon}</span>
-              {item.title}
+              <span className="nav-label">{item.title}</span>
             </NavLink>
           )
         })}

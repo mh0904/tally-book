@@ -42,10 +42,14 @@ const pageMeta = {
 const App = () => {
   const location = useLocation()
   const currentPage = pageMeta[location.pathname] || pageMeta['/']
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
 
   return (
     <div className="admin-shell">
-      <Navbar />
+      <Navbar
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed((value) => !value)}
+      />
       <main className="admin-main">
         <header className="admin-topbar">
           <div>
