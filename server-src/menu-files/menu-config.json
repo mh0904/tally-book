@@ -74,13 +74,5 @@
         "sort": 3
       }
     ]
-  },
-  {
-    "id": "menu-1785121905233-60rfze",
-    "title": "哈哈",
-    "icon": "chart",
-    "path": "data-1",
-    "enabled": true,
-    "sort": 100
   }
 ]

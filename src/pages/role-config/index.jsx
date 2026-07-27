@@ -221,10 +221,6 @@ const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
   return (
     <div className="role-config-page">
       <div className="role-config-toolbar">
-        <div>
-          <h2>角色管理</h2>
-          <span>维护角色资料，并为角色分配可访问的菜单范围</span>
-        </div>
         <Space wrap>
           <Button
             disabled={saving}

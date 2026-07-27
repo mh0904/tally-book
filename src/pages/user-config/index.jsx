@@ -204,10 +204,6 @@ const UserConfig = ({
   return (
     <div className="user-config-page">
       <div className="user-config-toolbar">
-        <div>
-          <h2>用户管理</h2>
-          <span>维护登录账号、密码、启用状态，并为用户绑定角色</span>
-        </div>
         <Space wrap>
           <Button
             disabled={saving}

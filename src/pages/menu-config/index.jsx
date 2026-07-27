@@ -297,10 +297,6 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
   return (
     <div className="menu-config-page">
       <div className="menu-config-toolbar">
-        <div>
-          <h2>菜单配置</h2>
-          <span>维护后台菜单树、路由地址和启用状态</span>
-        </div>
         <Space wrap>
           <Button
             disabled={saving}
