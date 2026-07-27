@@ -1,39 +1,144 @@
 // src/components/Navbar.js
-import { NavLink } from 'react-router-dom'
+import React from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
-  CalendarOutlined,
-  HomeOutlined,
+  DownOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PieChartOutlined,
-  UnorderedListOutlined,
+  RightOutlined,
 } from '@ant-design/icons'
+import { renderMenuIcon } from '../../common/menuIcons'
+import { defaultMenuConfig } from '../../config/menu'
 import './index.less'
 
-let linkList = [
-  {
-    title: '首页',
-    link: '/',
-    icon: <HomeOutlined />,
-  },
-  {
-    title: '流水管理',
-    link: '/transactions',
-    icon: <UnorderedListOutlined />,
-  },
-  {
-    title: '图表分析',
-    link: '/chart',
-    icon: <PieChartOutlined />,
-  },
-  {
-    title: '每日账单',
-    link: '/daily-bills',
-    icon: <CalendarOutlined />,
-  },
-]
+const getActiveParentKeys = (menus, pathname, parentKeys = []) => {
+  return menus.reduce((keys, item) => {
+    if (item.path === pathname) {
+      return [...keys, ...parentKeys]
+    }
 
-const Navbar = ({ collapsed, onToggle }) => {
+    if (item.children?.length) {
+      return [
+        ...keys,
+        ...getActiveParentKeys(item.children, pathname, [
+          ...parentKeys,
+          item.id,
+        ]),
+      ]
+    }
+
+    return keys
+  }, [])
+}
+
+const hasActiveChild = (item, pathname) => {
+  if (item.path === pathname) {
+    return true
+  }
+
+  return item.children?.some((child) => hasActiveChild(child, pathname))
+}
+
+const Navbar = ({ collapsed, menus = defaultMenuConfig, onToggle }) => {
+  const location = useLocation()
+  const [openKeys, setOpenKeys] = React.useState(() => new Set(['business']))
+
+  React.useEffect(() => {
+    const activeKeys = getActiveParentKeys(menus, location.pathname)
+
+    if (!activeKeys.length) {
+      return
+    }
+
+    setOpenKeys((keys) => new Set([...keys, ...activeKeys]))
+  }, [menus, location.pathname])
+
+  const toggleOpen = (id) => {
+    setOpenKeys((keys) => {
+      const nextKeys = new Set(keys)
+
+      if (nextKeys.has(id)) {
+        nextKeys.delete(id)
+      } else {
+        nextKeys.add(id)
+      }
+
+      return nextKeys
+    })
+  }
+
+  const renderMenuItem = (item, depth = 0, parentEnabled = true) => {
+    const children = item.children || []
+    const enabled = parentEnabled && item.enabled !== false
+    const isGroup = children.length > 0
+    const isOpen = openKeys.has(item.id)
+    const isActive = hasActiveChild(item, location.pathname)
+    const depthClass = `depth-${Math.min(depth, 2)}`
+
+    if (isGroup) {
+      return (
+        <div className="nav-group" key={item.id}>
+          <button
+            className={[
+              'nav-group-trigger',
+              depthClass,
+              isActive ? 'active' : '',
+              !enabled ? 'disabled' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            disabled={!enabled}
+            onClick={() => toggleOpen(item.id)}
+            title={item.title}
+            type="button"
+          >
+            <span className="nav-icon">{renderMenuIcon(item.icon)}</span>
+            <span className="nav-label">{item.title}</span>
+            <span className="nav-group-arrow">
+              {isOpen ? <DownOutlined /> : <RightOutlined />}
+            </span>
+          </button>
+          {isOpen && (
+            <div className="nav-children">
+              {children.map((child) => renderMenuItem(child, depth + 1, enabled))}
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    if (!enabled) {
+      return (
+        <div
+          aria-disabled="true"
+          className={['nav-item', depthClass, 'disabled'].join(' ')}
+          key={item.id}
+          title={`${item.title}（已禁用）`}
+        >
+          <span className="nav-icon">{renderMenuIcon(item.icon)}</span>
+          <span className="nav-label">{item.title}</span>
+        </div>
+      )
+    }
+
+    return (
+      <NavLink
+        className={({ isActive: linkActive }) =>
+          ['nav-item', depthClass, linkActive ? 'active' : '']
+            .filter(Boolean)
+            .join(' ')
+        }
+        end={item.path === '/'}
+        key={item.id}
+        title={item.title}
+        to={item.path || '/'}
+      >
+        <span className="nav-icon">{renderMenuIcon(item.icon)}</span>
+        <span className="nav-label">{item.title}</span>
+      </NavLink>
+    )
+  }
+
   return (
     <aside className={collapsed ? 'nav-bar collapsed' : 'nav-bar'}>
       <div className="brand">
@@ -52,24 +157,7 @@ const Navbar = ({ collapsed, onToggle }) => {
           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         </button>
       </div>
-      <nav className="nav-menu">
-        {linkList.map((item) => {
-          return (
-            <NavLink
-              className={({ isActive }) =>
-                isActive ? 'nav-item active' : 'nav-item'
-              }
-              end={item.link === '/'}
-              key={item.link}
-              title={item.title}
-              to={item.link}
-            >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-label">{item.title}</span>
-            </NavLink>
-          )
-        })}
-      </nav>
+      <nav className="nav-menu">{menus.map((item) => renderMenuItem(item))}</nav>
     </aside>
   )
 }

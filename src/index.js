@@ -20,9 +20,12 @@ dayjs.locale('zh-cn')
 // 导入页面组件
 import Home from './pages/home'
 import Login from './pages/login'
+import MenuConfig from './pages/menuConfig'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
 import DailyBills from './pages/dailyBills/index.jsx'
+import { defaultMenuConfig, normalizeMenuTree } from './config/menu'
+import { getMenus, updateMenus } from './utils/menus'
 
 // 导入导航栏
 import Navbar from './components/navBar/index.jsx'
@@ -95,6 +98,10 @@ const pageMeta = {
     title: '每日账单',
     description: '日账明细',
   },
+  '/menu-config': {
+    title: '菜单配置',
+    description: '后台菜单维护',
+  },
 }
 
 // 根组件（包含导航栏和路由出口）
@@ -102,12 +109,27 @@ const App = () => {
   const location = useLocation()
   const currentPage = pageMeta[location.pathname] || pageMeta['/']
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
+  const [menus, setMenus] = React.useState(() =>
+    normalizeMenuTree(defaultMenuConfig)
+  )
   const [isAuthenticated, setIsAuthenticated] = React.useState(
     () => localStorage.getItem(AUTH_KEY) === 'true'
   )
   const [userName, setUserName] = React.useState(getUserName)
   const [avatarColor, setAvatarColor] = React.useState(getAvatarColor)
   const avatarText = React.useMemo(() => getAvatarText(userName), [userName])
+
+  const refreshMenus = React.useCallback(async () => {
+    const { code, data, msg } = await getMenus()
+
+    if (code !== 200) {
+      throw new Error(msg || '菜单加载失败')
+    }
+
+    const refreshedMenus = normalizeMenuTree(data)
+    setMenus(refreshedMenus)
+    return refreshedMenus
+  }, [])
 
   const handleLogin = (name) => {
     const nextUserName = String(name || 'admin').trim() || 'admin'
@@ -121,6 +143,45 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem(AUTH_KEY)
     setIsAuthenticated(false)
+  }
+
+  React.useEffect(() => {
+    let mounted = true
+
+    const fetchMenus = async () => {
+      try {
+        const { code, data, msg } = await getMenus()
+
+        if (!mounted) {
+          return
+        }
+
+        if (code === 200) {
+          setMenus(normalizeMenuTree(data))
+        } else {
+          message.error(msg || '菜单加载失败')
+        }
+      } catch (error) {
+        // request 拦截器已经做了统一错误提示，这里保留默认菜单兜底。
+      }
+    }
+
+    fetchMenus()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const handleMenusChange = async (nextMenus) => {
+    const normalizedMenus = normalizeMenuTree(nextMenus)
+    const { code, msg } = await updateMenus(normalizedMenus)
+
+    if (code !== 200) {
+      throw new Error(msg || '菜单保存失败')
+    }
+
+    return refreshMenus()
   }
 
   const handleUserMenuClick = ({ key }) => {
@@ -167,6 +228,7 @@ const App = () => {
     <div className="admin-shell">
       <Navbar
         collapsed={sidebarCollapsed}
+        menus={menus}
         onToggle={() => setSidebarCollapsed((value) => !value)}
       />
       <main className="admin-main">
@@ -202,6 +264,13 @@ const App = () => {
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/chart" element={<Chart />} />
             <Route path="/daily-bills" element={<DailyBills />} />
+            <Route
+              path="/menu-config"
+              element={
+                <MenuConfig menus={menus} onMenusChange={handleMenusChange} />
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </section>
       </main>

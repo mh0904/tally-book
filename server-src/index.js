@@ -1,5 +1,6 @@
 // server-src/index.js
 const jsonServer = require('json-server')
+const { setupMenuRoutes } = require('./routes/menuRoutes')
 const { setupTransactionRoutes } = require('./routes/transactionRoutes')
 
 // 创建服务器实例
@@ -10,7 +11,8 @@ const middlewares = jsonServer.defaults()
 server.use(middlewares)
 server.use(jsonServer.bodyParser)
 
-// 配置交易相关路由
+// 配置业务路由
+setupMenuRoutes(server)
 setupTransactionRoutes(server)
 
 // 启动服务器

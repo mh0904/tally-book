@@ -9,6 +9,10 @@ let variables = {
 }
 
 module.exports = {
+  devServer: (devServerConfig) => {
+    devServerConfig.historyApiFallback = true
+    return devServerConfig
+  },
   webpack: {
     configure: (webpackConfig) => {
       webpackConfig.ignoreWarnings = [
