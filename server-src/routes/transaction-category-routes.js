@@ -6,12 +6,18 @@ const {
 } = require('../utils/transaction-category-helper')
 
 const setupTransactionCategoryRoutes = (server) => {
-  // 获取当前交易分类配置。
+  // 获取当前交易分类配置，可通过 type=收入/支出 筛选。
   server.get('/transaction-categories', (req, res) => {
     try {
+      const { type } = req.query
+      const categories = getTransactionCategoryConfig()
+      const filteredCategories = type
+        ? categories.filter((item) => item.type === type)
+        : categories
+
       res.json({
         code: 200,
-        data: getTransactionCategoryConfig(),
+        data: filteredCategories,
         msg: '查询交易分类成功',
       })
     } catch (error) {

@@ -48,11 +48,10 @@ const getEnabledCategoriesByType = (type) => {
 
 const getDefaultCategory = (type) => {
   const categories = getEnabledCategoriesByType(type)
-  const fallbackValue = type === '收入' ? '其他收入' : '其他'
   return (
-    categories.find((item) => item.value === fallbackValue)?.value ||
+    categories.find((item) => item.isDefault)?.value ||
     categories[0]?.value ||
-    fallbackValue
+    ''
   )
 }
 

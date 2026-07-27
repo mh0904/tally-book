@@ -22,10 +22,7 @@ import {
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { getAllTransactions } from '../../api/transactions'
-import {
-  transactionCategoryField as defaultTransactionCategoryField,
-  transactionTypeField,
-} from '../../constants/fields'
+import { transactionTypeField } from '../../constants/fields'
 import './index.less'
 
 const { Text } = Typography
@@ -44,10 +41,9 @@ const createEmptySummary = (date) => ({
 const formatAmount = (value) => Number(value || 0).toFixed(2)
 
 const getCategoryLabel = (value, transactionCategoryField) => {
-  const categoryOptions =
-    transactionCategoryField.options?.length
-      ? transactionCategoryField.options
-      : defaultTransactionCategoryField.options
+  const categoryOptions = Array.isArray(transactionCategoryField?.options)
+    ? transactionCategoryField.options
+    : []
 
   return (
     categoryOptions.find((item) => item.value === value)?.label ||
@@ -58,9 +54,7 @@ const getCategoryLabel = (value, transactionCategoryField) => {
 
 const isIncomeTransaction = (item) => item.type === INCOME_TYPE
 
-const BillCalendar = ({
-  transactionCategoryField = defaultTransactionCategoryField,
-}) => {
+const BillCalendar = ({ transactionCategoryField }) => {
   const [loading, setLoading] = React.useState(false)
   const [transactions, setTransactions] = React.useState([])
   const [selectedDate, setSelectedDate] = React.useState(dayjs())

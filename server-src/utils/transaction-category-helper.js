@@ -38,6 +38,7 @@ const normalizeCategory = (item, fallbackIndex) => {
     type: item.type === '收入' ? '收入' : '支出',
     keywords: normalizeKeywords(item.keywords),
     enabled: item.enabled !== false,
+    isDefault: item.isDefault === true || item.default === true,
     sort: Number(item.sort || fallbackIndex + 1),
   }
 }

@@ -23,7 +23,6 @@ const { RangePicker } = DatePicker;
 import {
   recordMode,
   transactionTypeField,
-  transactionCategoryField as defaultTransactionCategoryField,
 } from "../../constants/fields";
 import "./index.less";
 import {
@@ -37,9 +36,7 @@ import {
 } from "../../api/transactions";
 const dateFormat = "YYYY-MM-DD";
 
-const Transactions = ({
-  transactionCategoryField = defaultTransactionCategoryField,
-}) => {
+const Transactions = ({ transactionCategoryField }) => {
   const [transactions, setTransactions] = useState([]);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -48,30 +45,41 @@ const Transactions = ({
   const [searchForm] = Form.useForm(); // 用于查询的表单
   const mode = Form.useWatch("mode", form);
   const transactionType = Form.useWatch("type", form);
+  const searchTransactionType = Form.useWatch("type", searchForm);
   const [searchParams, setSearchParams] = useState({});
   const [importModalVisible, setImportModalVisible] = useState(false);
   const [importFile, setImportFile] = useState(null);
-  const categoryOptions =
-    transactionCategoryField.options?.length
-      ? transactionCategoryField.options
-      : defaultTransactionCategoryField.options;
+  const categoryOptions = Array.isArray(transactionCategoryField?.options)
+    ? transactionCategoryField.options
+    : [];
+  const getCategoryOptionsByType = (type) => {
+    if (!type) {
+      return categoryOptions;
+    }
+
+    const groupedOptions = transactionCategoryField?.optionsByType?.[type];
+
+    return Array.isArray(groupedOptions)
+      ? groupedOptions
+      : categoryOptions.filter((item) => !item.type || item.type === type);
+  };
   const getDefaultCategoryValue = (type = transactionTypeField.defaultValue) => {
-    const fallbackValue = type === "收入" ? "其他收入" : "其他";
+    const typeCategoryOptions = getCategoryOptionsByType(type);
+    const typeDefaultValue = transactionCategoryField?.defaultValues?.[type];
+    const fieldDefaultCategory = typeCategoryOptions.find(
+      (item) => item.value === typeDefaultValue
+    );
 
     return (
-      categoryOptions.find(
-        (item) => item.type === type && item.value === fallbackValue
-      )?.value ||
-      categoryOptions.find((item) => item.type === type)?.value ||
-      transactionCategoryField.defaultValue ||
-      categoryOptions[0]?.value ||
-      defaultTransactionCategoryField.defaultValue
+      fieldDefaultCategory?.value ||
+      typeCategoryOptions.find((item) => item.isDefault)?.value ||
+      typeCategoryOptions[0]?.value ||
+      ""
     );
   };
   const defaultCategoryValue = getDefaultCategoryValue();
-  const formCategoryOptions = transactionType
-    ? categoryOptions.filter((item) => !item.type || item.type === transactionType)
-    : categoryOptions;
+  const formCategoryOptions = getCategoryOptionsByType(transactionType);
+  const searchCategoryOptions = getCategoryOptionsByType(searchTransactionType);
 
   const columns = [
     {
@@ -560,6 +568,9 @@ const Transactions = ({
           <Select
             placeholder="请选择类型"
             allowClear
+            onChange={() => {
+              searchForm.setFieldsValue({ classification: undefined });
+            }}
             style={{ width: 120 }}
             options={transactionTypeField.options}
           />
@@ -569,8 +580,9 @@ const Transactions = ({
           <Select
             placeholder="请选择分类"
             allowClear
-            style={{ width: 120 }}
-            options={categoryOptions}
+            disabled={!searchCategoryOptions.length}
+            style={{ width: 140 }}
+            options={searchCategoryOptions}
           />
         </Form.Item>
 
@@ -738,6 +750,7 @@ const Transactions = ({
             >
               <Radio.Group
                 options={formCategoryOptions}
+                disabled={!formCategoryOptions.length}
                 style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
               />
             </Form.Item>

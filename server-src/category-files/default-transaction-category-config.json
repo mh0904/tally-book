@@ -53,6 +53,7 @@
     "type": "收入",
     "keywords": [],
     "enabled": true,
+    "isDefault": true,
     "sort": 7
   },
   {
@@ -237,6 +238,7 @@
     "type": "支出",
     "keywords": [],
     "enabled": true,
+    "isDefault": true,
     "sort": 999
   }
 ]

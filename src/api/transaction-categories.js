@@ -1,8 +1,8 @@
 import request from '../utils/request'
 
-// 获取后端维护的交易分类配置。
-export const getTransactionCategories = () => {
-  return request.get('/transaction-categories')
+// 获取后端维护的交易分类配置，支持按收入/支出类型筛选。
+export const getTransactionCategories = (params) => {
+  return request.get('/transaction-categories', { params })
 }
 
 // 保存交易分类配置。

@@ -1,5 +1,3 @@
-import { transactionCategoryField as defaultTransactionCategoryField } from '../constants/fields'
-
 const normalizeKeywords = (keywords) => {
   if (!Array.isArray(keywords)) {
     return []
@@ -24,14 +22,13 @@ const normalizeCategory = (item, index) => {
     type: item.type === '收入' ? '收入' : '支出',
     keywords: normalizeKeywords(item.keywords),
     enabled: item.enabled !== false,
+    isDefault: item.isDefault === true || item.default === true,
     sort: Number(item.sort || index + 1),
   }
 }
 
 export const normalizeTransactionCategoryOptions = (categories) => {
-  const source = Array.isArray(categories) && categories.length
-    ? categories
-    : defaultTransactionCategoryField.options
+  const source = Array.isArray(categories) ? categories : []
 
   const uniqueCategories = source.reduce((acc, item, index) => {
     const normalized = normalizeCategory(item, index)
@@ -46,16 +43,36 @@ export const normalizeTransactionCategoryOptions = (categories) => {
 
 export const normalizeTransactionCategoryField = (categories) => {
   const options = normalizeTransactionCategoryOptions(categories)
+  const optionsByType = options.reduce((acc, item) => {
+    const type = item.type || '支出'
+
+    if (!acc[type]) {
+      acc[type] = []
+    }
+
+    acc[type].push(item)
+    return acc
+  }, {})
+  const defaultValues = Object.entries(optionsByType).reduce(
+    (acc, [type, typeOptions]) => {
+      acc[type] =
+        typeOptions.find((item) => item.isDefault)?.value ||
+        typeOptions[0]?.value ||
+        ''
+      return acc
+    },
+    {}
+  )
   const defaultValue =
-    options.find((item) => item.value === defaultTransactionCategoryField.defaultValue)
-      ?.value ||
-    options.find((item) => item.type === '支出')?.value ||
-    options[0]?.value ||
-    defaultTransactionCategoryField.defaultValue
+    defaultValues['支出'] || options[0]?.value || ''
 
   return {
-    ...defaultTransactionCategoryField,
+    key: 'category',
+    label: '交易分类',
+    description: '交易的具体分类，便于统计',
     options,
+    optionsByType,
+    defaultValues,
     defaultValue,
   }
 }

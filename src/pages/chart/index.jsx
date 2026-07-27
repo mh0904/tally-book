@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Pie, Column } from "@ant-design/charts";
 import { getAllTransactions } from "../../api/transactions";
-import { transactionCategoryField as defaultTransactionCategoryField } from "../../constants/fields";
 import "./index.less";
 
 const roundAmount = (value) => {
@@ -12,26 +11,21 @@ const roundAmount = (value) => {
 const formatAmount = (value) => roundAmount(value).toFixed(2);
 const formatCurrencyAmount = (value) => `¥${formatAmount(value)}`;
 const formatPercent = (value) => `${((Number(value) || 0) * 100).toFixed(1)}%`;
-const incomeCategoryValues = ["工资"];
-const defaultExpenseCategory = "其他";
+const uncategorizedExpense = "未分类";
 
-const getExpenseCategoryOptions = (
-  data,
-  transactionCategoryField = defaultTransactionCategoryField
-) => {
-  const categoryOptions =
-    transactionCategoryField.options?.length
-      ? transactionCategoryField.options
-      : defaultTransactionCategoryField.options;
+const getExpenseCategoryOptions = (data, transactionCategoryField) => {
+  const categoryOptions = Array.isArray(transactionCategoryField?.options)
+    ? transactionCategoryField.options
+    : [];
   const expenseOptions = categoryOptions.filter(
-    (item) => item.type !== "收入" && !incomeCategoryValues.includes(item.value)
+    (item) => item.type !== "收入"
   );
   const optionValues = new Set(expenseOptions.map((item) => item.value));
   const extraOptions = Array.from(
     new Set(
       data
         .filter((item) => item.type === "支出")
-        .map((item) => item.classification || defaultExpenseCategory)
+        .map((item) => item.classification)
         .filter((category) => category && !optionValues.has(category))
     )
   ).map((category) => ({ value: category, label: category }));
@@ -39,9 +33,7 @@ const getExpenseCategoryOptions = (
   return [...expenseOptions, ...extraOptions];
 };
 
-const Chart = ({
-  transactionCategoryField = defaultTransactionCategoryField,
-}) => {
+const Chart = ({ transactionCategoryField }) => {
   const [transactionData, setTransactionData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState("2025-09"); // 默认显示当前月份
@@ -83,7 +75,11 @@ const Chart = ({
     const categoryStats = data
       .filter((item) => item.type === "支出" && !isNaN(parseFloat(item.amount)))
       .reduce((acc, item) => {
-        const category = item.classification || defaultExpenseCategory;
+        const category =
+          item.classification ||
+          expenseCategoryOptions.find((option) => option.isDefault)?.value ||
+          expenseCategoryOptions[0]?.value ||
+          uncategorizedExpense;
         const amount = parseFloat(item.amount);
         acc[category] = (acc[category] || 0) + (isNaN(amount) ? 0 : amount);
         return acc;
