@@ -11,11 +11,14 @@ import {
   message,
 } from 'antd'
 import {
-  CalendarOutlined,
   DoubleLeftOutlined,
   DoubleRightOutlined,
+  FileTextOutlined,
   LeftOutlined,
   RightOutlined,
+  RiseOutlined,
+  FallOutlined,
+  WalletOutlined,
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { getAllTransactions } from '../../api/transactions'
@@ -142,6 +145,32 @@ const BillCalendar = () => {
   const selectedDateKey = selectedDate.format(DATE_FORMAT)
   const selectedSummary =
     dailySummaryMap[selectedDateKey] || createEmptySummary(selectedDateKey)
+  const summaryCards = [
+    {
+      className: 'income',
+      icon: <RiseOutlined />,
+      label: '本月收入',
+      value: `+${formatAmount(monthSummary.totalIncome)}`,
+    },
+    {
+      className: 'expense',
+      icon: <FallOutlined />,
+      label: '本月支出',
+      value: `-${formatAmount(monthSummary.totalExpense)}`,
+    },
+    {
+      className: 'count',
+      icon: <FileTextOutlined />,
+      label: '账单笔数',
+      value: monthSummary.count,
+    },
+    {
+      className: 'total',
+      icon: <WalletOutlined />,
+      label: '本月总额',
+      value: formatAmount(monthSummary.totalAmount),
+    },
+  ]
   const sortedSelectedItems = React.useMemo(
     () =>
       [...selectedSummary.items].sort(
@@ -208,6 +237,7 @@ const BillCalendar = () => {
     const dateKey = date.format(DATE_FORMAT)
     const summary = dailySummaryMap[dateKey]
     const isSelected = date.isSame(selectedDate, 'day')
+    const isToday = date.isSame(dayjs(), 'day')
     const isCurrentMonth = date.isSame(selectedMonth, 'month')
 
     return (
@@ -215,6 +245,7 @@ const BillCalendar = () => {
         className={[
           'calendar-day-cell',
           isSelected ? 'selected' : '',
+          isToday ? 'today' : '',
           !isCurrentMonth ? 'muted' : '',
           summary?.items.length ? 'has-bills' : '',
         ]
@@ -242,34 +273,21 @@ const BillCalendar = () => {
 
   return (
     <div className="bill-calendar-page">
-      <div className="bill-calendar-toolbar">
-        <Space wrap>
-          <Button
-            icon={<CalendarOutlined />}
-            onClick={() => setSelectedDate(dayjs())}
-          >
-            今天
-          </Button>
-        </Space>
-      </div>
-
       <div className="bill-calendar-summary">
-        <section className="summary-item page-panel">
-          <span>本月收入</span>
-          <strong className="income">+{formatAmount(monthSummary.totalIncome)}</strong>
-        </section>
-        <section className="summary-item page-panel">
-          <span>本月支出</span>
-          <strong className="expense">-{formatAmount(monthSummary.totalExpense)}</strong>
-        </section>
-        <section className="summary-item page-panel">
-          <span>账单笔数</span>
-          <strong>{monthSummary.count}</strong>
-        </section>
-        <section className="summary-item page-panel">
-          <span>本月总额</span>
-          <strong>{formatAmount(monthSummary.totalAmount)}</strong>
-        </section>
+        {summaryCards.map((item) => (
+          <section
+            className={['summary-item', 'page-panel', item.className]
+              .filter(Boolean)
+              .join(' ')}
+            key={item.label}
+          >
+            <span className="summary-icon">{item.icon}</span>
+            <div>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          </section>
+        ))}
       </div>
 
       <Spin spinning={loading}>

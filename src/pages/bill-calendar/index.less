@@ -4,13 +4,6 @@
   gap: 10px;
 }
 
-.bill-calendar-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-}
-
 .bill-calendar-summary {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -18,23 +11,89 @@
 }
 
 .summary-item {
-  display: flex;
+  position: relative;
+  display: grid;
   min-height: 52px;
-  flex-direction: column;
-  justify-content: center;
-  padding: 8px 10px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  padding: 10px 12px;
+  border-color: #e8edf3;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: #94a3b8;
+    content: '';
+  }
+
+  &.income::before {
+    background: #16a34a;
+  }
+
+  &.expense::before {
+    background: #dc2626;
+  }
+
+  &.count::before {
+    background: #2563eb;
+  }
+
+  &.total::before {
+    background: #7c3aed;
+  }
+
+  .summary-icon {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 16px;
+  }
+
+  &.income .summary-icon {
+    background: #ecfdf3;
+    color: #16a34a;
+  }
+
+  &.expense .summary-icon {
+    background: #fef2f2;
+    color: #dc2626;
+  }
+
+  &.count .summary-icon {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+
+  &.total .summary-icon {
+    background: #f5f3ff;
+    color: #7c3aed;
+  }
 
   span {
     color: #6b7280;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   strong {
     display: block;
-    margin-top: 3px;
+    overflow: hidden;
+    margin-top: 2px;
     color: #111827;
     font-size: 16px;
     font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
@@ -60,7 +119,10 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   min-height: 0;
-  padding: 8px;
+  padding: 12px;
+  border-color: #e8edf3;
+  background: #fbfdff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   overflow: hidden;
 
   .ant-picker-calendar {
@@ -85,7 +147,8 @@
 
   .ant-picker-content th {
     height: 22px;
-    color: #4b5563;
+    color: #64748b;
+    font-size: 11px;
     font-weight: 650;
     text-align: center;
   }
@@ -120,11 +183,11 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 8px;
-  padding: 0 0 6px;
+  padding: 0 0 10px;
 
   > strong {
     color: #111827;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
     white-space: nowrap;
   }
@@ -138,8 +201,10 @@
   }
 
   .ant-btn {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #f8fafc;
     color: #475569;
 
     &:hover {
@@ -155,22 +220,33 @@
   min-height: 0;
   flex-direction: column;
   justify-content: space-between;
-  padding: 4px 5px;
-  border: 1px solid transparent;
+  padding: 6px;
+  border: 1px solid #edf2f7;
   border-radius: 8px;
   background: #fff;
   color: #111827;
   transition: border-color 0.2s ease, background 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+    transform: translateY(-1px);
+  }
 
   &.has-bills {
+    border-color: #dbeafe;
     background: #f8fbff;
   }
 
   &.selected {
     border-color: #2563eb;
     background: #eff6ff;
-    box-shadow: inset 0 0 0 1px #2563eb;
+    box-shadow: inset 0 0 0 1px #2563eb, 0 8px 18px rgba(37, 99, 235, 0.16);
+  }
+
+  &.today:not(.selected) {
+    border-color: #93c5fd;
   }
 
   &.muted {
@@ -187,15 +263,18 @@
 
   > span:first-child {
     color: #111827;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
   }
 }
 
 .calendar-day-count {
-  max-width: 42px;
+  max-width: 46px;
   margin-right: 0;
   overflow: hidden;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
   font-size: 10px;
   line-height: 16px;
   text-overflow: ellipsis;
@@ -211,7 +290,7 @@
   strong {
     overflow: hidden;
     color: #111827;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     line-height: 1.25;
     text-overflow: ellipsis;
@@ -239,7 +318,10 @@
   aspect-ratio: 1 / 1;
   min-height: 0;
   flex-direction: column;
-  padding: 10px;
+  padding: 14px;
+  border-color: #e8edf3;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   overflow: hidden;
 }
 
@@ -248,12 +330,12 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 
   h3 {
     margin: 0;
     color: #111827;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 650;
   }
 
@@ -268,15 +350,15 @@
 .detail-total {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 12px;
 
   > div {
     min-width: 0;
-    padding: 7px;
+    padding: 9px;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
-    background: #f9fafb;
+    background: #f8fafc;
   }
 
   span,
@@ -292,7 +374,7 @@
   strong {
     overflow: hidden;
     margin-top: 3px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -303,10 +385,23 @@
   min-height: 0;
   flex: 1;
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 6px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #cbd5e1;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
   .ant-list-item {
-    padding: 7px 0;
+    padding: 8px 0;
   }
 }
 
@@ -315,6 +410,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  border-bottom-color: #eef2f7;
 }
 
 .detail-item-main {
@@ -325,6 +421,7 @@
 
   .ant-tag {
     flex: 0 0 auto;
+    border-radius: 999px;
     margin-right: 0;
   }
 
@@ -367,11 +464,6 @@
 }
 
 @media (max-width: 900px) {
-  .bill-calendar-toolbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .bill-calendar-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
