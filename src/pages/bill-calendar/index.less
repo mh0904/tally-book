@@ -1,43 +1,28 @@
 .bill-calendar-page {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .bill-calendar-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
-
-  h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 18px;
-    font-weight: 650;
-    letter-spacing: 0;
-  }
-
-  span {
-    display: block;
-    margin-top: 4px;
-    color: #6b7280;
-    font-size: 13px;
-  }
 }
 
 .bill-calendar-summary {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 .summary-item {
   display: flex;
-  min-height: 82px;
+  min-height: 52px;
   flex-direction: column;
   justify-content: center;
-  padding: 16px;
+  padding: 8px 10px;
 
   span {
     color: #6b7280;
@@ -46,9 +31,9 @@
 
   strong {
     display: block;
-    margin-top: 8px;
+    margin-top: 3px;
     color: #111827;
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 700;
   }
 }
@@ -65,21 +50,33 @@
 
 .bill-calendar-layout {
   display: grid;
-  grid-template-columns: minmax(620px, 1fr) minmax(320px, 380px);
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   align-items: start;
+  justify-content: start;
 }
 
 .bill-calendar-board {
-  min-height: 680px;
-  padding: 16px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  padding: 8px;
+  overflow: hidden;
 
   .ant-picker-calendar {
+    height: 100%;
     background: transparent;
   }
 
   .ant-picker-panel {
+    height: calc(100% - 30px);
     background: transparent;
+  }
+
+  .ant-picker-date-panel,
+  .ant-picker-body,
+  .ant-picker-content {
+    height: 100%;
   }
 
   .ant-picker-content {
@@ -87,24 +84,24 @@
   }
 
   .ant-picker-content th {
-    height: 36px;
+    height: 22px;
     color: #4b5563;
     font-weight: 650;
     text-align: center;
   }
 
   .ant-picker-calendar-header {
-    padding: 0 0 12px;
+    padding: 0 0 6px;
   }
 
   .ant-picker-cell {
-    padding: 4px;
+    padding: 2px;
   }
 
   .ant-picker-calendar-date,
   .ant-picker-cell-inner {
-    min-height: 104px;
-    border-radius: 8px;
+    min-height: 0;
+    border-radius: 6px;
     overflow: hidden;
   }
 
@@ -112,18 +109,22 @@
     height: auto !important;
     overflow: hidden !important;
   }
+
+  .ant-picker-calendar-date-value {
+    display: none;
+  }
 }
 
 .calendar-custom-header {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 12px;
-  padding: 0 0 12px;
+  gap: 8px;
+  padding: 0 0 6px;
 
   > strong {
     color: #111827;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
     white-space: nowrap;
   }
@@ -137,8 +138,8 @@
   }
 
   .ant-btn {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     color: #475569;
 
     &:hover {
@@ -150,10 +151,11 @@
 
 .calendar-day-cell {
   display: flex;
-  min-height: 104px;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px;
+  padding: 4px 5px;
   border: 1px solid transparent;
   border-radius: 8px;
   background: #fff;
@@ -181,19 +183,21 @@
   min-width: 0;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 4px;
 
   > span:first-child {
     color: #111827;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
   }
 }
 
 .calendar-day-count {
-  max-width: 54px;
+  max-width: 42px;
   margin-right: 0;
   overflow: hidden;
+  font-size: 10px;
+  line-height: 16px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -202,12 +206,12 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 3px;
+  gap: 0;
 
   strong {
     overflow: hidden;
     color: #111827;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
     line-height: 1.25;
     text-overflow: ellipsis;
@@ -216,7 +220,7 @@
 
   span {
     overflow: hidden;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 650;
     line-height: 1.25;
     text-overflow: ellipsis;
@@ -226,25 +230,30 @@
 
 .calendar-day-empty {
   color: #cbd5e1;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .bill-day-detail {
-  min-height: 680px;
-  padding: 18px;
+  display: flex;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
 }
 
 .detail-heading {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 8px;
 
   h3 {
     margin: 0;
     color: #111827;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 650;
   }
 
@@ -259,14 +268,14 @@
 .detail-total {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 6px;
+  margin-bottom: 8px;
 
   > div {
     min-width: 0;
-    padding: 12px;
+    padding: 7px;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: 6px;
     background: #f9fafb;
   }
 
@@ -282,8 +291,8 @@
 
   strong {
     overflow: hidden;
-    margin-top: 6px;
-    font-size: 17px;
+    margin-top: 3px;
+    font-size: 13px;
     font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -291,8 +300,13 @@
 }
 
 .bill-detail-list {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+
   .ant-list-item {
-    padding: 12px 0;
+    padding: 7px 0;
   }
 }
 
@@ -307,7 +321,7 @@
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 
   .ant-tag {
     flex: 0 0 auto;
@@ -329,7 +343,7 @@
   strong {
     max-width: 190px;
     color: #111827;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   span {
@@ -346,7 +360,9 @@
 
   .bill-calendar-board,
   .bill-day-detail {
-    min-height: auto;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
   }
 }
 
@@ -365,7 +381,7 @@
   }
 
   .bill-calendar-board .ant-picker-panel {
-    min-width: 720px;
+    min-width: 0;
   }
 }
 

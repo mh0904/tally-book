@@ -14,7 +14,7 @@
     "description": "管理账本流水、查看图表和账单日历",
     "enabled": true,
     "sort": 2,
-    "menuIds": ["business", "home", "transactions", "chart", "daily-bills"]
+    "menuIds": ["business", "home", "transactions", "chart", "bill-calendar"]
   },
   {
     "id": "bookkeeper",
@@ -22,7 +22,7 @@
     "description": "负责录入和维护流水账单",
     "enabled": true,
     "sort": 3,
-    "menuIds": ["business", "home", "transactions", "daily-bills"]
+    "menuIds": ["business", "home", "transactions", "bill-calendar"]
   },
   {
     "id": "analyst",
@@ -30,7 +30,7 @@
     "description": "查看首页、图表分析和账单日历",
     "enabled": true,
     "sort": 4,
-    "menuIds": ["business", "home", "chart", "daily-bills"]
+    "menuIds": ["business", "home", "chart", "bill-calendar"]
   },
   {
     "id": "viewer",

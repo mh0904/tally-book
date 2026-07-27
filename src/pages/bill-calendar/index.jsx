@@ -51,7 +51,7 @@ const getCategoryLabel = (value) => {
 
 const isIncomeTransaction = (item) => item.type === INCOME_TYPE
 
-const DailyBills = () => {
+const BillCalendar = () => {
   const [loading, setLoading] = React.useState(false)
   const [transactions, setTransactions] = React.useState([])
   const [selectedDate, setSelectedDate] = React.useState(dayjs())
@@ -231,13 +231,7 @@ const DailyBills = () => {
         </div>
         {summary ? (
           <div className="calendar-day-money">
-            <strong>总额 {formatAmount(summary.totalAmount)}</strong>
-            {summary.totalIncome > 0 && (
-              <span className="income">+{formatAmount(summary.totalIncome)}</span>
-            )}
-            {summary.totalExpense > 0 && (
-              <span className="expense">-{formatAmount(summary.totalExpense)}</span>
-            )}
+            <strong>{formatAmount(summary.totalAmount)}</strong>
           </div>
         ) : (
           <span className="calendar-day-empty">无记录</span>
@@ -249,10 +243,6 @@ const DailyBills = () => {
   return (
     <div className="bill-calendar-page">
       <div className="bill-calendar-toolbar">
-        <div>
-          <h2>账单日历</h2>
-          <span>点击日历中的日期，查看当天账单明细</span>
-        </div>
         <Space wrap>
           <Button
             icon={<CalendarOutlined />}
@@ -364,4 +354,4 @@ const DailyBills = () => {
   )
 }
 
-export default DailyBills
+export default BillCalendar

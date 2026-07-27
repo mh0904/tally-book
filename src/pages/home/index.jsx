@@ -23,7 +23,7 @@ const quickLinks = [
   {
     title: '账单日历',
     desc: '在日历中查看每天账单总额和明细',
-    link: '/daily-bills',
+    link: '/bill-calendar',
     icon: <CalendarOutlined />,
   },
 ]

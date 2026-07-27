@@ -32,10 +32,10 @@
         "sort": 3
       },
       {
-        "id": "daily-bills",
+        "id": "bill-calendar",
         "title": "账单日历",
         "icon": "calendar",
-        "path": "/daily-bills",
+        "path": "/bill-calendar",
         "enabled": true,
         "sort": 4
       }

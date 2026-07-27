@@ -30,7 +30,7 @@ import RoleConfig from './pages/role-config'
 import UserConfig from './pages/user-config'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
-import DailyBills from './pages/daily-bills/index.jsx'
+import BillCalendar from './pages/bill-calendar/index.jsx'
 import { normalizeMenuTree } from './config/menu'
 import {
   ADMIN_ROLE_ID,
@@ -122,7 +122,7 @@ const pageMeta = {
     title: '图表分析',
     description: '支出统计',
   },
-  '/daily-bills': {
+  '/bill-calendar': {
     title: '账单日历',
     description: '按日查看账单明细',
   },
@@ -520,8 +520,8 @@ const App = () => {
               element={renderProtectedPage('/chart', <Chart />)}
             />
             <Route
-              path="/daily-bills"
-              element={renderProtectedPage('/daily-bills', <DailyBills />)}
+              path="/bill-calendar"
+              element={renderProtectedPage('/bill-calendar', <BillCalendar />)}
             />
             <Route
               path="/menu-config"
