@@ -92,6 +92,46 @@
   }
 }
 
+.category-breakdown {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.category-breakdown-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #374151;
+  font-size: 13px;
+  line-height: 1.4;
+
+  .category-name {
+    overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .category-amount {
+    color: #111827;
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+  }
+
+  .category-percent {
+    min-width: 46px;
+    color: #6b7280;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+}
+
 @media (max-width: 900px) {
   .chart-header {
     align-items: flex-start;
@@ -110,5 +150,9 @@
     .chart-content {
       height: 320px;
     }
+  }
+
+  .category-breakdown {
+    grid-template-columns: 1fr;
   }
 }

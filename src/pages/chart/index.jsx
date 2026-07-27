@@ -4,6 +4,34 @@ import { getAllTransactions } from "../../api/transactions";
 import { transactionCategoryField } from "../../constants/fields";
 import "./index.less";
 
+const roundAmount = (value) => {
+  const amount = Number(value);
+  return Number.isFinite(amount) ? Number(amount.toFixed(2)) : 0;
+};
+
+const formatAmount = (value) => roundAmount(value).toFixed(2);
+const formatCurrencyAmount = (value) => `¥${formatAmount(value)}`;
+const formatPercent = (value) => `${((Number(value) || 0) * 100).toFixed(1)}%`;
+const incomeCategoryValues = ["工资"];
+const defaultExpenseCategory = "其他";
+
+const getExpenseCategoryOptions = (data) => {
+  const expenseOptions = transactionCategoryField.options.filter(
+    (item) => !incomeCategoryValues.includes(item.value)
+  );
+  const optionValues = new Set(expenseOptions.map((item) => item.value));
+  const extraOptions = Array.from(
+    new Set(
+      data
+        .filter((item) => item.type === "支出")
+        .map((item) => item.classification || defaultExpenseCategory)
+        .filter((category) => category && !optionValues.has(category))
+    )
+  ).map((category) => ({ value: category, label: category }));
+
+  return [...expenseOptions, ...extraOptions];
+};
+
 const Chart = () => {
   const [transactionData, setTransactionData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,15 +61,21 @@ const Chart = () => {
 
   // 处理图表数据
   const processChartData = (data) => {
+    const expenseCategoryOptions = getExpenseCategoryOptions(data);
+
     // 按分类统计支出
+    const initialCategoryStats = expenseCategoryOptions.reduce((acc, item) => {
+      acc[item.value] = 0;
+      return acc;
+    }, {});
     const categoryStats = data
       .filter((item) => item.type === "支出" && !isNaN(parseFloat(item.amount)))
       .reduce((acc, item) => {
-        const category = item.classification || "其他";
+        const category = item.classification || defaultExpenseCategory;
         const amount = parseFloat(item.amount);
         acc[category] = (acc[category] || 0) + (isNaN(amount) ? 0 : amount);
         return acc;
-      }, {});
+      }, initialCategoryStats);
 
     // 计算总支出
     const totalExpense = Object.values(categoryStats).reduce(
@@ -50,13 +84,16 @@ const Chart = () => {
     );
 
     // 转换为饼图所需格式并计算百分比
-    const pieData = Object.entries(categoryStats)
-      .filter(([category]) => category && category.trim() !== "") // 过滤掉空字符串或undefined的分类
-      .map(([category, value]) => ({
-        type: category || "未知分类", // 确保type字段有默认值
-        value: typeof value === "number" ? value : 0, // 确保value字段是数字
+    const pieData = expenseCategoryOptions.map((category) => {
+      const value = categoryStats[category.value] || 0;
+      return {
+        type: category.label || category.value || "未知分类",
+        category: category.value,
+        value: roundAmount(value),
+        amountLabel: formatAmount(value),
         percentage: totalExpense > 0 ? value / totalExpense : 0,
-      }));
+      };
+    });
 
     // 设置饼图配置
     setPieConfig({
@@ -68,11 +105,17 @@ const Chart = () => {
         style: {
           fontSize: 12,
         },
-        text: "value",
+        text: "amountLabel",
       },
       legend: {
         position: "right",
         formatter: (name) => name, 
+      },
+      tooltip: {
+        items: [
+          { field: "value", name: "金额", valueFormatter: formatCurrencyAmount },
+          { field: "percentage", name: "占比", valueFormatter: formatPercent },
+        ],
       },
       interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
     });
@@ -91,9 +134,13 @@ const Chart = () => {
       }, {});
 
     // 转换为柱状图所需格式
-    const columnData = Object.values(dailyExpenseStats).sort((a, b) =>
-      a.date.localeCompare(b.date)
-    );
+    const columnData = Object.values(dailyExpenseStats)
+      .map((item) => ({
+        ...item,
+        支出: roundAmount(item["支出"]),
+        amountLabel: formatAmount(item["支出"]),
+      }))
+      .sort((a, b) => a.date.localeCompare(b.date));
     
     // 设置柱状图配置
     setColumnConfig({
@@ -111,8 +158,20 @@ const Chart = () => {
           autoRotate: false,
         },
       },
+      yAxis: {
+        label: {
+          formatter: formatAmount,
+        },
+      },
       tooltip: {
         showMarkers: false,
+        items: [
+          { field: "支出", name: "支出", valueFormatter: formatCurrencyAmount },
+        ],
+      },
+      label: {
+        position: "top",
+        text: "amountLabel",
       },
       columnStyle: {
         radius: [4, 4, 0, 0],
@@ -165,12 +224,27 @@ const Chart = () => {
           <div className="chart-item">
             <h2>支出分类占比</h2>
             <div className="chart-content">
-              {pieConfig?.data?.length > 0 ? (
+              {pieConfig?.data?.some((item) => item.value > 0) ? (
                 <Pie {...pieConfig} />
               ) : (
                 <div className="no-data">本月暂无支出数据</div>
               )}
             </div>
+            {pieConfig?.data?.length > 0 && (
+              <div className="category-breakdown">
+                {pieConfig.data.map((item) => (
+                  <div className="category-breakdown-item" key={item.category}>
+                    <span className="category-name">{item.type}</span>
+                    <span className="category-amount">
+                      {formatCurrencyAmount(item.value)}
+                    </span>
+                    <span className="category-percent">
+                      {formatPercent(item.percentage)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="chart-item">
