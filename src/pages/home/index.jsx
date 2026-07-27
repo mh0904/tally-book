@@ -28,7 +28,12 @@ const quickLinks = [
   },
 ]
 
-const Home = () => {
+const Home = ({ accessiblePaths = [] }) => {
+  const visibleQuickLinks = accessiblePaths.length
+    ? quickLinks.filter((item) => accessiblePaths.includes(item.link))
+    : quickLinks
+  const primaryAction = visibleQuickLinks[0]
+
   return (
     <div className="home-dashboard">
       <section className="home-summary page-panel">
@@ -36,14 +41,16 @@ const Home = () => {
           <h2>记账本后台</h2>
           <p>管理本地账单数据、查看支出统计、整理每日明细。</p>
         </div>
-        <Link className="home-primary-action" to="/transactions">
-          <UnorderedListOutlined />
-          进入流水管理
-        </Link>
+        {primaryAction && (
+          <Link className="home-primary-action" to={primaryAction.link}>
+            {primaryAction.icon}
+            进入{primaryAction.title}
+          </Link>
+        )}
       </section>
 
       <section className="home-quick-grid">
-        {quickLinks.map((item) => (
+        {visibleQuickLinks.map((item) => (
           <Link
             className="home-quick-item page-panel"
             key={item.link}

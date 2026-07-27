@@ -1,0 +1,43 @@
+[
+  {
+    "id": "admin",
+    "name": "管理员",
+    "description": "拥有全部菜单和系统管理权限",
+    "enabled": true,
+    "sort": 1,
+    "menuIds": ["*"],
+    "builtin": true
+  },
+  {
+    "id": "finance-manager",
+    "name": "财务主管",
+    "description": "管理账本流水、查看图表和每日账单",
+    "enabled": true,
+    "sort": 2,
+    "menuIds": ["business", "home", "transactions", "chart", "daily-bills"]
+  },
+  {
+    "id": "bookkeeper",
+    "name": "记账员",
+    "description": "负责录入和维护流水账单",
+    "enabled": true,
+    "sort": 3,
+    "menuIds": ["business", "home", "transactions", "daily-bills"]
+  },
+  {
+    "id": "analyst",
+    "name": "数据分析员",
+    "description": "查看首页、图表分析和每日账单",
+    "enabled": true,
+    "sort": 4,
+    "menuIds": ["business", "home", "chart", "daily-bills"]
+  },
+  {
+    "id": "viewer",
+    "name": "只读访客",
+    "description": "仅查看首页和基础分析菜单",
+    "enabled": true,
+    "sort": 5,
+    "menuIds": ["business", "home", "chart"]
+  }
+]

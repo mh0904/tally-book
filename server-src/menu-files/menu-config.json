@@ -56,6 +56,14 @@
         "path": "/menu-config",
         "enabled": true,
         "sort": 1
+      },
+      {
+        "id": "role-config",
+        "title": "角色管理",
+        "icon": "safety",
+        "path": "/role-config",
+        "enabled": true,
+        "sort": 2
       }
     ]
   },
