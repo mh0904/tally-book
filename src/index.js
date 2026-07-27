@@ -24,7 +24,7 @@ import MenuConfig from './pages/menuConfig'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
 import DailyBills from './pages/dailyBills/index.jsx'
-import { defaultMenuConfig, normalizeMenuTree } from './config/menu'
+import { normalizeMenuTree } from './config/menu'
 import { getMenus, updateMenus } from './utils/menus'
 
 // 导入导航栏
@@ -109,9 +109,7 @@ const App = () => {
   const location = useLocation()
   const currentPage = pageMeta[location.pathname] || pageMeta['/']
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
-  const [menus, setMenus] = React.useState(() =>
-    normalizeMenuTree(defaultMenuConfig)
-  )
+  const [menus, setMenus] = React.useState([])
   const [isAuthenticated, setIsAuthenticated] = React.useState(
     () => localStorage.getItem(AUTH_KEY) === 'true'
   )
@@ -267,7 +265,11 @@ const App = () => {
             <Route
               path="/menu-config"
               element={
-                <MenuConfig menus={menus} onMenusChange={handleMenusChange} />
+                <MenuConfig
+                  menus={menus}
+                  onMenusChange={handleMenusChange}
+                  onMenusRefresh={refreshMenus}
+                />
               }
             />
             <Route path="*" element={<Navigate to="/" replace />} />

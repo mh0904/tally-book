@@ -1,70 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 
-const MENU_FILE = path.join(__dirname, '../menu-config.json')
-
-const defaultMenuConfig = [
-  {
-    id: 'business',
-    title: '业务菜单',
-    icon: 'app',
-    path: '',
-    enabled: true,
-    sort: 1,
-    children: [
-      {
-        id: 'home',
-        title: '首页',
-        icon: 'home',
-        path: '/',
-        enabled: true,
-        sort: 1,
-      },
-      {
-        id: 'transactions',
-        title: '流水管理',
-        icon: 'list',
-        path: '/transactions',
-        enabled: true,
-        sort: 2,
-      },
-      {
-        id: 'chart',
-        title: '图表分析',
-        icon: 'chart',
-        path: '/chart',
-        enabled: true,
-        sort: 3,
-      },
-      {
-        id: 'daily-bills',
-        title: '每日账单',
-        icon: 'calendar',
-        path: '/daily-bills',
-        enabled: true,
-        sort: 4,
-      },
-    ],
-  },
-  {
-    id: 'system',
-    title: '系统管理',
-    icon: 'setting',
-    path: '',
-    enabled: true,
-    sort: 99,
-    children: [
-      {
-        id: 'menu-config',
-        title: '菜单配置',
-        icon: 'menu',
-        path: '/menu-config',
-        enabled: true,
-        sort: 1,
-      },
-    ],
-  },
-]
+const MENU_DATA_DIR = path.join(__dirname, '../menu-files')
+const MENU_FILE = path.join(MENU_DATA_DIR, 'menu-config.json')
+const DEFAULT_MENU_FILE = path.join(MENU_DATA_DIR, 'default-menu-config.json')
 
 const sortMenuTree = (menus = []) =>
   menus
@@ -88,17 +27,34 @@ const normalizeMenu = (item, fallbackIndex) => ({
 
 const normalizeMenuTree = (menus) => {
   if (!Array.isArray(menus)) {
-    return sortMenuTree(defaultMenuConfig)
+    return getDefaultMenuConfig()
   }
 
   return sortMenuTree(menus.map((item, index) => normalizeMenu(item, index)))
 }
 
+const readMenuJson = (filePath) => {
+  const data = fs.readFileSync(filePath, 'utf8')
+  return JSON.parse(data)
+}
+
+const getDefaultMenuConfig = () => {
+  return sortMenuTree(readMenuJson(DEFAULT_MENU_FILE))
+}
+
+const ensureMenuDir = () => {
+  if (!fs.existsSync(MENU_DATA_DIR)) {
+    fs.mkdirSync(MENU_DATA_DIR, { recursive: true })
+  }
+}
+
 const ensureMenuFile = () => {
+  ensureMenuDir()
+
   if (!fs.existsSync(MENU_FILE)) {
     fs.writeFileSync(
       MENU_FILE,
-      JSON.stringify(sortMenuTree(defaultMenuConfig), null, 2),
+      JSON.stringify(getDefaultMenuConfig(), null, 2),
       'utf8'
     )
   }
@@ -106,14 +62,23 @@ const ensureMenuFile = () => {
 
 const getMenuConfig = () => {
   ensureMenuFile()
-  const data = fs.readFileSync(MENU_FILE, 'utf8')
-  return normalizeMenuTree(JSON.parse(data))
+  return normalizeMenuTree(readMenuJson(MENU_FILE))
 }
 
 const writeMenuConfig = (menus) => {
+  ensureMenuDir()
   const normalizedMenus = normalizeMenuTree(menus)
   fs.writeFileSync(MENU_FILE, JSON.stringify(normalizedMenus, null, 2), 'utf8')
   return normalizedMenus
 }
 
-module.exports = { getMenuConfig, writeMenuConfig }
+const resetMenuConfig = () => {
+  return writeMenuConfig(getDefaultMenuConfig())
+}
+
+module.exports = {
+  getDefaultMenuConfig,
+  getMenuConfig,
+  resetMenuConfig,
+  writeMenuConfig,
+}

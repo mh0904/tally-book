@@ -21,9 +21,9 @@ import {
 } from '@ant-design/icons'
 import { MENU_ICON_OPTIONS, renderMenuIcon } from '../../common/menuIcons'
 import {
-  defaultMenuConfig,
   sortMenuTree,
 } from '../../config/menu'
+import { resetMenus } from '../../utils/menus'
 import './index.less'
 
 const { Text } = Typography
@@ -149,7 +149,7 @@ const iconSelectOptions = MENU_ICON_OPTIONS.map((item) => ({
   ),
 }))
 
-const MenuConfig = ({ menus, onMenusChange }) => {
+const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
   const [form] = Form.useForm()
   const [saving, setSaving] = React.useState(false)
   const [draftMenu, setDraftMenu] = React.useState(null)
@@ -272,13 +272,25 @@ const MenuConfig = ({ menus, onMenusChange }) => {
   }
 
   const handleReset = async () => {
-    const resetMenus = sortMenuTree(defaultMenuConfig)
+    setSaving(true)
 
-    const savedMenus = await persistMenus(resetMenus, '已恢复默认菜单')
+    try {
+      const { code, data, msg } = await resetMenus()
 
-    if (savedMenus) {
+      if (code !== 200) {
+        throw new Error(msg || '恢复默认菜单失败')
+      }
+
+      const savedMenus = onMenusRefresh
+        ? await onMenusRefresh()
+        : sortMenuTree(data)
       setDraftMenu(null)
-      setSelectedId(resetMenus[0]?.id)
+      setSelectedId(savedMenus[0]?.id)
+      message.success('已恢复默认菜单')
+    } catch (error) {
+      message.error(error.message || '恢复默认菜单失败')
+    } finally {
+      setSaving(false)
     }
   }
 

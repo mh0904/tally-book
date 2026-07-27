@@ -8,7 +8,6 @@ import {
   RightOutlined,
 } from '@ant-design/icons'
 import { renderMenuIcon } from '../../common/menuIcons'
-import { defaultMenuConfig } from '../../config/menu'
 import './index.less'
 
 const getActiveParentKeys = (menus, pathname, parentKeys = []) => {
@@ -39,7 +38,7 @@ const hasActiveChild = (item, pathname) => {
   return item.children?.some((child) => hasActiveChild(child, pathname))
 }
 
-const Navbar = ({ collapsed, menus = defaultMenuConfig, onToggle }) => {
+const Navbar = ({ collapsed, menus = [], onToggle }) => {
   const location = useLocation()
   const [openKeys, setOpenKeys] = React.useState(() => new Set(['business']))
 

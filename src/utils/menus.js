@@ -7,3 +7,7 @@ export const getMenus = () => {
 export const updateMenus = (menus) => {
   return request.put('/menus', menus)
 }
+
+export const resetMenus = () => {
+  return request.post('/menus/reset')
+}
