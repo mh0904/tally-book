@@ -11,7 +11,7 @@
   {
     "id": "finance-manager",
     "name": "财务主管",
-    "description": "管理账本流水、查看图表和每日账单",
+    "description": "管理账本流水、查看图表和账单日历",
     "enabled": true,
     "sort": 2,
     "menuIds": ["business", "home", "transactions", "chart", "daily-bills"]
@@ -27,7 +27,7 @@
   {
     "id": "analyst",
     "name": "数据分析员",
-    "description": "查看首页、图表分析和每日账单",
+    "description": "查看首页、图表分析和账单日历",
     "enabled": true,
     "sort": 4,
     "menuIds": ["business", "home", "chart", "daily-bills"]

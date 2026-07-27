@@ -33,7 +33,7 @@
       },
       {
         "id": "daily-bills",
-        "title": "每日账单",
+        "title": "账单日历",
         "icon": "calendar",
         "path": "/daily-bills",
         "enabled": true,

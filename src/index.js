@@ -123,8 +123,8 @@ const pageMeta = {
     description: '支出统计',
   },
   '/daily-bills': {
-    title: '每日账单',
-    description: '日账明细',
+    title: '账单日历',
+    description: '按日查看账单明细',
   },
   '/menu-config': {
     title: '菜单配置',
