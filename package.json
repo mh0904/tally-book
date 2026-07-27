@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "concurrently \"npm run react-start\" \"npm run server\"",
-    "react-start": "set \"PORT=3333\" && craco start",
+    "dev": "concurrently \"npm run vite\" \"npm run server\"",
+    "vite": "vite --host 0.0.0.0 --port 3333",
     "server": "nodemon server-src/index.js",
-    "build": "craco build"
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 3333"
   },
   "repository": {
     "type": "git",
@@ -33,14 +34,11 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
+    "@vitejs/plugin-react": "^6.0.4",
     "concurrently": "^9.2.1",
-    "craco-less": "^3.0.1",
-    "http-proxy-middleware": "^3.0.5",
     "less": "^4.4.2",
-    "less-loader": "^12.3.0",
     "nodemon": "^3.1.11",
-    "react-scripts": "^5.0.1"
+    "vite": "^8.1.5"
   },
   "browserslist": {
     "production": [

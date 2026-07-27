@@ -1,4 +1,4 @@
-// src/index.js
+// src/index.jsx
 import React from 'react'
 import './index.less'
 import ReactDOM from 'react-dom/client'
