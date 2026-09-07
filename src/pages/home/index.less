@@ -31,16 +31,19 @@
   align-items: center;
   gap: 8px;
   min-height: 38px;
-  padding: 0 14px;
-  border-radius: 6px;
+  padding: 0 16px;
+  border-radius: 999px;
   background: #2563eb;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.16);
   color: #fff;
   font-size: 14px;
   font-weight: 600;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     color: #fff;
     background: #1d4ed8;
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.2);
   }
 }
 
@@ -101,5 +104,26 @@
 
   .home-quick-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-summary {
+    min-height: auto;
+    padding: 18px;
+
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .home-primary-action {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-quick-item {
+    min-height: 112px;
+    padding: 18px;
   }
 }

@@ -44,7 +44,7 @@ const Home = ({ accessiblePaths = [] }) => {
         {primaryAction && (
           <Link className="home-primary-action" to={primaryAction.link}>
             {primaryAction.icon}
-            进入{primaryAction.title}
+            {primaryAction.title}
           </Link>
         )}
       </section>

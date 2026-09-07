@@ -303,7 +303,7 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
             icon={<PlusOutlined />}
             onClick={handleAddParent}
           >
-            新增父级菜单
+            父级
           </Button>
           <Button
             disabled={
@@ -316,10 +316,10 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
             onClick={handleAddChild}
             type="primary"
           >
-            新增子级菜单
+            子级
           </Button>
           <Button disabled={saving} icon={<ReloadOutlined />} onClick={handleReset}>
-            恢复默认
+            重置
           </Button>
         </Space>
       </div>
@@ -418,7 +418,7 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
                   onClick={handleSave}
                   type="primary"
                 >
-                  保存菜单
+                  保存
                 </Button>
               </div>
             </Form>

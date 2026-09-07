@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn"; // 导入中文本地化插件
 
 dayjs.locale("zh-cn"); // 全局使用中文本地化
 import {
   Table,
+  Empty,
   Space,
   Button,
   Form,
@@ -35,9 +36,38 @@ import {
   importTransactions,
 } from "../../api/transactions";
 const dateFormat = "YYYY-MM-DD";
+const MOBILE_LIST_QUERY = "(max-width: 900px)";
+
+const getIsMobileList = () =>
+  typeof window !== "undefined" && window.matchMedia(MOBILE_LIST_QUERY).matches;
+
+const useMobileList = () => {
+  const [isMobileList, setIsMobileList] = useState(getIsMobileList);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const matcher = window.matchMedia(MOBILE_LIST_QUERY);
+    const handleChange = (event) => {
+      setIsMobileList(event.matches);
+    };
+
+    setIsMobileList(matcher.matches);
+    matcher.addEventListener("change", handleChange);
+
+    return () => {
+      matcher.removeEventListener("change", handleChange);
+    };
+  }, []);
+
+  return isMobileList;
+};
 
 const Transactions = ({ transactionCategoryField }) => {
   const [transactions, setTransactions] = useState([]);
+  const isMobileList = useMobileList();
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -80,6 +110,27 @@ const Transactions = ({ transactionCategoryField }) => {
   const defaultCategoryValue = getDefaultCategoryValue();
   const formCategoryOptions = getCategoryOptionsByType(transactionType);
   const searchCategoryOptions = getCategoryOptionsByType(searchTransactionType);
+  const getCategoryLabel = (value) =>
+    categoryOptions.find((item) => item.value === value)?.label ||
+    value ||
+    "未分类";
+  const getTypeLabel = (value) =>
+    transactionTypeField.options.find((item) => item.value === value)?.label ||
+    value ||
+    "未知";
+  const formatAmount = (amount) => Number(amount || 0).toFixed(2);
+  const totalAmount = useMemo(
+    () =>
+      transactions.reduce((sum, item) => sum + (Number(item.amount) || 0), 0),
+    [transactions]
+  );
+  const sortedTransactions = useMemo(
+    () =>
+      [...transactions].sort(
+        (a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf()
+      ),
+    [transactions]
+  );
 
   const columns = [
     {
@@ -103,10 +154,7 @@ const Transactions = ({ transactionCategoryField }) => {
       title: "分类",
       dataIndex: "classification",
       render: (value) => {
-        const label = categoryOptions.find(
-          (item) => item.value === value
-        )?.label;
-        return <span>{label || value || "未分类"}</span>;
+        return <span>{getCategoryLabel(value)}</span>;
       },
       align: "center",
     },
@@ -114,10 +162,7 @@ const Transactions = ({ transactionCategoryField }) => {
       title: "交易类型",
       dataIndex: "type",
       render: (value) => {
-        const label = transactionTypeField.options.find(
-          (item) => item.value === value
-        )?.label;
-        return <span>{label}</span>;
+        return <span>{getTypeLabel(value)}</span>;
       },
     },
     {
@@ -599,49 +644,107 @@ const Transactions = ({ transactionCategoryField }) => {
               重置
             </Button>
             <Button type="primary" onClick={() => showModal("add")}>
-              新增
+              记账
             </Button>
             <Button
               type="primary"
               icon={<DownloadOutlined />}
               onClick={handleExport}
             >
-              导出数据
+              导出
             </Button>
             <Button
               type="primary"
               icon={<UploadOutlined />}
               onClick={handleImportModal}
             >
-              导入数据
+              导入
             </Button>
           </Space>
         </Form.Item>
       </Form>
 
-      {/* 交易列表表格 */}
-      <Table
-        size="small"
-        columns={columns}
-        dataSource={transactions}
-        bordered
-        rowKey="id"
-        footer={() => {
-          // 计算当前查询列表的金额总额
-          const totalAmount = transactions.reduce(
-            (sum, item) => sum + (Number(item.amount) || 0),
-            0
-          );
-          return (
-            <div style={{ textAlign: 'center', fontWeight: 'bold', paddingRight: '30px' }}>
-              总金额: ￥{totalAmount.toFixed(2)}
+      {/* 交易列表 */}
+      {isMobileList ? (
+        <section className="transaction-mobile-list" aria-label="交易滚动列表">
+          <div className="mobile-list-summary">
+            <span>共 {sortedTransactions.length} 条</span>
+            <strong>￥{formatAmount(totalAmount)}</strong>
+          </div>
+
+          {sortedTransactions.length ? (
+            <div className="mobile-record-list">
+              {sortedTransactions.map((item) => {
+                const categoryLabel = getCategoryLabel(item.classification);
+                const typeLabel = getTypeLabel(item.type);
+                const isIncome = typeLabel === "收入";
+
+                return (
+                  <article
+                    className={[
+                      "mobile-record-item",
+                      isIncome ? "income" : "expense",
+                    ].join(" ")}
+                    key={item.id}
+                  >
+                    <span className="mobile-record-icon">
+                      {categoryLabel.slice(0, 1)}
+                    </span>
+                    <div className="mobile-record-main">
+                      <div className="mobile-record-title">
+                        <strong>{item.describe || "未填写描述"}</strong>
+                        <span>{item.date}</span>
+                      </div>
+                      <div className="mobile-record-meta">
+                        <span>{categoryLabel}</span>
+                        <span>{typeLabel}</span>
+                      </div>
+                    </div>
+                    <div className="mobile-record-side">
+                      <strong>
+                        {isIncome ? "+" : "-"}￥{formatAmount(item.amount)}
+                      </strong>
+                      <div className="mobile-record-actions">
+                        <button type="button" onClick={() => showModal(item)}>
+                          编辑
+                        </button>
+                        <button type="button" onClick={() => deleteList(item)}>
+                          删除
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-          );
-        }}
-      />
+          ) : (
+            <Empty
+              className="mobile-record-empty"
+              description="暂无交易记录"
+            />
+          )}
+        </section>
+      ) : (
+        <Table
+          className="transaction-table"
+          size="small"
+          columns={columns}
+          dataSource={transactions}
+          bordered
+          pagination={{ responsive: true, showSizeChanger: false }}
+          rowKey="id"
+          scroll={{ x: 760 }}
+          footer={() => (
+            <div className="transaction-total">
+              总金额: ￥{formatAmount(totalAmount)}
+            </div>
+          )}
+        />
+      )}
 
       {/* 新增/编辑 Modal (保持不变) */}
       <Modal
+        className="transaction-modal"
         title={modalTitle}
         open={open}
         onOk={handleOk}
@@ -783,7 +886,8 @@ const Transactions = ({ transactionCategoryField }) => {
 
       {/* 导入数据模态框 */}
       <Modal
-        title="导入数据"
+        className="transaction-modal"
+        title="导入"
         open={importModalVisible}
         onOk={handleImport}
         onCancel={handleImportCancel}
@@ -798,7 +902,7 @@ const Transactions = ({ transactionCategoryField }) => {
             onRemove={() => setImportFile(null)}
             maxCount={1}
           >
-            <Button icon={<UploadOutlined />}>选择文件</Button>
+            <Button icon={<UploadOutlined />}>选择</Button>
           </Upload>
         </div>
         {importFile && (

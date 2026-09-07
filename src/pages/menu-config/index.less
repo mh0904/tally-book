@@ -98,8 +98,13 @@
 
 @media (max-width: 900px) {
   .menu-config-toolbar {
-    align-items: center;
-    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    .ant-space {
+      width: 100%;
+    }
   }
 
   .menu-config-layout {
@@ -110,5 +115,53 @@
   .menu-editor-panel {
     min-height: auto;
     padding: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .menu-config-page {
+    gap: 12px;
+  }
+
+  .menu-config-toolbar {
+    .ant-space {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .ant-space-item,
+    .ant-btn {
+      width: 100%;
+    }
+  }
+
+  .menu-tree-panel,
+  .menu-editor-panel {
+    padding: 12px;
+  }
+
+  .panel-heading {
+    flex-direction: column;
+  }
+
+  .menu-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-form-actions {
+    .ant-btn {
+      width: 100%;
+    }
+  }
+
+  .menu-tree {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .menu-config-toolbar .ant-space {
+    grid-template-columns: 1fr;
   }
 }

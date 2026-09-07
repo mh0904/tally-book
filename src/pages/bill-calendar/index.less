@@ -1,7 +1,7 @@
 .bill-calendar-page {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .bill-calendar-summary {
@@ -119,10 +119,10 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   min-height: 0;
-  padding: 12px;
-  border-color: #e8edf3;
-  background: #fbfdff;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  padding: 16px;
+  border-color: #eef2f7;
+  background: #fff;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
   overflow: hidden;
 
   .ant-picker-calendar {
@@ -146,10 +146,10 @@
   }
 
   .ant-picker-content th {
-    height: 22px;
-    color: #64748b;
-    font-size: 11px;
-    font-weight: 650;
+    height: 28px;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
     text-align: center;
   }
 
@@ -158,15 +158,25 @@
   }
 
   .ant-picker-cell {
-    padding: 2px;
+    padding: 2px 1px;
   }
 
   .ant-picker-calendar-date,
   .ant-picker-cell-inner {
     border-top: 0 !important;
     min-height: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
+  }
+
+  .ant-picker-cell-selected .ant-picker-calendar-date,
+  .ant-picker-cell-selected .ant-picker-cell-inner {
+    background: transparent !important;
+  }
+
+  .ant-picker-cell-today .ant-picker-cell-inner::before,
+  .ant-picker-calendar-date-today::before {
+    border: 0 !important;
   }
 
   .ant-picker-calendar-date-content {
@@ -183,17 +193,17 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 8px;
-  padding: 0 0 10px;
+  gap: 10px;
+  padding: 0 0 14px;
 
   > strong {
     color: #111827;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     white-space: nowrap;
   }
 
-  > .ant-space:first-child {
+  > .ant-btn {
     justify-self: start;
   }
 
@@ -202,125 +212,107 @@
   }
 
   .ant-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
     background: #f8fafc;
-    color: #475569;
+    color: #334155;
+    box-shadow: none;
 
     &:hover {
       background: #eff6ff;
       color: #2563eb;
     }
   }
+
+  .calendar-today-button {
+    width: auto;
+    padding: 0 12px;
+    border: 1px solid #bfdbfe;
+    background: #fff;
+    color: #2563eb;
+    font-size: 13px;
+  }
 }
 
 .calendar-day-cell {
   display: flex;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   min-height: 0;
+  align-items: center;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 6px;
-  border: 1px solid #edf2f7;
-  border-radius: 10px;
-  background: #fff;
+  justify-content: flex-start;
+  padding: 3px 1px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
   color: #111827;
-  transition: border-color 0.2s ease, background 0.2s ease,
-    box-shadow 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease;
 
   &:hover {
-    border-color: #bfdbfe;
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
-  }
-
-  &.has-bills {
-    border-color: #dbeafe;
-    background: #f8fbff;
-  }
-
-  &.selected {
-    border-color: #edf2f7;
-    background: #2563eb;
-    color: #fff;
-    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
-  }
-
-  &.today:not(.selected) {
-    border-color: #93c5fd;
+    background: #f8fafc;
   }
 
   &.muted {
-    opacity: 0.45;
+    opacity: 0.34;
+  }
+
+  &.has-bills .calendar-day-number {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+
+  &.selected .calendar-day-number {
+    border-color: #1d4ed8;
+    background: #2563eb;
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+  }
+
+  &.today:not(.selected) .calendar-day-number {
+    border-color: #60a5fa;
   }
 }
 
-.calendar-day-top {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-
-  > span:first-child {
-    color: #111827;
-    font-size: 13px;
-    font-weight: 700;
-  }
-}
-
-.calendar-day-cell.selected .calendar-day-top > span:first-child,
-.calendar-day-cell.selected .calendar-day-money strong {
-  color: #fff;
-}
-
-.calendar-day-cell.selected .calendar-day-count {
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
-}
-
-.calendar-day-count {
-  max-width: 46px;
-  margin-right: 0;
-  overflow: hidden;
+.calendar-day-number {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid transparent;
   border-radius: 999px;
-  background: #e0f2fe;
-  color: #0369a1;
-  font-size: 10px;
-  line-height: 16px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .calendar-day-money {
   display: flex;
+  align-items: center;
+  width: 100%;
   min-width: 0;
   flex-direction: column;
-  gap: 0;
-
-  strong {
-    overflow: hidden;
-    color: #111827;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.25;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  gap: 1px;
+  margin-top: 2px;
+  overflow: hidden;
 
   span {
     overflow: hidden;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 650;
-    line-height: 1.25;
+    line-height: 1.15;
+    text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-}
 
-.calendar-day-empty {
-  color: #cbd5e1;
-  font-size: 10px;
+  .day-income {
+    color: #0891b2;
+  }
+
+  .day-expense {
+    color: #ef4444;
+  }
 }
 
 .bill-day-detail {
@@ -329,10 +321,10 @@
   aspect-ratio: 1 / 1;
   min-height: 0;
   flex-direction: column;
-  padding: 14px;
-  border-color: #e8edf3;
+  padding: 18px;
+  border-color: #eef2f7;
   background: #fff;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
   overflow: hidden;
 }
 
@@ -346,8 +338,8 @@
   h3 {
     margin: 0;
     color: #111827;
-    font-size: 16px;
-    font-weight: 650;
+    font-size: 20px;
+    font-weight: 700;
   }
 
   span {
@@ -361,15 +353,20 @@
 .detail-total {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 0;
+  margin-bottom: 14px;
+  padding: 12px 0;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
 
   > div {
     min-width: 0;
-    padding: 9px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    background: #f8fafc;
+    padding: 0 10px;
+    border-right: 1px solid #f1f5f9;
+
+    &:last-child {
+      border-right: 0;
+    }
   }
 
   span,
@@ -378,14 +375,14 @@
   }
 
   span {
-    color: #6b7280;
+    color: #94a3b8;
     font-size: 12px;
   }
 
   strong {
     overflow: hidden;
     margin-top: 3px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -412,7 +409,7 @@
   }
 
   .ant-list-item {
-    padding: 8px 0;
+    padding: 12px 0;
   }
 }
 
@@ -428,7 +425,7 @@
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 
   .ant-tag {
     flex: 0 0 auto;
@@ -451,13 +448,36 @@
   strong {
     max-width: 190px;
     color: #111827;
-    font-size: 13px;
+    font-size: 14px;
   }
 
   span {
     margin-top: 3px;
     color: #94a3b8;
     font-size: 12px;
+  }
+}
+
+.detail-category-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  flex: 0 0 34px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 700;
+
+  &.income {
+    background: #ecfeff;
+    color: #0891b2;
+  }
+
+  &.expense {
+    background: #fff1f2;
+    color: #e11d48;
   }
 }
 
@@ -479,18 +499,167 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .bill-calendar-board,
+  .bill-day-detail {
+    aspect-ratio: auto;
+  }
+
   .bill-calendar-board {
-    overflow-x: auto;
+    min-height: 420px;
+    overflow: hidden;
   }
 
   .bill-calendar-board .ant-picker-panel {
     min-width: 0;
   }
+
+  .bill-day-detail {
+    min-height: 360px;
+  }
 }
 
 @media (max-width: 640px) {
+  .bill-calendar-page {
+    gap: 12px;
+  }
+
+  .bill-calendar-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .summary-item {
+    min-height: 48px;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 8px;
+    padding: 9px 10px;
+
+    .summary-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      font-size: 14px;
+    }
+
+    strong {
+      font-size: 14px;
+    }
+  }
+
+  .bill-calendar-board {
+    min-height: 382px;
+    padding: 12px;
+    border-radius: 18px;
+
+    .ant-picker-panel {
+      height: calc(100% - 24px);
+    }
+
+    .ant-picker-content th {
+      height: 22px;
+      font-size: 11px;
+    }
+
+    .ant-picker-cell {
+      padding: 1px;
+    }
+  }
+
+  .calendar-custom-header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px;
+    padding-bottom: 10px;
+
+    > strong {
+      font-size: 17px;
+      text-align: center;
+    }
+
+    .ant-btn {
+      width: 32px;
+      height: 32px;
+    }
+
+    .calendar-today-button {
+      width: auto;
+      padding-inline: 10px;
+    }
+  }
+
+  .calendar-day-cell {
+    padding: 2px 0;
+    border-radius: 12px;
+  }
+
+  .calendar-day-number {
+    width: 31px;
+    height: 31px;
+    font-size: 13px;
+  }
+
+  .calendar-day-money span {
+    font-size: 10px;
+  }
+
+  .calendar-day-empty {
+    display: none;
+  }
+
+  .bill-day-detail {
+    min-height: 320px;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .detail-total {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    > div {
+      padding: 0 8px;
+    }
+
+    span {
+      font-size: 11px;
+    }
+
+    strong {
+      font-size: 12px;
+    }
+  }
+
+  .detail-item-main {
+    gap: 8px;
+
+    strong {
+      max-width: 150px;
+    }
+  }
+}
+
+@media (max-width: 420px) {
   .bill-calendar-summary,
   .detail-total {
     grid-template-columns: 1fr;
+  }
+
+  .bill-calendar-board {
+    min-height: 342px;
+  }
+
+  .calendar-day-cell {
+    padding: 1px 0;
+  }
+
+  .calendar-day-money span {
+    display: none;
+  }
+
+  .detail-heading {
+    flex-direction: column;
+  }
+
+  .bill-detail-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
   }
 }

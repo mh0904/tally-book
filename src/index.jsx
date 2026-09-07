@@ -25,7 +25,9 @@ dayjs.locale('zh-cn')
 // 导入页面组件
 import Home from './pages/home'
 import Login from './pages/login'
+import Discover from './pages/discover'
 import MenuConfig from './pages/menu-config'
+import Profile from './pages/profile'
 import RoleConfig from './pages/role-config'
 import UserConfig from './pages/user-config'
 import Transactions from './pages/transactions/index.jsx'
@@ -69,6 +71,7 @@ const AVATAR_COLORS = [
   '#22c55e',
   '#64748b',
 ]
+const APP_ONLY_PATHS = ['/discover', '/profile']
 
 const getUserName = () => localStorage.getItem(USER_KEY) || 'admin'
 
@@ -127,6 +130,14 @@ const pageMeta = {
   '/bill-calendar': {
     title: '账单日历',
     description: '按日查看账单明细',
+  },
+  '/discover': {
+    title: '发现',
+    description: '快捷入口',
+  },
+  '/profile': {
+    title: '我的',
+    description: '个人中心',
   },
   '/menu-config': {
     title: '菜单配置',
@@ -406,6 +417,7 @@ const App = () => {
       !isAuthenticated ||
       location.pathname === '/login' ||
       !accessReady ||
+      APP_ONLY_PATHS.includes(location.pathname) ||
       canAccessMenuPath(menus, currentRole, location.pathname)
     ) {
       return
@@ -423,7 +435,11 @@ const App = () => {
   ])
 
   const renderProtectedPage = (path, element) => {
-    if (!accessReady || canAccessMenuPath(menus, currentRole, path)) {
+    if (
+      APP_ONLY_PATHS.includes(path) ||
+      !accessReady ||
+      canAccessMenuPath(menus, currentRole, path)
+    ) {
       return element
     }
 
@@ -432,7 +448,7 @@ const App = () => {
 
   const handleUserMenuClick = ({ key }) => {
     if (key === 'profile') {
-      message.info('个人中心暂未开放')
+      navigate('/profile')
       return
     }
 
@@ -445,7 +461,7 @@ const App = () => {
     {
       key: 'profile',
       icon: <UserOutlined />,
-      label: '个人中心',
+      label: '我的',
     },
     {
       type: 'divider',
@@ -462,7 +478,7 @@ const App = () => {
       key: 'logout',
       danger: true,
       icon: <LogoutOutlined />,
-      label: '退出登录',
+      label: '退出',
     },
   ]
 
@@ -487,7 +503,7 @@ const App = () => {
       />
       <main className="admin-main">
         <header className="admin-topbar">
-          <div>
+          <div className="admin-title">
             <h1>{currentPage.title}</h1>
             <span>{currentPage.description}</span>
           </div>
@@ -548,6 +564,23 @@ const App = () => {
               element={renderProtectedPage(
                 '/bill-calendar',
                 <BillCalendar transactionCategoryField={transactionCategoryField} />
+              )}
+            />
+            <Route
+              path="/discover"
+              element={renderProtectedPage('/discover', <Discover />)}
+            />
+            <Route
+              path="/profile"
+              element={renderProtectedPage(
+                '/profile',
+                <Profile
+                  avatarColor={avatarColor}
+                  avatarText={avatarText}
+                  currentRole={currentRole}
+                  onLogout={handleLogout}
+                  userName={userName}
+                />
               )}
             />
             <Route

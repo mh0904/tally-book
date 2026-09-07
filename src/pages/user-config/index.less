@@ -115,8 +115,13 @@
 
 @media (max-width: 900px) {
   .user-config-toolbar {
-    align-items: center;
-    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    .ant-space {
+      width: 100%;
+    }
   }
 
   .user-config-layout {
@@ -131,8 +136,63 @@
 }
 
 @media (max-width: 680px) {
+  .user-config-page {
+    gap: 12px;
+  }
+
+  .user-config-toolbar {
+    .ant-space {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .ant-space-item,
+    .ant-btn {
+      width: 100%;
+    }
+  }
+
+  .user-list-panel,
+  .user-editor-panel {
+    padding: 12px;
+  }
+
+  .panel-heading {
+    flex-direction: column;
+  }
+
   .user-form-row,
   .user-form-row.small {
     grid-template-columns: 1fr;
+  }
+
+  .user-form-actions {
+    flex-direction: column-reverse;
+
+    .ant-btn {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .user-config-toolbar .ant-space {
+    grid-template-columns: 1fr;
+  }
+
+  .user-list-item {
+    grid-template-columns: 32px minmax(0, 1fr);
+
+    .ant-tag {
+      grid-column: 2;
+      justify-self: start;
+      margin-right: 0;
+    }
+  }
+
+  .user-list-icon {
+    width: 32px;
+    height: 32px;
   }
 }

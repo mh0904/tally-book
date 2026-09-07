@@ -13,6 +13,41 @@ const formatCurrencyAmount = (value) => `¥${formatAmount(value)}`;
 const formatPercent = (value) => `${((Number(value) || 0) * 100).toFixed(1)}%`;
 const uncategorizedExpense = "未分类";
 
+const useCompactView = () => {
+  const [isCompactView, setIsCompactView] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return window.matchMedia("(max-width: 640px)").matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 640px)");
+    const handleChange = (event) => setIsCompactView(event.matches);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleChange);
+    } else {
+      mediaQuery.addListener(handleChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
+  }, []);
+
+  return isCompactView;
+};
+
 const getExpenseCategoryOptions = (data, transactionCategoryField) => {
   const categoryOptions = Array.isArray(transactionCategoryField?.options)
     ? transactionCategoryField.options
@@ -39,6 +74,7 @@ const Chart = ({ transactionCategoryField }) => {
   const [selectedMonth, setSelectedMonth] = useState("2025-09"); // 默认显示当前月份
   const [pieConfig, setPieConfig] = useState({});
   const [columnConfig, setColumnConfig] = useState({});
+  const isCompactView = useCompactView();
 
   // 获取所有交易数据
   useEffect(() => {
@@ -58,7 +94,7 @@ const Chart = ({ transactionCategoryField }) => {
       }
     };
     fetchData();
-  }, [selectedMonth, transactionCategoryField]);
+  }, [selectedMonth, transactionCategoryField, isCompactView]);
 
   // 处理图表数据
   const processChartData = (data) => {
@@ -108,15 +144,17 @@ const Chart = ({ transactionCategoryField }) => {
       data: pieData,
       angleField: "value",
       colorField: "type",
-      radius: 0.8,
-      label: {
-        style: {
-          fontSize: 12,
-        },
-        text: "amountLabel",
-      },
+      radius: isCompactView ? 0.68 : 0.8,
+      label: isCompactView
+        ? false
+        : {
+            style: {
+              fontSize: 12,
+            },
+            text: "amountLabel",
+          },
       legend: {
-        position: "right",
+        position: isCompactView ? "bottom" : "right",
         formatter: (name) => name, 
       },
       tooltip: {
@@ -163,7 +201,7 @@ const Chart = ({ transactionCategoryField }) => {
         type: "cat",
         label: {
           autoHide: true,
-          autoRotate: false,
+          autoRotate: isCompactView,
         },
       },
       yAxis: {
@@ -177,10 +215,12 @@ const Chart = ({ transactionCategoryField }) => {
           { field: "支出", name: "支出", valueFormatter: formatCurrencyAmount },
         ],
       },
-      label: {
-        position: "top",
-        text: "amountLabel",
-      },
+      label: isCompactView
+        ? false
+        : {
+            position: "top",
+            text: "amountLabel",
+          },
       columnStyle: {
         radius: [4, 4, 0, 0],
       },

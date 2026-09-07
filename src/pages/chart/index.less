@@ -66,6 +66,7 @@
 
 .chart-item {
   min-width: 0;
+  overflow: hidden;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   background-color: white;
@@ -81,6 +82,7 @@
 
   .chart-content {
     height: 400px;
+    min-width: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -154,5 +156,37 @@
 
   .category-breakdown {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .chart-container {
+    gap: 12px;
+  }
+
+  .chart-header,
+  .chart-item {
+    padding: 12px;
+  }
+
+  .chart-item {
+    h2 {
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .chart-content {
+      height: 260px;
+    }
+  }
+
+  .category-breakdown-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+
+    .category-percent {
+      grid-column: 1 / -1;
+      min-width: 0;
+      text-align: left;
+    }
   }
 }

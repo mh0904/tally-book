@@ -228,10 +228,10 @@ const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
             onClick={handleAddRole}
             type="primary"
           >
-            新增角色
+            新增
           </Button>
           <Button disabled={saving} icon={<ReloadOutlined />} onClick={handleReset}>
-            恢复默认
+            重置
           </Button>
         </Space>
       </div>
@@ -359,7 +359,7 @@ const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
                       disabled={!selectedRole || isAdmin || Boolean(draftRole)}
                       icon={<DeleteOutlined />}
                     >
-                      删除角色
+                      删除
                     </Button>
                   </Popconfirm>
                   <Button
@@ -369,7 +369,7 @@ const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
                     onClick={handleSave}
                     type="primary"
                   >
-                    保存角色
+                    保存
                   </Button>
                 </div>
               </Form>

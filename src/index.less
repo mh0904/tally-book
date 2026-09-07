@@ -5,12 +5,14 @@
 
 html,
 body {
+  width: 100%;
   margin: 0;
   min-height: 100%;
   background: #f4f6f9;
   color: #1f2937;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  overflow-x: hidden;
 }
 
 #root {
@@ -21,9 +23,17 @@ a {
   text-decoration: none;
 }
 
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 .admin-shell {
   display: flex;
   min-height: 100vh;
+  min-width: 0;
   background: #f4f6f9;
 }
 
@@ -46,6 +56,10 @@ a {
   background: rgba(255, 255, 255, 0.96);
   padding: 0 28px;
   backdrop-filter: blur(12px);
+}
+
+.admin-title {
+  min-width: 0;
 
   h1 {
     margin: 0;
@@ -61,7 +75,6 @@ a {
     color: #6b7280;
     font-size: 13px;
   }
-
 }
 
 .admin-actions {
@@ -141,31 +154,97 @@ a {
 }
 
 .ant-btn {
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 999px;
+  font-weight: 600;
+  box-shadow: none;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ant-btn-primary {
+  border-color: #2563eb;
+  background: #2563eb;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.14);
+}
+
+.ant-btn-primary:not(:disabled):hover {
+  border-color: #1d4ed8;
+  background: #1d4ed8;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+}
+
+.ant-btn-default:not(:disabled):hover {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.ant-btn-dangerous:not(.ant-btn-primary):not(:disabled):hover {
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
+.ant-btn-text {
+  box-shadow: none;
+}
+
+.ant-btn-text:not(:disabled):hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.ant-btn-lg {
+  min-height: 42px;
 }
 
 .ant-table-wrapper {
+  max-width: 100%;
+
   .ant-table {
     border-radius: 8px;
   }
 }
 
+.ant-form-item {
+  min-width: 0;
+}
+
 @media (max-width: 900px) {
   .admin-shell {
     flex-direction: column;
+    min-height: 100svh;
+  }
+
+  .admin-main {
+    width: 100%;
   }
 
   .admin-topbar {
+    position: static;
     min-height: auto;
     align-items: flex-start;
     flex-direction: column;
     gap: 8px;
     padding: 16px;
+
+    h1 {
+      font-size: 18px;
+    }
   }
 
   .admin-actions {
     width: 100%;
+    flex-wrap: wrap;
     justify-content: space-between;
+    gap: 8px;
+  }
+
+  .current-role-tag {
+    max-width: 120px;
   }
 
   .user-trigger {
@@ -173,6 +252,63 @@ a {
   }
 
   .admin-content {
-    padding: 16px;
+    padding: 16px 16px calc(84px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-topbar {
+    padding: 12px;
+
+    h1 {
+      font-size: 17px;
+    }
+  }
+
+  .admin-date {
+    display: none;
+  }
+
+  .current-role-tag {
+    max-width: 108px;
+  }
+
+  .user-name {
+    max-width: 92px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .admin-content {
+    padding: 12px 12px calc(84px + env(safe-area-inset-bottom));
+  }
+
+  .page-panel {
+    border-radius: 6px;
+  }
+
+  .ant-btn {
+    min-height: 36px;
+    padding-inline: 13px;
+  }
+
+  .ant-modal {
+    max-width: calc(100vw - 24px);
+    margin: 12px auto;
+  }
+
+  .ant-modal-content {
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .current-role-tag {
+    max-width: 96px;
+  }
+
+  .user-name {
+    display: none !important;
   }
 }

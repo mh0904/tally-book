@@ -11,8 +11,6 @@ import {
   message,
 } from 'antd'
 import {
-  DoubleLeftOutlined,
-  DoubleRightOutlined,
   FileTextOutlined,
   LeftOutlined,
   RightOutlined,
@@ -39,6 +37,21 @@ const createEmptySummary = (date) => ({
 })
 
 const formatAmount = (value) => Number(value || 0).toFixed(2)
+
+const formatCellAmount = (value) => {
+  const amount = Number(value || 0)
+
+  if (!amount) {
+    return ''
+  }
+
+  if (amount >= 10000) {
+    const compactValue = amount / 10000
+    return `${compactValue >= 10 ? compactValue.toFixed(0) : compactValue.toFixed(1)}万`
+  }
+
+  return Number.isInteger(amount) ? String(amount) : amount.toFixed(2)
+}
 
 const getCategoryLabel = (value, transactionCategoryField) => {
   const categoryOptions = Array.isArray(transactionCategoryField?.options)
@@ -193,35 +206,33 @@ const BillCalendar = ({ transactionCategoryField }) => {
       onChange(nextDate)
       setSelectedDate(nextDate)
     }
+    const jumpToday = () => {
+      const today = dayjs()
+      onChange(today)
+      setSelectedDate(today)
+    }
 
     return (
       <div className="calendar-custom-header">
-        <Space size={6}>
-          <Button
-            icon={<DoubleLeftOutlined />}
-            onClick={() => changeCalendarDate(-1, 'year')}
-            title="上一年"
-            type="text"
-          />
-          <Button
-            icon={<LeftOutlined />}
-            onClick={() => changeCalendarDate(-1, 'month')}
-            title="上一月"
-            type="text"
-          />
-        </Space>
+        <Button
+          icon={<LeftOutlined />}
+          onClick={() => changeCalendarDate(-1, 'month')}
+          title="上月"
+          type="text"
+        />
         <strong>{value.format('YYYY年MM月')}</strong>
         <Space size={6}>
           <Button
+            className="calendar-today-button"
+            onClick={jumpToday}
+            type="text"
+          >
+            今天
+          </Button>
+          <Button
             icon={<RightOutlined />}
             onClick={() => changeCalendarDate(1, 'month')}
-            title="下一月"
-            type="text"
-          />
-          <Button
-            icon={<DoubleRightOutlined />}
-            onClick={() => changeCalendarDate(1, 'year')}
-            title="下一年"
+            title="下月"
             type="text"
           />
         </Space>
@@ -239,6 +250,8 @@ const BillCalendar = ({ transactionCategoryField }) => {
     const isSelected = date.isSame(selectedDate, 'day')
     const isToday = date.isSame(dayjs(), 'day')
     const isCurrentMonth = date.isSame(selectedMonth, 'month')
+    const hasIncome = Number(summary?.totalIncome || 0) > 0
+    const hasExpense = Number(summary?.totalExpense || 0) > 0
 
     return (
       <div
@@ -248,24 +261,28 @@ const BillCalendar = ({ transactionCategoryField }) => {
           isToday ? 'today' : '',
           !isCurrentMonth ? 'muted' : '',
           summary?.items.length ? 'has-bills' : '',
+          hasIncome ? 'has-income' : '',
+          hasExpense ? 'has-expense' : '',
         ]
           .filter(Boolean)
           .join(' ')}
       >
-        <div className="calendar-day-top">
-          <span>{date.date()}</span>
-          {summary?.items.length > 0 && (
-            <Tag className="calendar-day-count" color="blue">
-              {summary.items.length}笔
-            </Tag>
-          )}
-        </div>
+        <span className="calendar-day-number">{date.date()}</span>
         {summary ? (
           <div className="calendar-day-money">
-            <strong>{formatAmount(summary.totalAmount)}</strong>
+            {hasIncome && (
+              <span className="day-income">
+                +{formatCellAmount(summary.totalIncome)}
+              </span>
+            )}
+            {hasExpense && (
+              <span className="day-expense">
+                {formatCellAmount(summary.totalExpense)}
+              </span>
+            )}
           </div>
         ) : (
-          <span className="calendar-day-empty">无记录</span>
+          <span className="calendar-day-empty" />
         )}
       </div>
     )
@@ -306,7 +323,7 @@ const BillCalendar = ({ transactionCategoryField }) => {
           <aside className="bill-day-detail page-panel">
             <div className="detail-heading">
               <div>
-                <h3>{selectedDate.format('YYYY年MM月DD日')}</h3>
+                <h3>{selectedDate.format('M月D日')}</h3>
                 <span>{selectedDate.format('dddd')}</span>
               </div>
               <Tag color={selectedSummary.items.length ? 'blue' : 'default'}>
@@ -339,19 +356,27 @@ const BillCalendar = ({ transactionCategoryField }) => {
                 dataSource={sortedSelectedItems}
                 renderItem={(item) => {
                   const income = isIncomeTransaction(item)
+                  const categoryLabel = getCategoryLabel(
+                    item.classification,
+                    transactionCategoryField
+                  )
 
                   return (
                     <List.Item className="bill-detail-item">
                       <div className="detail-item-main">
-                        <Tag color={income ? 'success' : 'error'}>
-                          {getCategoryLabel(
-                            item.classification,
-                            transactionCategoryField
-                          )}
-                        </Tag>
+                        <span
+                          className={[
+                            'detail-category-icon',
+                            income ? 'income' : 'expense',
+                          ].join(' ')}
+                        >
+                          {categoryLabel.slice(0, 1)}
+                        </span>
                         <div>
                           <Text strong>{item.describe || '未填写描述'}</Text>
-                          <span>{income ? '收入' : '支出'}</span>
+                          <span>
+                            {categoryLabel} · {income ? '收入' : '支出'}
+                          </span>
                         </div>
                       </div>
                       <Text

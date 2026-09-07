@@ -211,10 +211,10 @@ const UserConfig = ({
             onClick={handleAddUser}
             type="primary"
           >
-            新增用户
+            新增
           </Button>
           <Button disabled={saving} icon={<ReloadOutlined />} onClick={handleReset}>
-            恢复默认
+            重置
           </Button>
         </Space>
       </div>
@@ -368,7 +368,7 @@ const UserConfig = ({
                   title="确认删除该用户？"
                 >
                   <Button danger disabled={!canDelete} icon={<DeleteOutlined />}>
-                    删除用户
+                    删除
                   </Button>
                 </Popconfirm>
                 <Button
@@ -377,7 +377,7 @@ const UserConfig = ({
                   onClick={handleSave}
                   type="primary"
                 >
-                  保存用户
+                  保存
                 </Button>
               </div>
             </Form>

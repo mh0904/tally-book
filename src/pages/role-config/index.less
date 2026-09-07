@@ -181,8 +181,13 @@
 
 @media (max-width: 900px) {
   .role-config-toolbar {
-    align-items: center;
-    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    .ant-space {
+      width: 100%;
+    }
   }
 
   .role-config-layout {
@@ -197,7 +202,68 @@
 }
 
 @media (max-width: 640px) {
+  .role-config-page {
+    gap: 12px;
+  }
+
+  .role-config-toolbar {
+    .ant-space {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .ant-space-item,
+    .ant-btn {
+      width: 100%;
+    }
+  }
+
+  .role-list-panel,
+  .role-editor-panel,
+  .role-permission-panel {
+    padding: 12px;
+  }
+
+  .panel-heading,
+  .role-permission-heading {
+    flex-direction: column;
+  }
+
   .role-form-row {
     grid-template-columns: 1fr;
+  }
+
+  .role-form-actions {
+    flex-direction: column-reverse;
+
+    .ant-btn {
+      width: 100%;
+    }
+  }
+
+  .role-menu-tree {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .role-config-toolbar .ant-space {
+    grid-template-columns: 1fr;
+  }
+
+  .role-list-item {
+    grid-template-columns: 32px minmax(0, 1fr);
+
+    .ant-tag {
+      grid-column: 2;
+      justify-self: start;
+      margin-right: 0;
+    }
+  }
+
+  .role-list-icon {
+    width: 32px;
+    height: 32px;
   }
 }
