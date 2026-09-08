@@ -1,79 +1,22 @@
 import React from 'react'
-import {
-  Button,
-  Empty,
-  Form,
-  Input,
-  InputNumber,
-  Popconfirm,
-  Space,
-  Switch,
-  Tag,
-  Tree,
-  Typography,
-  message,
-} from 'antd'
-import {
-  DeleteOutlined,
-  PlusOutlined,
-  ReloadOutlined,
-  SaveOutlined,
-  SafetyOutlined,
-} from '@ant-design/icons'
-import { renderMenuIcon } from '../../common/menu-icons'
+import { Form, message } from 'antd'
 import { resetRoles } from '../../api/roles'
 import {
   ADMIN_ROLE_ID,
-  ALL_MENU_PERMISSION,
   getAllMenuIds,
   normalizeRole,
   sortRoles,
 } from '../../config/roles'
+import RoleEditorPanel from './role-editor-panel'
+import RoleListPanel from './role-list-panel'
+import RoleToolbar from './role-toolbar'
+import {
+  createRoleId,
+  findRoleById,
+  getNextSort,
+  getRoleCheckedKeys,
+} from './role-utils'
 import './index.less'
-
-const { Text } = Typography
-
-const createRoleId = () =>
-  `role-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-
-const getNextSort = (roles) => {
-  const maxSort = roles.reduce(
-    (max, role) => Math.max(max, Number(role.sort || 0)),
-    0
-  )
-  return maxSort + 1
-}
-
-const findRoleById = (roles, id) => roles.find((role) => role.id === id)
-
-const getRoleCheckedKeys = (role, menus) => {
-  if (!role) {
-    return []
-  }
-
-  if (role.id === ADMIN_ROLE_ID || role.menuIds?.includes(ALL_MENU_PERMISSION)) {
-    return getAllMenuIds(menus)
-  }
-
-  return role.menuIds || []
-}
-
-const createPermissionTreeData = (menus) =>
-  menus.map((item) => ({
-    key: item.id,
-    title: (
-      <div className="role-menu-tree-title">
-        <span className="role-menu-tree-icon">{renderMenuIcon(item.icon)}</span>
-        <span className="role-menu-tree-name">{item.title}</span>
-        <Tag color={item.enabled ? 'success' : 'default'}>
-          {item.enabled ? '启用' : '停用'}
-        </Tag>
-      </div>
-    ),
-    children: item.children?.length
-      ? createPermissionTreeData(item.children)
-      : undefined,
-  }))
 
 const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
   const [form] = Form.useForm()
@@ -89,7 +32,6 @@ const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
   )
   const editingRole = draftRole || selectedRole
   const isAdmin = editingRole?.id === ADMIN_ROLE_ID
-  const treeData = React.useMemo(() => createPermissionTreeData(menus), [menus])
 
   React.useEffect(() => {
     setExpandedKeys(getAllMenuIds(menus))
@@ -220,189 +162,38 @@ const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
 
   return (
     <div className="role-config-page">
-      <div className="role-config-toolbar">
-        <Space wrap>
-          <Button
-            disabled={saving}
-            icon={<PlusOutlined />}
-            onClick={handleAddRole}
-            type="primary"
-          >
-            新增
-          </Button>
-          <Button disabled={saving} icon={<ReloadOutlined />} onClick={handleReset}>
-            重置
-          </Button>
-        </Space>
-      </div>
+      <RoleToolbar
+        onAdd={handleAddRole}
+        onReset={handleReset}
+        saving={saving}
+      />
 
       <div className="role-config-layout">
-        <section className="role-list-panel page-panel">
-          <div className="panel-heading">
-            <div>
-              <h3>角色列表</h3>
-              <span>当前共 {roles.length} 个角色</span>
-            </div>
-          </div>
-          <div className="role-list">
-            {roles.map((role) => (
-              <button
-                className={[
-                  'role-list-item',
-                  !draftRole && selectedId === role.id ? 'active' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                key={role.id}
-                onClick={() => {
-                  setDraftRole(null)
-                  setSelectedId(role.id)
-                }}
-                type="button"
-              >
-                <span className="role-list-icon">
-                  <SafetyOutlined />
-                </span>
-                <span className="role-list-content">
-                  <strong>{role.name}</strong>
-                  <em>{role.description || '暂无描述'}</em>
-                </span>
-                <Tag color={role.enabled ? 'success' : 'default'}>
-                  {role.enabled ? '启用' : '停用'}
-                </Tag>
-              </button>
-            ))}
-          </div>
-        </section>
+        <RoleListPanel
+          draftRole={draftRole}
+          onSelect={(roleId) => {
+            setDraftRole(null)
+            setSelectedId(roleId)
+          }}
+          roles={roles}
+          selectedId={selectedId}
+        />
 
-        <section className="role-editor-panel page-panel">
-          <div className="panel-heading">
-            <div>
-              <h3>{draftRole ? '新增角色' : '编辑角色'}</h3>
-              {editingRole ? (
-                <span>
-                  当前角色：<Text strong>{editingRole.name}</Text>
-                </span>
-              ) : (
-                <span>请选择一个角色</span>
-              )}
-            </div>
-            {editingRole && (
-              <Tag color={isAdmin ? 'gold' : 'orange'}>
-                {isAdmin ? '最高权限' : '自定义权限'}
-              </Tag>
-            )}
-          </div>
-
-          {editingRole ? (
-            <div className="role-editor-grid">
-              <Form
-                className="role-edit-form"
-                form={form}
-                layout="vertical"
-                requiredMark={false}
-              >
-                <Form.Item
-                  label="角色名称"
-                  name="name"
-                  rules={[{ required: true, message: '请输入角色名称' }]}
-                >
-                  <Input
-                    disabled={isAdmin}
-                    maxLength={20}
-                    placeholder="请输入角色名称"
-                  />
-                </Form.Item>
-
-                <Form.Item label="角色说明" name="description">
-                  <Input.TextArea
-                    autoSize={{ minRows: 3, maxRows: 5 }}
-                    disabled={isAdmin}
-                    maxLength={80}
-                    placeholder="请输入角色说明"
-                  />
-                </Form.Item>
-
-                <div className="role-form-row">
-                  <Form.Item
-                    label="排序"
-                    name="sort"
-                    rules={[{ required: true, message: '请输入排序值' }]}
-                  >
-                    <InputNumber disabled={isAdmin} min={1} precision={0} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="状态"
-                    name="enabled"
-                    valuePropName="checked"
-                  >
-                    <Switch
-                      checkedChildren="启用"
-                      disabled={isAdmin}
-                      unCheckedChildren="停用"
-                    />
-                  </Form.Item>
-                </div>
-
-                <div className="role-form-actions">
-                  <Popconfirm
-                    cancelText="取消"
-                    disabled={!selectedRole || isAdmin || Boolean(draftRole)}
-                    okText="删除"
-                    okButtonProps={{ danger: true }}
-                    onConfirm={handleDelete}
-                    title="确认删除该角色？"
-                  >
-                    <Button
-                      danger
-                      disabled={!selectedRole || isAdmin || Boolean(draftRole)}
-                      icon={<DeleteOutlined />}
-                    >
-                      删除
-                    </Button>
-                  </Popconfirm>
-                  <Button
-                    disabled={isAdmin}
-                    icon={<SaveOutlined />}
-                    loading={saving}
-                    onClick={handleSave}
-                    type="primary"
-                  >
-                    保存
-                  </Button>
-                </div>
-              </Form>
-
-              <div className="role-permission-panel">
-                <div className="role-permission-heading">
-                  <h4>菜单权限</h4>
-                  <span>
-                    {isAdmin
-                      ? '管理员默认拥有全部菜单权限'
-                      : `已选择 ${checkedKeys.length} 个菜单节点`}
-                  </span>
-                </div>
-                {treeData.length ? (
-                  <Tree
-                    checkable
-                    checkedKeys={checkedKeys}
-                    className="role-menu-tree"
-                    disabled={isAdmin}
-                    expandedKeys={expandedKeys}
-                    onCheck={handleCheck}
-                    onExpand={setExpandedKeys}
-                    treeData={treeData}
-                  />
-                ) : (
-                  <Empty description="暂无菜单" />
-                )}
-              </div>
-            </div>
-          ) : (
-            <Empty description="请选择左侧角色" />
-          )}
-        </section>
+        <RoleEditorPanel
+          checkedKeys={checkedKeys}
+          draftRole={draftRole}
+          editingRole={editingRole}
+          expandedKeys={expandedKeys}
+          form={form}
+          isAdmin={isAdmin}
+          menus={menus}
+          onCheck={handleCheck}
+          onDelete={handleDelete}
+          onExpand={setExpandedKeys}
+          onSave={handleSave}
+          saving={saving}
+          selectedRole={selectedRole}
+        />
       </div>
     </div>
   )
