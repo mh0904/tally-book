@@ -326,7 +326,7 @@ const BillCalendar = ({ transactionCategoryField }) => {
                 <h3>{selectedDate.format('M月D日')}</h3>
                 <span>{selectedDate.format('dddd')}</span>
               </div>
-              <Tag color={selectedSummary.items.length ? 'blue' : 'default'}>
+              <Tag color={selectedSummary.items.length ? 'orange' : 'default'}>
                 {selectedSummary.items.length} 笔
               </Tag>
             </div>

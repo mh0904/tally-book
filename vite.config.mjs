@@ -7,10 +7,10 @@ import { defineConfig } from 'vite'
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const themeVariables = {
-  '@background-title': '#f3f4f6',
-  '@primary-color': '#6698ff',
+  '@background-title': '#fff7f1',
+  '@primary-color': '#ff9a3d',
   '@text-color': '#333',
-  '@border-radius': '4px',
+  '@border-radius': '8px',
   '@font-size-base': '14px',
 }
 
@@ -35,7 +35,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
-        modifyVars: { '@primary-color': '#1DA57A', ...themeVariables },
+        modifyVars: themeVariables,
         javascriptEnabled: true,
       },
     },

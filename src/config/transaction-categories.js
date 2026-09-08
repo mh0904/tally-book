@@ -12,7 +12,7 @@ const normalizeKeywords = (keywords) => {
   )
 }
 
-const normalizeCategory = (item, index) => {
+const normalizeCategory = (item = {}, index) => {
   const value = String(item.value || item.label || '').trim()
   const label = String(item.label || item.value || '').trim()
 
@@ -27,7 +27,7 @@ const normalizeCategory = (item, index) => {
   }
 }
 
-export const normalizeTransactionCategoryOptions = (categories) => {
+export const normalizeAllTransactionCategories = (categories) => {
   const source = Array.isArray(categories) ? categories : []
 
   const uniqueCategories = source.reduce((acc, item, index) => {
@@ -37,9 +37,13 @@ export const normalizeTransactionCategoryOptions = (categories) => {
   }, new Map())
 
   return Array.from(uniqueCategories.values())
-    .filter((item) => item.enabled !== false)
     .sort((a, b) => Number(a.sort || 0) - Number(b.sort || 0))
 }
+
+export const normalizeTransactionCategoryOptions = (categories) =>
+  normalizeAllTransactionCategories(categories).filter(
+    (item) => item.enabled !== false
+  )
 
 export const normalizeTransactionCategoryField = (categories) => {
   const options = normalizeTransactionCategoryOptions(categories)

@@ -43,28 +43,233 @@
     }
   }
 
-  .ant-table-wrapper {
-    padding: 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-  }
-
-  .ant-table-thead > tr > th {
-    background: #f8fafc;
-    color: #374151;
-    font-weight: 650;
-  }
-
-  .ant-table-content {
-    overflow-x: auto;
-  }
-
   .transaction-total {
     padding-right: 30px;
     font-weight: 700;
     text-align: center;
+  }
+
+  .transaction-ledger {
+    display: grid;
+    height: calc(100vh - 216px);
+    min-height: 520px;
+    grid-template-columns: 280px minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  .ledger-months {
+    min-width: 0;
+    overflow-y: auto;
+    border-right: 1px solid #eef0f4;
+    padding: 16px;
+  }
+
+  .ledger-month-filter {
+    display: flex;
+    height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 0 14px;
+    border: 1px solid #e6e9ef;
+    border-radius: 8px;
+    color: #8a8f99;
+
+    strong {
+      color: #374151;
+    }
+  }
+
+  .ledger-month-item {
+    display: grid;
+    width: 100%;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #fff;
+    color: #4b5563;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+
+    &.active,
+    &:hover {
+      background: linear-gradient(90deg, #fff7f1, #fff);
+      box-shadow: inset 3px 0 0 var(--theme-primary);
+    }
+
+    span {
+      color: #111827;
+      font-size: 22px;
+      font-weight: 750;
+    }
+
+    em,
+    small {
+      color: #8a8f99;
+      font-size: 13px;
+      font-style: normal;
+    }
+  }
+
+  .ledger-records {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px 24px 24px;
+  }
+
+  .ledger-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+
+    div {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 20px;
+    }
+
+    strong {
+      color: #111827;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    span {
+      color: #9ca3af;
+      font-size: 15px;
+    }
+
+    .income {
+      color: #ef5b3f;
+    }
+
+    .expense {
+      color: #2388a5;
+    }
+  }
+
+  .ledger-table-head,
+  .ledger-row {
+    display: grid;
+    grid-template-columns:
+      minmax(150px, 1.2fr) 100px 100px 100px 130px minmax(130px, 1fr)
+      116px;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ledger-table-head {
+    min-height: 50px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: #f7f7f8;
+    color: #4b5563;
+    font-weight: 750;
+  }
+
+  .ledger-scroll {
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 12px;
+  }
+
+  .ledger-date-title {
+    margin: 0 0 8px;
+    color: #8a8f99;
+    font-size: 13px;
+  }
+
+  .ledger-row {
+    min-height: 64px;
+    margin-bottom: 8px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+
+    &:nth-child(even) {
+      background: #fcfcfd;
+    }
+
+    > span {
+      min-width: 0;
+      overflow: hidden;
+      color: #4b5563;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    b {
+      font-size: 15px;
+      font-weight: 750;
+
+      &.income {
+        color: #ef5b3f;
+      }
+
+      &.expense {
+        color: #2388a5;
+      }
+    }
+  }
+
+  .ledger-category {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+
+    span {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      flex: 0 0 32px;
+      border-radius: 50%;
+      background: var(--theme-primary-soft);
+      color: var(--theme-primary-deep);
+      font-weight: 800;
+    }
+
+    strong {
+      overflow: hidden;
+      color: #111827;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .ledger-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+
+    button {
+      border: 0;
+      background: transparent;
+      color: var(--theme-primary);
+      cursor: pointer;
+      font-weight: 650;
+
+      &:last-child {
+        color: #ef5b3f;
+      }
+    }
+  }
+
+  .ledger-empty {
+    display: grid;
+    min-height: 260px;
+    place-items: center;
   }
 
   .transaction-mobile-list {
@@ -135,8 +340,8 @@
       height: 40px;
       place-items: center;
       border-radius: 8px;
-      background: #eff6ff;
-      color: #2563eb;
+      background: var(--theme-primary-soft);
+      color: var(--theme-primary-deep);
       font-size: 15px;
       font-weight: 700;
     }
@@ -220,8 +425,8 @@
         padding: 0 8px;
         border: 0;
         border-radius: 999px;
-        background: #eff6ff;
-        color: #2563eb;
+        background: var(--theme-primary-soft);
+        color: var(--theme-primary-deep);
         cursor: pointer;
         font-size: 12px;
         font-weight: 600;

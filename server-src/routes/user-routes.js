@@ -12,7 +12,7 @@ const {
 } = require('../utils/response-helper')
 
 const setupUserRoutes = (server) => {
-  // 校验用户登录账号和密码。
+  // 校验成员登录账号和密码。
   server.post('/login', (req, res) => {
     try {
       const user = verifyUserLogin(req.body?.username, req.body?.password)
@@ -32,36 +32,36 @@ const setupUserRoutes = (server) => {
     }
   })
 
-  // 获取用户账号配置列表，不返回密码哈希、盐或明文密码字段。
+  // 获取成员账号配置列表，不返回密码哈希、盐或明文密码字段。
   server.get('/users', (req, res) => {
     try {
-      sendSuccess(res, getSafeUserConfig(), '查询用户成功')
+      sendSuccess(res, getSafeUserConfig(), '查询成员成功')
     } catch (error) {
-      sendError(res, '查询用户失败', error)
+      sendError(res, '查询成员失败', error)
     }
   })
 
-  // 保存用户账号、密码、启用状态和角色绑定配置。
+  // 保存成员账号、密码、启用状态和角色绑定配置。
   server.put('/users', (req, res) => {
     try {
       const users = req.body
 
       if (!Array.isArray(users)) {
-        return sendFail(res, '用户数据必须是数组')
+        return sendFail(res, '成员数据必须是数组')
       }
 
-      sendSuccess(res, writeUserConfig(users), '用户保存成功')
+      sendSuccess(res, writeUserConfig(users), '成员保存成功')
     } catch (error) {
-      sendError(res, '用户保存失败', error)
+      sendError(res, '成员保存失败', error)
     }
   })
 
-  // 将用户配置恢复为默认配置。
+  // 将成员配置恢复为默认配置。
   server.post('/users/reset', (req, res) => {
     try {
-      sendSuccess(res, resetUserConfig(), '用户已恢复默认')
+      sendSuccess(res, resetUserConfig(), '成员已恢复默认')
     } catch (error) {
-      sendError(res, '恢复默认用户失败', error)
+      sendError(res, '恢复默认成员失败', error)
     }
   })
 }

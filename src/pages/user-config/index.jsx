@@ -1,6 +1,8 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import {
   Button,
+  Checkbox,
   Empty,
   Form,
   Input,
@@ -58,6 +60,7 @@ const UserConfig = ({
   const [saving, setSaving] = React.useState(false)
   const [draftUser, setDraftUser] = React.useState(null)
   const [selectedId, setSelectedId] = React.useState(users[0]?.id)
+  const [showHidden, setShowHidden] = React.useState(false)
 
   const selectedUser = React.useMemo(
     () => findUserById(users, selectedId),
@@ -79,6 +82,10 @@ const UserConfig = ({
           value: role.id,
         })),
     [roles]
+  )
+  const visibleUsers = React.useMemo(
+    () => (showHidden ? users : users.filter((user) => user.enabled !== false)),
+    [showHidden, users]
   )
 
   React.useEffect(() => {
@@ -115,7 +122,7 @@ const UserConfig = ({
       message.success(successMsg)
       return savedUsers
     } catch (error) {
-      message.error(error.message || '用户保存失败')
+      message.error(error.message || '成员保存失败')
       return null
     } finally {
       setSaving(false)
@@ -158,7 +165,7 @@ const UserConfig = ({
     const nextUsers = draftUser
       ? [...users, nextUser]
       : users.map((user) => (user.id === nextUser.id ? nextUser : user))
-    const savedUsers = await persistUsers(nextUsers, '用户配置已保存')
+    const savedUsers = await persistUsers(nextUsers, '成员配置已保存')
 
     if (savedUsers) {
       setDraftUser(null)
@@ -172,7 +179,7 @@ const UserConfig = ({
     }
 
     const nextUsers = users.filter((user) => user.id !== selectedUser.id)
-    const savedUsers = await persistUsers(nextUsers, '用户已删除')
+    const savedUsers = await persistUsers(nextUsers, '成员已删除')
 
     if (savedUsers) {
       setDraftUser(null)
@@ -187,15 +194,15 @@ const UserConfig = ({
       const { code, data, msg } = await resetUsers()
 
       if (code !== 200) {
-        throw new Error(msg || '恢复默认用户失败')
+        throw new Error(msg || '恢复默认成员失败')
       }
 
       const savedUsers = onUsersRefresh ? await onUsersRefresh() : sortUsers(data)
       setDraftUser(null)
       setSelectedId(savedUsers[0]?.id)
-      message.success('已恢复默认用户')
+      message.success('已恢复默认成员')
     } catch (error) {
-      message.error(error.message || '恢复默认用户失败')
+      message.error(error.message || '恢复默认成员失败')
     } finally {
       setSaving(false)
     }
@@ -211,8 +218,17 @@ const UserConfig = ({
             onClick={handleAddUser}
             type="primary"
           >
-            新增
+            邀请
           </Button>
+          <Link to="/role-config">
+            <Button>角色管理</Button>
+          </Link>
+          <Checkbox
+            checked={showHidden}
+            onChange={(event) => setShowHidden(event.target.checked)}
+          >
+            显示已隐藏的成员
+          </Checkbox>
           <Button disabled={saving} icon={<ReloadOutlined />} onClick={handleReset}>
             重置
           </Button>
@@ -223,12 +239,12 @@ const UserConfig = ({
         <section className="user-list-panel page-panel">
           <div className="panel-heading">
             <div>
-              <h3>用户列表</h3>
-              <span>当前共 {users.length} 个用户</span>
+              <h3>成员列表</h3>
+              <span>当前共 {visibleUsers.length} 个成员</span>
             </div>
           </div>
           <div className="user-list">
-            {users.map((user) => (
+            {visibleUsers.map((user) => (
               <button
                 className={[
                   'user-list-item',
@@ -263,17 +279,17 @@ const UserConfig = ({
         <section className="user-editor-panel page-panel">
           <div className="panel-heading">
             <div>
-              <h3>{draftUser ? '新增用户' : '编辑用户'}</h3>
+              <h3>{draftUser ? '新增成员' : '编辑成员'}</h3>
               {editingUser ? (
                 <span>
-                  当前用户：<Text strong>{editingUser.name || editingUser.username}</Text>
+                  当前成员：<Text strong>{editingUser.name || editingUser.username}</Text>
                 </span>
               ) : (
-                <span>请选择一个用户</span>
+                <span>请选择一个成员</span>
               )}
             </div>
             {editingUser && (
-              <Tag color={isAdminUser ? 'gold' : 'blue'}>
+              <Tag color={isAdminUser ? 'gold' : 'orange'}>
                 {isAdminUser ? '内置管理员' : getRoleName(roles, editingUser.roleId)}
               </Tag>
             )}
@@ -301,11 +317,11 @@ const UserConfig = ({
                 </Form.Item>
 
                 <Form.Item
-                  label="用户姓名"
+                  label="成员姓名"
                   name="name"
-                  rules={[{ required: true, message: '请输入用户姓名' }]}
+                  rules={[{ required: true, message: '请输入成员姓名' }]}
                 >
-                  <Input maxLength={20} placeholder="请输入用户姓名" />
+                  <Input maxLength={20} placeholder="请输入成员姓名" />
                 </Form.Item>
               </div>
 
@@ -365,7 +381,7 @@ const UserConfig = ({
                   okText="删除"
                   okButtonProps={{ danger: true }}
                   onConfirm={handleDelete}
-                  title="确认删除该用户？"
+                    title="确认删除该成员？"
                 >
                   <Button danger disabled={!canDelete} icon={<DeleteOutlined />}>
                     删除
@@ -382,7 +398,7 @@ const UserConfig = ({
               </div>
             </Form>
           ) : (
-            <Empty description="请选择左侧用户" />
+            <Empty description="请选择左侧成员" />
           )}
         </section>
       </div>

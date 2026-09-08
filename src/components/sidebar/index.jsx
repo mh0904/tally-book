@@ -1,6 +1,6 @@
 // src/components/sidebar/index.jsx
 import React from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
   DownOutlined,
   MenuFoldOutlined,
@@ -97,9 +97,15 @@ const getMobileTabItems = (menus) => {
   return [...configuredItems, ...restItems].slice(0, 5)
 }
 
-const Sidebar = ({ collapsed, menus = [], onNavigate = () => {}, onToggle }) => {
+const Sidebar = ({
+  collapsed,
+  menus = [],
+  onNavigate = () => {},
+  onRecordClick = () => {},
+  onToggle,
+}) => {
   const location = useLocation()
-  const [openKeys, setOpenKeys] = React.useState(() => new Set(['business']))
+  const [openKeys, setOpenKeys] = React.useState(() => new Set(['category-tags']))
   const mobileTabItems = React.useMemo(() => getMobileTabItems(menus), [menus])
 
   React.useEffect(() => {
@@ -124,6 +130,11 @@ const Sidebar = ({ collapsed, menus = [], onNavigate = () => {}, onToggle }) => 
 
       return nextKeys
     })
+  }
+
+  const handleRecordClick = () => {
+    onNavigate()
+    onRecordClick()
   }
 
   const renderMenuItem = (item, depth = 0, parentEnabled = true) => {
@@ -202,18 +213,18 @@ const Sidebar = ({ collapsed, menus = [], onNavigate = () => {}, onToggle }) => 
   const renderMobileTabItem = (item) => {
     if (item.isCenter) {
       return (
-        <Link
+        <button
           aria-label={item.title}
           className="mobile-tab-item record"
           key={item.id}
-          onClick={onNavigate}
+          onClick={handleRecordClick}
           title={item.title}
-          to={item.path || '/'}
+          type="button"
         >
           <span className="nav-icon">
             <PlusOutlined />
           </span>
-        </Link>
+        </button>
       )
     }
 
@@ -238,12 +249,21 @@ const Sidebar = ({ collapsed, menus = [], onNavigate = () => {}, onToggle }) => 
 
   return (
     <aside className={collapsed ? 'nav-bar collapsed' : 'nav-bar'}>
-      <div className="brand">
-        <div className="brand-mark">T</div>
-        <div className="brand-info">
-          <div className="brand-title">Tally Book</div>
-          <div className="brand-subtitle">账本后台</div>
-        </div>
+      <div className="sidebar-create-wrap">
+        <button
+          className="sidebar-create"
+          onClick={handleRecordClick}
+          title="记一笔"
+          type="button"
+        >
+          <PlusOutlined />
+          <span>记一笔</span>
+        </button>
+      </div>
+      <nav className="nav-menu" aria-label="后台菜单">
+        {menus.map((item) => renderMenuItem(item))}
+      </nav>
+      <div className="sidebar-footer">
         <button
           aria-label={collapsed ? '展开菜单' : '收起菜单'}
           className="sidebar-toggle"
@@ -254,9 +274,6 @@ const Sidebar = ({ collapsed, menus = [], onNavigate = () => {}, onToggle }) => 
           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
         </button>
       </div>
-      <nav className="nav-menu" aria-label="后台菜单">
-        {menus.map((item) => renderMenuItem(item))}
-      </nav>
       <nav
         className="mobile-tab-menu"
         aria-label="移动端主菜单"

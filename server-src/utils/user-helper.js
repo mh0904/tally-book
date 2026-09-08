@@ -55,7 +55,7 @@ const normalizeUser = (item, fallbackIndex, existingUsers = []) => {
   const username = String(item.username || '').trim()
 
   if (!username) {
-    throw new Error('用户账号不能为空')
+    throw new Error('成员账号不能为空')
   }
 
   const isAdmin = item.id === ADMIN_USER.id || username === ADMIN_USER.username
@@ -81,7 +81,7 @@ const normalizeUser = (item, fallbackIndex, existingUsers = []) => {
       passwordHash: ADMIN_USER.passwordHash,
     }
   } else {
-    throw new Error(`用户 ${username} 必须设置登录密码`)
+    throw new Error(`账号 ${username} 必须设置登录密码`)
   }
 
   return {

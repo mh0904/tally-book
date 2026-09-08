@@ -11,26 +11,26 @@
   {
     "id": "finance-manager",
     "name": "财务主管",
-    "description": "管理账本流水、查看图表和账单日历",
+    "description": "管理流水、报表、账单日历和收支分类",
     "enabled": true,
     "sort": 2,
-    "menuIds": ["business", "home", "transactions", "chart", "bill-calendar"]
+    "menuIds": ["home", "transactions", "chart", "bill-calendar", "category-tags", "category-config"]
   },
   {
     "id": "bookkeeper",
     "name": "记账员",
-    "description": "负责录入和维护流水账单",
+    "description": "负责录入流水并维护收支分类",
     "enabled": true,
     "sort": 3,
-    "menuIds": ["business", "home", "transactions", "bill-calendar"]
+    "menuIds": ["home", "transactions", "bill-calendar", "category-tags", "category-config"]
   },
   {
     "id": "analyst",
     "name": "数据分析员",
-    "description": "查看首页、图表分析和账单日历",
+    "description": "查看首页、报表和账单日历",
     "enabled": true,
     "sort": 4,
-    "menuIds": ["business", "home", "chart", "bill-calendar"]
+    "menuIds": ["home", "chart", "bill-calendar"]
   },
   {
     "id": "viewer",
@@ -38,6 +38,6 @@
     "description": "仅查看首页和基础分析菜单",
     "enabled": true,
     "sort": 5,
-    "menuIds": ["business", "home", "chart"]
+    "menuIds": ["home", "chart"]
   }
 ]

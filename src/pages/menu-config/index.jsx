@@ -364,7 +364,7 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
               )}
             </div>
             {editingInfo && (
-              <Tag color={draftMenu ? 'orange' : 'blue'}>
+              <Tag color="orange">
                 {editingInfo.depth === 0 ? '父级菜单' : '子级菜单'}
               </Tag>
             )}

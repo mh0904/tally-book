@@ -40,10 +40,10 @@ const Login = ({ onLogin }) => {
     <main className="login-page">
       <section className="login-panel">
         <div className="login-brand">
-          <div className="login-mark">T</div>
+          <div className="login-mark">考</div>
           <div>
-            <h1>Tally Book</h1>
-            <span>账本后台</span>
+            <h1>考拉记账</h1>
+            <span>家庭账本后台</span>
           </div>
         </div>
 

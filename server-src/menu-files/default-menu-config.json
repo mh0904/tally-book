@@ -1,49 +1,65 @@
 [
   {
-    "id": "business",
-    "title": "业务菜单",
-    "icon": "app",
+    "id": "home",
+    "title": "首页",
+    "icon": "home",
+    "path": "/",
+    "enabled": true,
+    "sort": 1
+  },
+  {
+    "id": "transactions",
+    "title": "流水",
+    "icon": "list",
+    "path": "/transactions",
+    "enabled": true,
+    "sort": 2
+  },
+  {
+    "id": "chart",
+    "title": "报表",
+    "icon": "chart",
+    "path": "/chart",
+    "enabled": true,
+    "sort": 3
+  },
+  {
+    "id": "bill-calendar",
+    "title": "账单日历",
+    "icon": "calendar",
+    "path": "/bill-calendar",
+    "enabled": true,
+    "sort": 4
+  },
+  {
+    "id": "category-tags",
+    "title": "分类标签",
+    "icon": "tags",
     "path": "",
     "enabled": true,
-    "sort": 1,
+    "sort": 5,
     "children": [
       {
-        "id": "home",
-        "title": "首页",
-        "icon": "home",
-        "path": "/",
+        "id": "category-config",
+        "title": "收支分类",
+        "icon": "tags",
+        "path": "/category-config",
         "enabled": true,
         "sort": 1
       },
       {
-        "id": "transactions",
-        "title": "流水管理",
-        "icon": "list",
-        "path": "/transactions",
+        "id": "user-config",
+        "title": "成员管理",
+        "icon": "team",
+        "path": "/user-config",
         "enabled": true,
         "sort": 2
-      },
-      {
-        "id": "chart",
-        "title": "图表分析",
-        "icon": "chart",
-        "path": "/chart",
-        "enabled": true,
-        "sort": 3
-      },
-      {
-        "id": "bill-calendar",
-        "title": "账单日历",
-        "icon": "calendar",
-        "path": "/bill-calendar",
-        "enabled": true,
-        "sort": 4
       }
     ]
   },
   {
     "id": "system",
-    "title": "系统管理",
+    "title": "设置",
     "icon": "setting",
     "path": "",
     "enabled": true,
@@ -64,14 +80,6 @@
         "path": "/role-config",
         "enabled": true,
         "sort": 2
-      },
-      {
-        "id": "user-config",
-        "title": "用户管理",
-        "icon": "user",
-        "path": "/user-config",
-        "enabled": true,
-        "sort": 3
       }
     ]
   }

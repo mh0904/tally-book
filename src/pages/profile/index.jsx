@@ -24,7 +24,7 @@ const Profile = ({
       </Avatar>
       <div className="profile-info">
         <h2>{userName}</h2>
-        <Tag color={currentRole?.id === 'admin' ? 'gold' : 'blue'}>
+        <Tag color={currentRole?.id === 'admin' ? 'gold' : 'orange'}>
           {currentRole?.name || '未加载角色'}
         </Tag>
       </div>

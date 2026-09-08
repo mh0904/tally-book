@@ -41,7 +41,7 @@
   }
 
   &.count::before {
-    background: #2563eb;
+    background: var(--theme-primary);
   }
 
   &.total::before {
@@ -71,8 +71,8 @@
   }
 
   &.count .summary-icon {
-    background: #eff6ff;
-    color: #2563eb;
+    background: var(--theme-primary-soft);
+    color: var(--theme-primary-deep);
   }
 
   &.total .summary-icon {
@@ -220,17 +220,17 @@
     box-shadow: none;
 
     &:hover {
-      background: #eff6ff;
-      color: #2563eb;
+      background: var(--theme-primary-soft);
+      color: var(--theme-primary-deep);
     }
   }
 
   .calendar-today-button {
     width: auto;
     padding: 0 12px;
-    border: 1px solid #bfdbfe;
+    border: 1px solid var(--theme-primary-border);
     background: #fff;
-    color: #2563eb;
+    color: var(--theme-primary-deep);
     font-size: 13px;
   }
 }
@@ -258,19 +258,19 @@
   }
 
   &.has-bills .calendar-day-number {
-    background: #dbeafe;
-    color: #1d4ed8;
+    background: var(--theme-primary-soft);
+    color: var(--theme-primary-deep);
   }
 
   &.selected .calendar-day-number {
-    border-color: #1d4ed8;
-    background: #2563eb;
+    border-color: var(--theme-primary-hover);
+    background: var(--theme-primary);
     color: #fff;
-    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+    box-shadow: 0 8px 18px var(--theme-primary-shadow);
   }
 
   &.today:not(.selected) .calendar-day-number {
-    border-color: #60a5fa;
+    border-color: var(--theme-primary-border);
   }
 }
 
@@ -307,7 +307,7 @@
   }
 
   .day-income {
-    color: #0891b2;
+    color: #16a34a;
   }
 
   .day-expense {
@@ -465,14 +465,14 @@
   place-items: center;
   flex: 0 0 34px;
   border-radius: 999px;
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--theme-primary-soft);
+  color: var(--theme-primary-deep);
   font-size: 14px;
   font-weight: 700;
 
   &.income {
-    background: #ecfeff;
-    color: #0891b2;
+    background: #ecfdf3;
+    color: #16a34a;
   }
 
   &.expense {

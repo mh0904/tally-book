@@ -12,7 +12,9 @@ import {
 } from 'react-router-dom'
 import { Avatar, ConfigProvider, Dropdown, Tag, message } from 'antd'
 import {
+  ArrowLeftOutlined,
   DownOutlined,
+  CustomerServiceOutlined,
   LogoutOutlined,
   UserOutlined,
 } from '@ant-design/icons'
@@ -25,6 +27,7 @@ dayjs.locale('zh-cn')
 // 导入页面组件
 import Home from './pages/home'
 import Login from './pages/login'
+import CategoryConfig from './pages/category-config'
 import Discover from './pages/discover'
 import MenuConfig from './pages/menu-config'
 import Profile from './pages/profile'
@@ -44,34 +47,44 @@ import {
 } from './config/roles'
 import { getMenus, updateMenus } from './api/menus'
 import { getRoles, updateRoles } from './api/roles'
-import { getTransactionCategories } from './api/transaction-categories'
+import {
+  getTransactionCategories,
+  updateTransactionCategories,
+} from './api/transaction-categories'
 import { getUsers, updateUsers } from './api/users'
 import {
   ADMIN_USER_ID,
   getUserDisplayName,
   normalizeUsers,
 } from './config/users'
-import { normalizeTransactionCategoryField } from './config/transaction-categories'
+import {
+  normalizeAllTransactionCategories,
+  normalizeTransactionCategoryField,
+} from './config/transaction-categories'
 
 // 导入导航栏
 import Sidebar from './components/sidebar/index.jsx'
+import RecordDrawer from './components/record-drawer'
+import { TRANSACTION_UPDATED_EVENT } from './constants/events'
 
-const AUTH_KEY = 'tally-book-login'
-const USER_ID_KEY = 'tally-book-user-id'
-const USER_KEY = 'tally-book-user'
-const ROLE_KEY = 'tally-book-role'
-const AVATAR_COLOR_KEY = 'tally-book-avatar-color'
+const AUTH_KEY = 'koala-book-login'
+const USER_ID_KEY = 'koala-book-user-id'
+const USER_KEY = 'koala-book-user'
+const ROLE_KEY = 'koala-book-role'
+const AVATAR_COLOR_KEY = 'koala-book-avatar-color'
 const AVATAR_COLORS = [
+  '#ff9a3d',
+  '#f58220',
+  '#fb7185',
+  '#f59e0b',
   '#14b8a6',
-  '#0ea5e9',
-  '#6366f1',
   '#8b5cf6',
-  '#ec4899',
-  '#f97316',
-  '#22c55e',
   '#64748b',
 ]
 const APP_ONLY_PATHS = ['/discover', '/profile']
+const THEME_COLOR = '#ff9a3d'
+const APP_FONT_FAMILY =
+  'PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans SC, sans-serif'
 
 const getUserName = () => localStorage.getItem(USER_KEY) || 'admin'
 
@@ -116,16 +129,20 @@ const getAvatarColor = () => {
 
 const pageMeta = {
   '/': {
-    title: '首页',
+    title: '考拉记账',
     description: '账本总览',
   },
   '/transactions': {
-    title: '流水管理',
+    title: '流水',
     description: '交易记录',
   },
   '/chart': {
-    title: '图表分析',
+    title: '报表',
     description: '支出统计',
+  },
+  '/category-config': {
+    title: '收支分类',
+    description: '分类标签维护',
   },
   '/bill-calendar': {
     title: '账单日历',
@@ -148,8 +165,8 @@ const pageMeta = {
     description: '角色与菜单权限维护',
   },
   '/user-config': {
-    title: '用户管理',
-    description: '登录账号与密码维护',
+    title: '成员管理',
+    description: '成员账号与角色维护',
   },
 }
 
@@ -161,6 +178,8 @@ const App = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
   const [menus, setMenus] = React.useState([])
   const [roles, setRoles] = React.useState([])
+  const [transactionCategories, setTransactionCategories] = React.useState([])
+  const [recordDrawerOpen, setRecordDrawerOpen] = React.useState(false)
   const [transactionCategoryField, setTransactionCategoryField] =
     React.useState(() => normalizeTransactionCategoryField())
   const [users, setUsers] = React.useState([])
@@ -235,12 +254,27 @@ const App = () => {
     const { code, data, msg } = await getUsers()
 
     if (code !== 200) {
-      throw new Error(msg || '用户加载失败')
+      throw new Error(msg || '成员加载失败')
     }
 
     const refreshedUsers = normalizeUsers(data)
     setUsers(refreshedUsers)
     return refreshedUsers
+  }, [])
+
+  const refreshTransactionCategories = React.useCallback(async () => {
+    const { code, data, msg } = await getTransactionCategories()
+
+    if (code !== 200) {
+      throw new Error(msg || '交易分类加载失败')
+    }
+
+    const refreshedCategories = normalizeAllTransactionCategories(data)
+    setTransactionCategories(refreshedCategories)
+    setTransactionCategoryField(
+      normalizeTransactionCategoryField(refreshedCategories)
+    )
+    return refreshedCategories
   }, [])
 
   const handleLogin = (user) => {
@@ -306,12 +340,16 @@ const App = () => {
         if (usersResult.code === 200) {
           setUsers(normalizeUsers(usersResult.data))
         } else {
-          message.error(usersResult.msg || '用户加载失败')
+          message.error(usersResult.msg || '成员加载失败')
         }
 
         if (categoriesResult.code === 200) {
+          const normalizedCategories = normalizeAllTransactionCategories(
+            categoriesResult.data
+          )
+          setTransactionCategories(normalizedCategories)
           setTransactionCategoryField(
-            normalizeTransactionCategoryField(categoriesResult.data)
+            normalizeTransactionCategoryField(normalizedCategories)
           )
         } else {
           message.error(categoriesResult.msg || '交易分类加载失败')
@@ -355,11 +393,37 @@ const App = () => {
     const { code, msg } = await updateUsers(normalizedUsers)
 
     if (code !== 200) {
-      throw new Error(msg || '用户保存失败')
+      throw new Error(msg || '成员保存失败')
     }
 
     return refreshUsers()
   }
+
+  const handleTransactionCategoriesChange = async (nextCategories) => {
+    const normalizedCategories =
+      normalizeAllTransactionCategories(nextCategories)
+    const { code, msg } = await updateTransactionCategories(
+      normalizedCategories
+    )
+
+    if (code !== 200) {
+      throw new Error(msg || '交易分类保存失败')
+    }
+
+    return refreshTransactionCategories()
+  }
+
+  const openRecordDrawer = React.useCallback(() => {
+    setRecordDrawerOpen(true)
+  }, [])
+
+  const closeRecordDrawer = React.useCallback(() => {
+    setRecordDrawerOpen(false)
+  }, [])
+
+  const handleRecordSaved = React.useCallback(() => {
+    window.dispatchEvent(new Event(TRANSACTION_UPDATED_EVENT))
+  }, [])
 
   React.useEffect(() => {
     if (!isAuthenticated || !users.length) {
@@ -368,7 +432,7 @@ const App = () => {
 
     if (!currentUser || currentUser.enabled === false) {
       handleLogout()
-      message.warning('当前用户不可用，请重新登录')
+      message.warning('当前成员不可用，请重新登录')
       return
     }
 
@@ -379,7 +443,7 @@ const App = () => {
       )
     ) {
       handleLogout()
-      message.warning('当前用户角色不可用，请重新登录')
+      message.warning('当前成员角色不可用，请重新登录')
       return
     }
 
@@ -496,53 +560,77 @@ const App = () => {
 
   return (
     <div className="admin-shell">
-      <Sidebar
-        collapsed={sidebarCollapsed}
-        menus={visibleMenus}
-        onToggle={() => setSidebarCollapsed((value) => !value)}
-      />
-      <main className="admin-main">
-        <header className="admin-topbar">
-          <div className="admin-title">
-            <h1>{currentPage.title}</h1>
+      <header className="admin-topbar">
+        <div className="book-brand">
+          <button
+            aria-label="返回"
+            className="book-back"
+            onClick={() => navigate(-1)}
+            type="button"
+          >
+            <ArrowLeftOutlined />
+          </button>
+          <div className="book-cover">考</div>
+          <div className="book-title">
+            <strong>考拉记账</strong>
+            <Tag className="book-tag">家庭账本</Tag>
+          </div>
+        </div>
+        <div className="admin-actions">
+          <button className="support-button" type="button" aria-label="客服">
+            <CustomerServiceOutlined />
+          </button>
+          <div className="admin-page-title">
+            <strong>{currentPage.title}</strong>
             <span>{currentPage.description}</span>
           </div>
-          <div className="admin-actions">
-            <div className="admin-date">{dayjs().format('YYYY年MM月DD日')}</div>
-            {currentRole && (
-              <Tag
-                className="current-role-tag"
-                color={currentRole.id === ADMIN_ROLE_ID ? 'gold' : 'blue'}
-              >
-                {currentRole.name}
-              </Tag>
-            )}
-            <Dropdown
-              menu={{ items: userMenuItems, onClick: handleUserMenuClick }}
-              placement="bottomRight"
-              trigger={['click']}
+          <div className="admin-date">{dayjs().format('YYYY年MM月DD日')}</div>
+          {currentRole && (
+            <Tag
+              className="current-role-tag"
+              color={currentRole.id === ADMIN_ROLE_ID ? 'gold' : 'orange'}
             >
-              <button className="user-trigger" type="button">
-                <Avatar
-                  className="user-avatar"
-                  size={30}
-                  style={{ backgroundColor: avatarColor }}
-                >
-                  {avatarText}
-                </Avatar>
-                <span className="user-name">{userName}</span>
-                <DownOutlined className="user-caret" />
-              </button>
-            </Dropdown>
-          </div>
-        </header>
+              {currentRole.name}
+            </Tag>
+          )}
+          <Dropdown
+            menu={{ items: userMenuItems, onClick: handleUserMenuClick }}
+            placement="bottomRight"
+            trigger={['click']}
+          >
+            <button className="user-trigger" type="button">
+              <Avatar
+                className="user-avatar"
+                size={30}
+                style={{ backgroundColor: avatarColor }}
+              >
+                {avatarText}
+              </Avatar>
+              <span className="user-name">{userName}</span>
+              <DownOutlined className="user-caret" />
+            </button>
+          </Dropdown>
+        </div>
+      </header>
+      <div className="admin-body">
+        <Sidebar
+          collapsed={sidebarCollapsed}
+          menus={visibleMenus}
+          onRecordClick={openRecordDrawer}
+          onToggle={() => setSidebarCollapsed((value) => !value)}
+        />
+        <main className="admin-main">
         <section className="admin-content">
           <Routes>
             <Route
               path="/"
               element={renderProtectedPage(
                 '/',
-                <Home accessiblePaths={accessibleMenuPaths} />
+                <Home
+                  accessiblePaths={accessibleMenuPaths}
+                  transactionCategoryField={transactionCategoryField}
+                  users={users}
+                />
               )}
             />
             <Route
@@ -557,6 +645,17 @@ const App = () => {
               element={renderProtectedPage(
                 '/chart',
                 <Chart transactionCategoryField={transactionCategoryField} />
+              )}
+            />
+            <Route
+              path="/category-config"
+              element={renderProtectedPage(
+                '/category-config',
+                <CategoryConfig
+                  categories={transactionCategories}
+                  onCategoriesChange={handleTransactionCategoriesChange}
+                  onCategoriesRefresh={refreshTransactionCategories}
+                />
               )}
             />
             <Route
@@ -626,6 +725,14 @@ const App = () => {
           </Routes>
         </section>
       </main>
+      </div>
+      <RecordDrawer
+        onClose={closeRecordDrawer}
+        onSaved={handleRecordSaved}
+        open={recordDrawerOpen}
+        sidebarCollapsed={sidebarCollapsed}
+        transactionCategoryField={transactionCategoryField}
+      />
     </div>
   )
 }
@@ -634,7 +741,18 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 // 用 BrowserRouter 包裹整个应用
 root.render(
   <BrowserRouter>
-    <ConfigProvider locale={zhCN}>
+    <ConfigProvider
+      locale={zhCN}
+      theme={{
+        token: {
+          colorInfo: THEME_COLOR,
+          colorLink: THEME_COLOR,
+          colorPrimary: THEME_COLOR,
+          fontFamily: APP_FONT_FAMILY,
+          fontWeightStrong: 700,
+        },
+      }}
+    >
       <App />
     </ConfigProvider>
   </BrowserRouter>

@@ -288,7 +288,7 @@ const RoleConfig = ({ roles, menus, onRolesChange, onRolesRefresh }) => {
               )}
             </div>
             {editingRole && (
-              <Tag color={isAdmin ? 'gold' : 'blue'}>
+              <Tag color={isAdmin ? 'gold' : 'orange'}>
                 {isAdmin ? '最高权限' : '自定义权限'}
               </Tag>
             )}

@@ -19,7 +19,7 @@ export const normalizeUser = (user, fallbackIndex = 0) => {
   return {
     id: isAdmin ? ADMIN_USER_ID : user?.id || `user-${Date.now()}-${fallbackIndex}`,
     username: isAdmin ? ADMIN_USER_ID : username,
-    name: String(user?.name || username || '未命名用户').trim(),
+    name: String(user?.name || username || '未命名成员').trim(),
     roleId: isAdmin ? 'admin' : user?.roleId || 'viewer',
     enabled: isAdmin ? true : user?.enabled !== false,
     sort: Number(user?.sort || fallbackIndex + 1),

@@ -9,6 +9,19 @@
   align-items: center;
   justify-content: flex-end;
   gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid #eef0f4;
+  border-radius: 14px;
+  background: #fff;
+
+  a {
+    display: inline-flex;
+  }
+
+  .ant-checkbox-wrapper {
+    color: #8a8f99;
+    font-weight: 650;
+  }
 }
 
 .user-config-layout {
@@ -49,9 +62,9 @@
 
   &:hover,
   &.active {
-    border-color: #60a5fa;
-    background: #f8fbff;
-    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+    border-color: var(--theme-primary-border);
+    background: var(--theme-primary-tint);
+    box-shadow: 0 1px 3px var(--theme-primary-shadow-soft);
   }
 }
 
@@ -62,8 +75,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background: #eef6ff;
-  color: #2563eb;
+  background: var(--theme-primary-soft);
+  color: var(--theme-primary-deep);
   font-size: 16px;
 }
 

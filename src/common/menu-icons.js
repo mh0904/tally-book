@@ -70,7 +70,7 @@ export const MENU_ICON_OPTIONS = [
   { label: '标签', value: 'tags' },
   { label: '门店', value: 'shop' },
   { label: '购物车', value: 'shopping-cart' },
-  { label: '用户', value: 'user' },
+  { label: '成员', value: 'user' },
   { label: '团队', value: 'team' },
   { label: '权限', value: 'lock' },
   { label: '安全', value: 'safety' },

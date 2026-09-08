@@ -1,6 +1,6 @@
-# Tally Book 记账本后台
+# 考拉记账
 
-Tally Book 是一个本地运行的记账后台，用于维护日常收入、支出流水，并提供账单日历、图表分析、菜单权限、角色权限和用户账号管理能力。
+考拉记账是一个本地运行的家庭账本后台，用于维护日常收入、支出流水，并提供账单日历、报表统计、收支分类、菜单权限、角色权限和成员账号管理能力。
 
 项目采用前后端同仓结构：
 
@@ -15,12 +15,13 @@ Tally Book 是一个本地运行的记账后台，用于维护日常收入、支
 | 模块 | 路由 | 说明 |
 | --- | --- | --- |
 | 首页 | `/` | 展示系统入口和可访问快捷菜单 |
-| 流水管理 | `/transactions` | 新增、编辑、删除、筛选、批量录入、导入和导出账单 |
-| 图表分析 | `/chart` | 查看支出分类占比和每日支出趋势，金额保留 2 位小数 |
+| 流水 | `/transactions` | 新增、编辑、删除、筛选、批量录入、导入和导出账单 |
+| 报表 | `/chart` | 查看支出分类占比和每日支出趋势，金额保留 2 位小数 |
 | 账单日历 | `/bill-calendar` | 以日历方式查看每日账单总额，点击日期查看当天明细 |
+| 收支分类 | `/category-config` | 维护收入和支出分类、关键词、默认项和启用状态 |
 | 菜单配置 | `/menu-config` | 维护后台菜单树、路由地址、图标和启用状态 |
 | 角色管理 | `/role-config` | 维护角色资料，并为角色分配可访问菜单范围 |
-| 用户管理 | `/user-config` | 管理登录账号、密码、启用状态，并为用户绑定角色 |
+| 成员管理 | `/user-config` | 管理登录账号、密码、启用状态，并为成员绑定角色 |
 
 ## 快速开始
 
@@ -75,7 +76,7 @@ pnpm run dev
 ## 项目结构
 
 ```txt
-tally-book/
+koala-book/
 ├── index.html                         # Vite 入口 HTML
 ├── vite.config.mjs                    # Vite 配置，包含代理和 Less 配置
 ├── package.json                       # 项目脚本和依赖配置
@@ -86,17 +87,18 @@ tally-book/
 │   ├── api/                           # 前端接口封装
 │   ├── common/                        # 公共配置和图标映射
 │   ├── components/                    # 通用组件
-│   ├── config/                        # 菜单、角色、用户、交易分类标准化逻辑
+│   ├── config/                        # 菜单、角色、成员、交易分类标准化逻辑
 │   ├── constants/                     # 固定字段配置
 │   ├── pages/                         # 页面模块
 │   │   ├── bill-calendar/             # 账单日历
-│   │   ├── chart/                     # 图表分析
+│   │   ├── category-config/           # 收支分类
+│   │   ├── chart/                     # 报表
 │   │   ├── home/                      # 首页
 │   │   ├── login/                     # 登录页
 │   │   ├── menu-config/               # 菜单配置
 │   │   ├── role-config/               # 角色管理
-│   │   ├── transactions/              # 流水管理
-│   │   └── user-config/               # 用户管理
+│   │   ├── transactions/              # 流水
+│   │   └── user-config/               # 成员管理
 │   ├── styles/                        # 样式变量
 │   └── utils/                         # 前端工具函数
 └── server-src/                        # 后端源码和本地数据
@@ -107,7 +109,7 @@ tally-book/
     ├── month-files/                   # 按月份保存的账单数据
     ├── menu-files/                    # 菜单配置数据
     ├── role-files/                    # 角色权限配置数据
-    ├── user-files/                    # 用户账号配置数据
+    ├── user-files/                    # 成员账号配置数据
     └── category-files/                # 交易分类配置数据
 ```
 
@@ -122,8 +124,8 @@ tally-book/
 | `server-src/menu-files/` | `default-menu-config.json` | 默认菜单配置 |
 | `server-src/role-files/` | `role-config.json` | 当前角色权限配置 |
 | `server-src/role-files/` | `default-role-config.json` | 默认角色权限配置 |
-| `server-src/user-files/` | `user-config.json` | 当前用户账号配置 |
-| `server-src/user-files/` | `default-user-config.json` | 默认用户账号配置 |
+| `server-src/user-files/` | `user-config.json` | 当前成员账号配置 |
+| `server-src/user-files/` | `default-user-config.json` | 默认成员账号配置 |
 | `server-src/category-files/` | `transaction-category-config.json` | 当前交易分类配置 |
 | `server-src/category-files/` | `default-transaction-category-config.json` | 默认交易分类配置 |
 
@@ -147,12 +149,13 @@ tally-book/
 
 ## 默认菜单
 
-默认菜单分为业务菜单和系统管理。
+默认菜单按常用账本入口和配置入口组织。
 
 | 菜单分组 | 子菜单 |
 | --- | --- |
-| 业务菜单 | 首页、流水管理、图表分析、账单日历 |
-| 系统管理 | 菜单配置、角色管理、用户管理 |
+| 一级菜单 | 首页、流水、报表、账单日历 |
+| 分类标签 | 收支分类、成员管理 |
+| 设置 | 菜单配置、角色管理 |
 
 菜单配置支持维护：
 
@@ -168,10 +171,10 @@ tally-book/
 | 角色 | 权限范围 |
 | --- | --- |
 | 管理员 | 全部菜单和系统管理权限 |
-| 财务主管 | 首页、流水管理、图表分析、账单日历 |
-| 记账员 | 首页、流水管理、账单日历 |
-| 数据分析员 | 首页、图表分析、账单日历 |
-| 只读访客 | 首页、图表分析 |
+| 财务主管 | 首页、流水、报表、账单日历、收支分类 |
+| 记账员 | 首页、流水、账单日历、收支分类 |
+| 数据分析员 | 首页、报表、账单日历 |
+| 只读访客 | 首页、报表 |
 
 管理员角色是内置角色，`menuIds` 为 `["*"]`，表示拥有全部菜单权限。
 
@@ -200,14 +203,14 @@ tally-book/
 
 前端请求时使用 `/api` 前缀，例如 `/api/transactions`。后端真实路由不带 `/api`。
 
-### 登录和用户
+### 登录和成员
 
 | 方法 | 前端路径 | 后端路径 | 说明 |
 | --- | --- | --- | --- |
-| `POST` | `/api/login` | `/login` | 用户登录 |
-| `GET` | `/api/users` | `/users` | 获取用户列表，不返回密码哈希和盐 |
-| `PUT` | `/api/users` | `/users` | 保存用户账号、密码、启用状态和角色绑定 |
-| `POST` | `/api/users/reset` | `/users/reset` | 恢复默认用户配置 |
+| `POST` | `/api/login` | `/login` | 成员登录 |
+| `GET` | `/api/users` | `/users` | 获取成员列表，不返回密码哈希和盐 |
+| `PUT` | `/api/users` | `/users` | 保存成员账号、密码、启用状态和角色绑定 |
+| `POST` | `/api/users/reset` | `/users/reset` | 恢复默认成员配置 |
 
 ### 菜单
 
@@ -251,7 +254,7 @@ tally-book/
 
 | 参数 | 示例 | 说明 |
 | --- | --- | --- |
-| `month` | `2025-09` | 按月份查询，账单日历和图表分析会使用该参数 |
+| `month` | `2025-09` | 按月份查询，账单日历和报表会使用该参数 |
 | `startDate` | `2025-09-01` | 开始日期 |
 | `endDate` | `2025-09-30` | 结束日期 |
 | `type` | `支出` | 交易类型 |
@@ -260,7 +263,7 @@ tally-book/
 
 ## 流水录入说明
 
-流水管理支持三种录入方式。
+流水支持三种录入方式。
 
 | 方式 | 说明 | 示例 |
 | --- | --- | --- |
@@ -275,7 +278,7 @@ tally-book/
 账单日历按月份加载账单数据：
 
 - 默认选中今天
-- 日历顶部支持上一年、上一月、下一月、下一年切换
+- 日历顶部支持上一月、今天、下一月切换
 - 每一天显示当天账单总额和账单笔数
 - 点击日期后，右侧显示当天账单明细
 - 右侧明细区域与日历区域等分空间，超出内容显示滚动条
@@ -326,8 +329,8 @@ Local: http://localhost:3334/
 可以检查：
 
 - 默认账号密码是否为 `admin / admin`
-- `server-src/user-files/user-config.json` 中用户是否被禁用
-- 用户绑定的角色是否被禁用
+- `server-src/user-files/user-config.json` 中成员是否被禁用
+- 成员绑定的角色是否被禁用
 - 后端服务 `http://localhost:5511` 是否正常运行
 
 ### 接口请求失败

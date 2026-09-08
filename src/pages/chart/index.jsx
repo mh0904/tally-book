@@ -1,314 +1,272 @@
-import React, { useState, useEffect } from "react";
-import { Pie, Column } from "@ant-design/charts";
-import { getAllTransactions } from "../../api/transactions";
-import "./index.less";
+import React, { useEffect, useMemo, useState } from 'react'
+import { Button, DatePicker, Empty, Segmented, Spin } from 'antd'
+import { Line, Pie } from '@ant-design/charts'
+import {
+  AppstoreOutlined,
+  ExportOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from '@ant-design/icons'
+import dayjs from 'dayjs'
+import { getAllTransactions } from '../../api/transactions'
+import {
+  formatAmount,
+  getDailyStats,
+  getExpenseStats,
+  getIncomeStats,
+  summarizeTransactions,
+} from '../../utils/book-stats'
+import './index.less'
 
-const roundAmount = (value) => {
-  const amount = Number(value);
-  return Number.isFinite(amount) ? Number(amount.toFixed(2)) : 0;
-};
+const reportTabs = ['基础统计', '分类', '账户', '成员', '项目', '商家']
+const defaultMonth = '2025-09'
+const chartColors = ['#ff9a3d', '#f58220', '#64c6c6', '#819cff', '#fb7185']
 
-const formatAmount = (value) => roundAmount(value).toFixed(2);
-const formatCurrencyAmount = (value) => `¥${formatAmount(value)}`;
-const formatPercent = (value) => `${((Number(value) || 0) * 100).toFixed(1)}%`;
-const uncategorizedExpense = "未分类";
-
-const useCompactView = () => {
-  const [isCompactView, setIsCompactView] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
-
-    return window.matchMedia("(max-width: 640px)").matches;
-  });
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
-
-    const mediaQuery = window.matchMedia("(max-width: 640px)");
-    const handleChange = (event) => setIsCompactView(event.matches);
-
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener("change", handleChange);
-    } else {
-      mediaQuery.addListener(handleChange);
-    }
-
-    return () => {
-      if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener("change", handleChange);
-      } else {
-        mediaQuery.removeListener(handleChange);
-      }
-    };
-  }, []);
-
-  return isCompactView;
-};
-
-const getExpenseCategoryOptions = (data, transactionCategoryField) => {
-  const categoryOptions = Array.isArray(transactionCategoryField?.options)
+const getCategoryLabelGetter = (transactionCategoryField) => {
+  const options = Array.isArray(transactionCategoryField?.options)
     ? transactionCategoryField.options
-    : [];
-  const expenseOptions = categoryOptions.filter(
-    (item) => item.type !== "收入"
-  );
-  const optionValues = new Set(expenseOptions.map((item) => item.value));
-  const extraOptions = Array.from(
-    new Set(
-      data
-        .filter((item) => item.type === "支出")
-        .map((item) => item.classification)
-        .filter((category) => category && !optionValues.has(category))
-    )
-  ).map((category) => ({ value: category, label: category }));
+    : []
+  const labelMap = new Map(
+    options.map((item) => [item.value, item.label || item.value])
+  )
 
-  return [...expenseOptions, ...extraOptions];
-};
+  return (value) => labelMap.get(value) || value || '未分类'
+}
+
+const createTrendData = (dailyStats) =>
+  dailyStats.flatMap((item) => [
+    { date: item.day, type: '收入', value: item.income },
+    { date: item.day, type: '支出', value: item.expense },
+  ])
 
 const Chart = ({ transactionCategoryField }) => {
-  const [transactionData, setTransactionData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedMonth, setSelectedMonth] = useState("2025-09"); // 默认显示当前月份
-  const [pieConfig, setPieConfig] = useState({});
-  const [columnConfig, setColumnConfig] = useState({});
-  const isCompactView = useCompactView();
+  const [activeTab, setActiveTab] = useState(reportTabs[0])
+  const [selectedMonth, setSelectedMonth] = useState(defaultMonth)
+  const [transactionData, setTransactionData] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  // 获取所有交易数据
   useEffect(() => {
+    let mounted = true
+
     const fetchData = async () => {
-      setLoading(true);
+      setLoading(true)
+
       try {
-        const res = await getAllTransactions({ month: selectedMonth });
-        const data = res.data || []; // 正确提取交易数据数组
-        setTransactionData(data);
-        processChartData(data);
-      } catch (error) {
-        console.error("获取数据失败:", error);
-        setTransactionData([]);
-        processChartData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [selectedMonth, transactionCategoryField, isCompactView]);
+        const res = await getAllTransactions({ month: selectedMonth })
 
-  // 处理图表数据
-  const processChartData = (data) => {
-    const expenseCategoryOptions = getExpenseCategoryOptions(
-      data,
-      transactionCategoryField
-    );
-
-    // 按分类统计支出
-    const initialCategoryStats = expenseCategoryOptions.reduce((acc, item) => {
-      acc[item.value] = 0;
-      return acc;
-    }, {});
-    const categoryStats = data
-      .filter((item) => item.type === "支出" && !isNaN(parseFloat(item.amount)))
-      .reduce((acc, item) => {
-        const category =
-          item.classification ||
-          expenseCategoryOptions.find((option) => option.isDefault)?.value ||
-          expenseCategoryOptions[0]?.value ||
-          uncategorizedExpense;
-        const amount = parseFloat(item.amount);
-        acc[category] = (acc[category] || 0) + (isNaN(amount) ? 0 : amount);
-        return acc;
-      }, initialCategoryStats);
-
-    // 计算总支出
-    const totalExpense = Object.values(categoryStats).reduce(
-      (sum, value) => sum + value,
-      0
-    );
-
-    // 转换为饼图所需格式并计算百分比
-    const pieData = expenseCategoryOptions.map((category) => {
-      const value = categoryStats[category.value] || 0;
-      return {
-        type: category.label || category.value || "未知分类",
-        category: category.value,
-        value: roundAmount(value),
-        amountLabel: formatAmount(value),
-        percentage: totalExpense > 0 ? value / totalExpense : 0,
-      };
-    });
-
-    // 设置饼图配置
-    setPieConfig({
-      data: pieData,
-      angleField: "value",
-      colorField: "type",
-      radius: isCompactView ? 0.68 : 0.8,
-      label: isCompactView
-        ? false
-        : {
-            style: {
-              fontSize: 12,
-            },
-            text: "amountLabel",
-          },
-      legend: {
-        position: isCompactView ? "bottom" : "right",
-        formatter: (name) => name, 
-      },
-      tooltip: {
-        items: [
-          { field: "value", name: "金额", valueFormatter: formatCurrencyAmount },
-          { field: "percentage", name: "占比", valueFormatter: formatPercent },
-        ],
-      },
-      interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
-    });
-
-    // 按日期统计支出
-    const dailyExpenseStats = data
-      .filter((item) => item.type === "支出" && !isNaN(parseFloat(item.amount)))
-      .reduce((acc, item) => {
-        const date = item.date;
-        const amount = parseFloat(item.amount);
-        if (!acc[date]) {
-          acc[date] = { date, 支出: 0 };
+        if (mounted) {
+          setTransactionData(Array.isArray(res.data) ? res.data : [])
         }
-        acc[date]["支出"] += isNaN(amount) ? 0 : amount;
-        return acc;
-      }, {});
+      } catch (error) {
+        if (mounted) {
+          setTransactionData([])
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false)
+        }
+      }
+    }
 
-    // 转换为柱状图所需格式
-    const columnData = Object.values(dailyExpenseStats)
-      .map((item) => ({
-        ...item,
-        支出: roundAmount(item["支出"]),
-        amountLabel: formatAmount(item["支出"]),
-      }))
-      .sort((a, b) => a.date.localeCompare(b.date));
-    
-    // 设置柱状图配置
-    setColumnConfig({
-      data: columnData,
-      xField: "date",
-      yField: "支出",
-      colorField: "支出",
-      legend: {
-        position: "top",
-      },
-      xAxis: {
-        type: "cat",
-        label: {
-          autoHide: true,
-          autoRotate: isCompactView,
+    fetchData()
+
+    return () => {
+      mounted = false
+    }
+  }, [selectedMonth])
+
+  const getCategoryLabel = useMemo(
+    () => getCategoryLabelGetter(transactionCategoryField),
+    [transactionCategoryField]
+  )
+  const summary = useMemo(
+    () => summarizeTransactions(transactionData),
+    [transactionData]
+  )
+  const expenseStats = useMemo(
+    () => getExpenseStats(transactionData, getCategoryLabel),
+    [getCategoryLabel, transactionData]
+  )
+  const incomeStats = useMemo(
+    () => getIncomeStats(transactionData, getCategoryLabel),
+    [getCategoryLabel, transactionData]
+  )
+  const dailyStats = useMemo(
+    () => getDailyStats(transactionData, selectedMonth),
+    [selectedMonth, transactionData]
+  )
+  const pieConfig = useMemo(
+    () => ({
+      data: expenseStats,
+      angleField: 'amount',
+      colorField: 'label',
+      height: 270,
+      radius: 0.78,
+      scale: {
+        color: {
+          range: chartColors,
         },
       },
-      yAxis: {
-        label: {
-          formatter: formatAmount,
-        },
-      },
+      legend: false,
+      label: false,
       tooltip: {
-        showMarkers: false,
         items: [
-          { field: "支出", name: "支出", valueFormatter: formatCurrencyAmount },
+          {
+            field: 'amount',
+            name: '支出',
+            valueFormatter: (value) => `¥${formatAmount(value)}`,
+          },
         ],
       },
-      label: isCompactView
-        ? false
-        : {
-            position: "top",
-            text: "amountLabel",
-          },
-      columnStyle: {
-        radius: [4, 4, 0, 0],
+    }),
+    [expenseStats]
+  )
+  const lineConfig = useMemo(
+    () => ({
+      data: createTrendData(dailyStats),
+      xField: 'date',
+      yField: 'value',
+      colorField: 'type',
+      height: 310,
+      scale: {
+        color: {
+          range: ['#ef5b3f', '#64c6c6'],
+        },
       },
-    });
-  };
+      smooth: true,
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        items: [
+          {
+            field: 'value',
+            name: '金额',
+            valueFormatter: (value) => `¥${formatAmount(value)}`,
+          },
+        ],
+      },
+    }),
+    [dailyStats]
+  )
 
-  // 生成月份选择器选项
-  const generateMonthOptions = () => {
-    const options = [];
-    const currentDate = new Date();
-    // 生成最近6个月的选项
-    for (let i = 5; i >= 0; i--) {
-      const date = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() - i,
-        1
-      );
-      const monthStr = date.toISOString().slice(0, 7);
-      options.push({
-        value: monthStr,
-        label: monthStr,
-      });
-    }
-    return options;
-  };
+  const changeYear = (step) => {
+    setSelectedMonth((month) => dayjs(`${month}-01`).add(step, 'year').format('YYYY-MM'))
+  }
 
   return (
-    <div className="chart-container">
-      <div className="chart-header">
-        <h3>账单分析</h3>
-        <div className="month-selector">
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-          >
-            {generateMonthOptions().map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+    <div className="report-page">
+      <div className="report-tabs-bar">
+        <Segmented
+          className="report-tabs"
+          onChange={setActiveTab}
+          options={reportTabs}
+          value={activeTab}
+        />
+        <Button icon={<AppstoreOutlined />}>报表库</Button>
+      </div>
+
+      <div className="report-toolbar">
+        <h2>{activeTab}</h2>
+        <div className="report-toolbar-actions">
+          <Button icon={<LeftOutlined />} onClick={() => changeYear(-1)} />
+          <DatePicker
+            allowClear={false}
+            onChange={(value) => setSelectedMonth(value.format('YYYY-MM'))}
+            picker="month"
+            value={dayjs(`${selectedMonth}-01`)}
+          />
+          <Button icon={<RightOutlined />} onClick={() => changeYear(1)} />
+          <Button icon={<ExportOutlined />}>生成图片</Button>
         </div>
       </div>
 
-      {loading ? (
-        <div className="loading">加载中...</div>
-      ) : (
-        <div className="charts-wrapper">
-          <div className="chart-item">
-            <h2>支出分类占比</h2>
-            <div className="chart-content">
-              {pieConfig?.data?.some((item) => item.value > 0) ? (
+      <Spin spinning={loading}>
+        <section className="report-grid">
+          <div className="report-left">
+            <div className="report-asset-card">
+              <div>
+                <span>账本流水统计</span>
+                <em>结余</em>
+                <strong>{formatAmount(summary.balance)}</strong>
+                <p>
+                  总收入 {formatAmount(summary.income)}
+                  <i />
+                  总支出 {formatAmount(summary.expense)}
+                </p>
+              </div>
+              <footer>
+                <span>记账里程碑</span>
+                <b>记账笔数 {summary.count}</b>
+              </footer>
+            </div>
+
+            <div className="report-card page-panel">
+              <div className="report-card-heading">
+                <h3>支出分布</h3>
+              </div>
+              <div className="report-rank-list">
+                {expenseStats.length ? (
+                  expenseStats.slice(0, 6).map((item, index) => (
+                    <div className="report-rank-row" key={item.key}>
+                      <span>{index + 1}</span>
+                      <strong>{item.label}</strong>
+                      <em>{(item.percent * 100).toFixed(2)}%</em>
+                      <b>{formatAmount(item.amount)}</b>
+                      <i style={{ width: `${Math.max(item.percent * 100, 6)}%` }} />
+                    </div>
+                  ))
+                ) : (
+                  <Empty description="暂无支出数据" />
+                )}
+              </div>
+            </div>
+
+            <div className="report-card page-panel">
+              <div className="report-card-heading">
+                <h3>资产类账户统计</h3>
+                <span>资产 {formatAmount(summary.balance)}</span>
+              </div>
+              {expenseStats.length ? (
                 <Pie {...pieConfig} />
               ) : (
-                <div className="no-data">本月暂无支出数据</div>
+                <Empty description="暂无分类数据" />
               )}
             </div>
-            {pieConfig?.data?.length > 0 && (
-              <div className="category-breakdown">
-                {pieConfig.data.map((item) => (
-                  <div className="category-breakdown-item" key={item.category}>
-                    <span className="category-name">{item.type}</span>
-                    <span className="category-amount">
-                      {formatCurrencyAmount(item.value)}
-                    </span>
-                    <span className="category-percent">
-                      {formatPercent(item.percentage)}
-                    </span>
-                  </div>
-                ))}
+          </div>
+
+          <div className="report-right">
+            <div className="report-card page-panel">
+              <div className="report-card-heading">
+                <h3>收入来源</h3>
               </div>
-            )}
-          </div>
+              <div className="report-source-list">
+                {incomeStats.length ? (
+                  incomeStats.slice(0, 5).map((item, index) => (
+                    <div className="report-source-row" key={item.key}>
+                      <span>{index + 1}</span>
+                      <strong>{item.label}</strong>
+                      <b>{formatAmount(item.amount)}</b>
+                    </div>
+                  ))
+                ) : (
+                  <Empty description="暂无收入数据" />
+                )}
+              </div>
+            </div>
 
-          <div className="chart-item">
-            <h2>每日支出趋势</h2>
-            <div className="chart-content">
-              {columnConfig?.data?.length > 0 ? (
-                <Column {...columnConfig} />
-              ) : (
-                <div className="no-data">本月暂无支出数据</div>
-              )}
+            <div className="report-card trend-card page-panel">
+              <div className="report-card-heading">
+                <h3>月度收支趋势</h3>
+                <span>{selectedMonth}</span>
+              </div>
+              <Line {...lineConfig} />
             </div>
           </div>
-        </div>
-      )}
+        </section>
+      </Spin>
     </div>
-  );
-};
+  )
+}
 
-export default Chart;
+export default Chart
