@@ -15,9 +15,8 @@ import {
   Radio,
   Modal,
   message,
-  Upload,
 } from "antd";
-import { DownloadOutlined, UploadOutlined } from "@ant-design/icons";
+import { DownloadOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
 const { RangePicker } = DatePicker;
 import {
@@ -31,7 +30,6 @@ import {
   getAllTransactions,
   updateTransactions,
   deleteTransactions,
-  importTransactions,
 } from "../../api/transactions";
 import {
   groupTransactionsByMonth,
@@ -80,8 +78,6 @@ const Transactions = ({ transactionCategoryField }) => {
   const transactionType = Form.useWatch("type", form);
   const searchTransactionType = Form.useWatch("type", searchForm);
   const [searchParams, setSearchParams] = useState({});
-  const [importModalVisible, setImportModalVisible] = useState(false);
-  const [importFile, setImportFile] = useState(null);
   const categoryOptions = Array.isArray(transactionCategoryField?.options)
     ? transactionCategoryField.options
     : [];
@@ -509,98 +505,6 @@ const Transactions = ({ transactionCategoryField }) => {
     }
   };
 
-  //  导入数据模态框函数
-  const handleImportModal = () => {
-    setImportModalVisible(true);
-  };
-
-  // 处理文件上传
-  const handleFileUpload = (file) => {
-    const isJSON =
-      file.type === "application/json" || file.name.endsWith(".json");
-    const isExcel = file.name.endsWith(".xlsx") || file.name.endsWith(".xls");
-
-    if (!isJSON && !isExcel) {
-      message.error("请选择 JSON 或 Excel 文件");
-      return false;
-    }
-    setImportFile(file);
-    return false; // 返回 false 阻止自动上传
-  };
-
-  // 导入数据函数
-  const handleImport = async () => {
-    if (!importFile) {
-      message.error("请选择要导入的文件");
-      return;
-    }
-
-    try {
-      const reader = new FileReader();
-      // 处理Excel文件
-      reader.readAsArrayBuffer(importFile);
-      reader.onload = async (e) => {
-        try {
-          // 解析Excel文件
-          const workbook = XLSX.read(e.target.result, { type: "array" });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const excelData = XLSX.utils.sheet_to_json(worksheet);
-
-          // 转换数据格式为后端期望的格式
-          const formattedData = {};
-
-          excelData.forEach((item) => {
-            // 跳过表头行
-            if (item["ID"] === "ID" || item["ID"] === undefined) return;
-
-            // 提取月份
-            const date = item["日期"];
-            const monthKey = date.substring(0, 7); // 格式：YYYY-MM
-
-            // 创建月份数据结构
-            if (!formattedData[monthKey]) {
-              formattedData[monthKey] = { transactions: [] };
-            }
-
-            // 添加交易记录
-            formattedData[monthKey].transactions.push({
-              id: item["ID"], // 包含ID字段，支持更新操作
-              date: date,
-              type: item["类型"],
-              classification: item["分类"],
-              amount: item["金额"],
-              describe: item["描述"],
-            });
-          });
-
-          // 发送到后端
-          const response = await importTransactions(formattedData);
-          if (response.code === 200) {
-            message.success("数据导入成功");
-            setImportModalVisible(false);
-            setImportFile(null);
-            // 清除筛选条件并刷新列表
-            setSearchParams({});
-          } else {
-            message.error(`数据导入失败：${response.msg}`);
-          }
-        } catch (error) {
-          console.error("解析 Excel 文件失败:", error);
-          message.error("Excel 文件格式错误");
-        }
-      };
-    } catch (error) {
-      console.error("导入数据失败:", error);
-      message.error("数据导入失败");
-    }
-  };
-
-  // 关闭导入模态框
-  const handleImportCancel = () => {
-    setImportModalVisible(false);
-    setImportFile(null);
-  };
-
   return (
     <div className="transaction">
       {/* 查询表单区域 */}
@@ -655,13 +559,6 @@ const Transactions = ({ transactionCategoryField }) => {
               onClick={handleExport}
             >
               导出
-            </Button>
-            <Button
-              type="primary"
-              icon={<UploadOutlined />}
-              onClick={handleImportModal}
-            >
-              导入
             </Button>
           </Space>
         </Form.Item>
@@ -972,32 +869,6 @@ const Transactions = ({ transactionCategoryField }) => {
             </Form.Item>
           )}
         </Form>
-      </Modal>
-
-      {/* 导入数据模态框 */}
-      <Modal
-        className="transaction-modal"
-        title="导入"
-        open={importModalVisible}
-        onOk={handleImport}
-        onCancel={handleImportCancel}
-        okText="导入"
-        cancelText="取消"
-      >
-        <div style={{ marginBottom: 16 }}>
-          <p>请选择要导入的 JSON 文件</p>
-          <Upload
-            beforeUpload={handleFileUpload}
-            fileList={importFile ? [importFile] : []}
-            onRemove={() => setImportFile(null)}
-            maxCount={1}
-          >
-            <Button icon={<UploadOutlined />}>选择</Button>
-          </Upload>
-        </div>
-        {importFile && (
-          <p style={{ marginTop: 8 }}>已选择文件：{importFile.name}</p>
-        )}
       </Modal>
     </div>
   );

@@ -1,0 +1,267 @@
+.transaction-import {
+  min-height: 100%;
+  overflow: hidden;
+  background: #fff;
+}
+
+.transaction-import-header {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #eceff5;
+  padding: 0 22px;
+  background: #fff;
+}
+
+.transaction-import-title {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
+  color: #111827;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.transaction-import-back {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #111827;
+  cursor: pointer;
+  font-size: 17px;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover,
+  &:focus {
+    background: #fff5ec;
+    color: var(--theme-primary);
+  }
+}
+
+.transaction-import-submit {
+  height: 36px;
+  border-radius: 8px;
+  padding-inline: 18px;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.transaction-import-body {
+  padding: 54px 42px 96px;
+  background: #fff;
+}
+
+.transaction-import-steps {
+  display: grid;
+  max-width: 560px;
+  margin: 0 auto 32px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: #fafafa;
+}
+
+.transaction-import-step {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #a4a8b0;
+  font-size: 14px;
+  font-weight: 750;
+
+  &:not(:last-child)::after {
+    position: absolute;
+    top: 50%;
+    right: -24px;
+    width: 48px;
+    height: 1px;
+    background: #e4e8ef;
+    content: '';
+  }
+
+  span {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e1e5ec;
+    border-radius: 999px;
+    background: #fff;
+    color: inherit;
+    font-size: 13px;
+  }
+
+  &.active {
+    color: #111827;
+
+    span {
+      border-color: #f4a259;
+      background: #f4a259;
+      color: #fff;
+    }
+  }
+}
+
+.transaction-import-content {
+  display: grid;
+  max-width: 760px;
+  margin: 0 auto;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 32px;
+}
+
+.transaction-import-label {
+  padding-top: 96px;
+  text-align: right;
+
+  strong {
+    color: #111827;
+    font-size: 15px;
+    font-weight: 800;
+  }
+}
+
+.transaction-import-card {
+  min-width: 0;
+
+  .ant-upload-wrapper,
+  .ant-upload-drag-container {
+    width: 100%;
+  }
+
+  .ant-upload.ant-upload-drag {
+    min-height: 190px;
+    border-color: #e7ebf3;
+    border-radius: 12px;
+    background: #fffaf6;
+
+    &:hover,
+    &:focus-within {
+      border-color: var(--theme-primary);
+      background: #fff7ef;
+    }
+  }
+
+  .ant-upload-list {
+    margin-top: 10px;
+  }
+
+  .ant-upload-list-item-name,
+  .ant-upload-text,
+  .ant-upload-hint {
+    font-size: 13px;
+  }
+}
+
+.transaction-import-icon {
+  margin: 0 0 10px;
+  color: #f4a259;
+  font-size: 30px;
+}
+
+.transaction-import-main-text {
+  margin: 0;
+  color: #20242b;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.transaction-import-sub-text {
+  margin: 8px 0 0;
+  color: #a1a6af;
+  font-size: 12px;
+}
+
+.transaction-import-file {
+  margin: 10px 0 0;
+  color: #333842;
+  font-size: 13px;
+}
+
+.transaction-import-rules {
+  margin: 22px 0 0;
+  padding-left: 18px;
+  color: #9aa0aa;
+  font-size: 13px;
+  line-height: 1.9;
+
+  li::marker {
+    color: #c6cad2;
+  }
+}
+
+@media (max-width: 900px) {
+  .transaction-import {
+    min-height: calc(100svh - 60px - 74px);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .transaction-import-header {
+    min-height: 58px;
+    padding: 0 16px;
+  }
+
+  .transaction-import-title {
+    gap: 10px;
+    font-size: 15px;
+  }
+
+  .transaction-import-submit {
+    height: 34px;
+    padding-inline: 12px;
+  }
+
+  .transaction-import-body {
+    padding: 22px 16px 88px;
+  }
+
+  .transaction-import-steps {
+    margin: 0 0 22px;
+    padding: 10px;
+  }
+
+  .transaction-import-step {
+    gap: 6px;
+    font-size: 12px;
+
+    &:not(:last-child)::after {
+      right: -14px;
+      width: 28px;
+    }
+
+    span {
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+    }
+  }
+
+  .transaction-import-content {
+    display: block;
+  }
+
+  .transaction-import-label {
+    padding: 0 0 12px;
+    text-align: left;
+  }
+
+  .transaction-import-card {
+    .ant-upload.ant-upload-drag {
+      min-height: 178px;
+    }
+  }
+}

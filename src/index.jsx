@@ -33,6 +33,7 @@ import MenuConfig from './pages/menu-config'
 import Profile from './pages/profile'
 import RoleConfig from './pages/role-config'
 import UserConfig from './pages/user-config'
+import TransactionImport from './pages/transaction-import'
 import Transactions from './pages/transactions/index.jsx'
 import Chart from './pages/chart/index.jsx'
 import BillCalendar from './pages/bill-calendar/index.jsx'
@@ -86,6 +87,9 @@ const THEME_COLOR = '#ff9a3d'
 const APP_FONT_FAMILY =
   'PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans SC, sans-serif'
 
+const getMenuAccessPath = (path) =>
+  path.startsWith('/transactions/') ? '/transactions' : path
+
 const getUserName = () => localStorage.getItem(USER_KEY) || 'admin'
 
 const getUserId = () => localStorage.getItem(USER_ID_KEY) || ADMIN_USER_ID
@@ -136,6 +140,10 @@ const pageMeta = {
     title: '流水',
     description: '交易记录',
   },
+  '/transactions/import': {
+    title: '数据导入',
+    description: '批量导入账单',
+  },
   '/chart': {
     title: '报表',
     description: '支出统计',
@@ -174,7 +182,9 @@ const pageMeta = {
 const App = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const currentPage = pageMeta[location.pathname] || pageMeta['/']
+  const currentAccessPath = getMenuAccessPath(location.pathname)
+  const currentPage =
+    pageMeta[location.pathname] || pageMeta[currentAccessPath] || pageMeta['/']
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
   const [menus, setMenus] = React.useState([])
   const [roles, setRoles] = React.useState([])
@@ -421,6 +431,11 @@ const App = () => {
     setRecordDrawerOpen(false)
   }, [])
 
+  const openTransactionImport = React.useCallback(() => {
+    setRecordDrawerOpen(false)
+    navigate('/transactions/import')
+  }, [navigate])
+
   const handleRecordSaved = React.useCallback(() => {
     window.dispatchEvent(new Event(TRANSACTION_UPDATED_EVENT))
   }, [])
@@ -481,8 +496,8 @@ const App = () => {
       !isAuthenticated ||
       location.pathname === '/login' ||
       !accessReady ||
-      APP_ONLY_PATHS.includes(location.pathname) ||
-      canAccessMenuPath(menus, currentRole, location.pathname)
+      APP_ONLY_PATHS.includes(currentAccessPath) ||
+      canAccessMenuPath(menus, currentRole, currentAccessPath)
     ) {
       return
     }
@@ -491,6 +506,7 @@ const App = () => {
   }, [
     accessReady,
     currentRole,
+    currentAccessPath,
     firstAccessiblePath,
     isAuthenticated,
     location.pathname,
@@ -641,6 +657,13 @@ const App = () => {
               )}
             />
             <Route
+              path="/transactions/import"
+              element={renderProtectedPage(
+                '/transactions',
+                <TransactionImport onImported={handleRecordSaved} />
+              )}
+            />
+            <Route
               path="/chart"
               element={renderProtectedPage(
                 '/chart',
@@ -728,6 +751,7 @@ const App = () => {
       </div>
       <RecordDrawer
         onClose={closeRecordDrawer}
+        onImport={openTransactionImport}
         onSaved={handleRecordSaved}
         open={recordDrawerOpen}
         sidebarCollapsed={sidebarCollapsed}

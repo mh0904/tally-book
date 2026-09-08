@@ -1,4 +1,5 @@
 .record-drawer-root {
+  z-index: 20 !important;
   pointer-events: none;
 
   .ant-drawer-content-wrapper {
@@ -6,7 +7,9 @@
     left: 232px;
     height: calc(100vh - 74px);
     pointer-events: auto;
-    box-shadow: 18px 0 46px rgba(15, 23, 42, 0.12);
+    box-shadow:
+      -8px 0 18px rgba(15, 23, 42, 0.06),
+      18px 0 46px rgba(15, 23, 42, 0.12);
   }
 
   &.sidebar-collapsed {
@@ -90,6 +93,21 @@
 .record-close {
   color: #111827;
   font-size: 16px;
+}
+
+.record-import-trigger {
+  height: 34px;
+  border-color: #f4d7bd;
+  border-radius: 999px;
+  color: #cf742a;
+  font-size: 13px;
+  font-weight: 750;
+
+  &:hover,
+  &:focus {
+    border-color: var(--theme-primary) !important;
+    color: var(--theme-primary) !important;
+  }
 }
 
 .record-form {
@@ -229,6 +247,8 @@
 @media (max-width: 900px) {
   .record-drawer-root,
   .record-drawer-root.sidebar-collapsed {
+    z-index: 60 !important;
+
     .ant-drawer-content-wrapper {
       top: 0;
       left: 0;
