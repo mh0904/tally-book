@@ -14,7 +14,7 @@
     "description": "管理流水、报表、账单日历和收支分类",
     "enabled": true,
     "sort": 2,
-    "menuIds": ["home", "transactions", "chart", "bill-calendar", "category-tags", "category-config"]
+    "menuIds": ["home", "transactions", "chart", "bill-calendar", "category-config"]
   },
   {
     "id": "bookkeeper",
@@ -22,7 +22,7 @@
     "description": "负责录入流水并维护收支分类",
     "enabled": true,
     "sort": 3,
-    "menuIds": ["home", "transactions", "bill-calendar", "category-tags", "category-config"]
+    "menuIds": ["home", "transactions", "bill-calendar", "category-config"]
   },
   {
     "id": "analyst",

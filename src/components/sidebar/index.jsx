@@ -105,7 +105,7 @@ const Sidebar = ({
   onToggle,
 }) => {
   const location = useLocation()
-  const [openKeys, setOpenKeys] = React.useState(() => new Set(['category-tags']))
+  const [openKeys, setOpenKeys] = React.useState(() => new Set())
   const mobileTabItems = React.useMemo(() => getMobileTabItems(menus), [menus])
 
   React.useEffect(() => {

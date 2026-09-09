@@ -32,55 +32,35 @@
     "sort": 4
   },
   {
-    "id": "category-tags",
-    "title": "分类标签",
+    "id": "category-config",
+    "title": "收支分类",
     "icon": "tags",
-    "path": "",
+    "path": "/category-config",
     "enabled": true,
-    "sort": 5,
-    "children": [
-      {
-        "id": "category-config",
-        "title": "收支分类",
-        "icon": "tags",
-        "path": "/category-config",
-        "enabled": true,
-        "sort": 1
-      },
-      {
-        "id": "user-config",
-        "title": "成员管理",
-        "icon": "team",
-        "path": "/user-config",
-        "enabled": true,
-        "sort": 2
-      }
-    ]
+    "sort": 5
   },
   {
-    "id": "system",
-    "title": "设置",
-    "icon": "setting",
-    "path": "",
+    "id": "user-config",
+    "title": "成员管理",
+    "icon": "team",
+    "path": "/user-config",
     "enabled": true,
-    "sort": 99,
-    "children": [
-      {
-        "id": "menu-config",
-        "title": "菜单配置",
-        "icon": "menu",
-        "path": "/menu-config",
-        "enabled": true,
-        "sort": 1
-      },
-      {
-        "id": "role-config",
-        "title": "角色管理",
-        "icon": "safety",
-        "path": "/role-config",
-        "enabled": true,
-        "sort": 2
-      }
-    ]
+    "sort": 6
+  },
+  {
+    "id": "menu-config",
+    "title": "菜单配置",
+    "icon": "menu",
+    "path": "/menu-config",
+    "enabled": true,
+    "sort": 7
+  },
+  {
+    "id": "role-config",
+    "title": "角色管理",
+    "icon": "safety",
+    "path": "/role-config",
+    "enabled": true,
+    "sort": 8
   }
 ]

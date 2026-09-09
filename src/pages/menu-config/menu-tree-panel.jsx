@@ -32,8 +32,8 @@ const MenuTreePanel = ({
     <section className="menu-tree-panel page-panel">
       <div className="panel-heading">
         <div>
-          <h3>菜单树</h3>
-          <span>点击节点后在右侧编辑</span>
+          <h3>菜单列表</h3>
+          <span>点击菜单后在右侧编辑</span>
         </div>
       </div>
       {treeData.length ? (

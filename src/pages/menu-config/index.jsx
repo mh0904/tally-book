@@ -28,12 +28,6 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
   )
   const selectedMenu = selectedInfo?.item
   const editingMenu = draftMenu?.menu || selectedMenu
-  const editingInfo = draftMenu
-    ? {
-        depth: draftMenu.depth,
-        parentId: draftMenu.parentId,
-      }
-    : selectedInfo
 
   React.useEffect(() => {
     setExpandedKeys(getAllMenuKeys(menus))
@@ -77,37 +71,16 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
     }
   }
 
-  const handleAddParent = () => {
+  const handleAddMenu = () => {
     const nextMenu = createMenu({
-      title: '新建父级菜单',
+      title: '新建菜单',
       sort: getNextSort(menus),
     })
 
     setSelectedId(null)
     setDraftMenu({
-      depth: 0,
       menu: nextMenu,
       parentId: null,
-    })
-  }
-
-  const handleAddChild = () => {
-    if (draftMenu || !selectedMenu || selectedInfo?.depth !== 0) {
-      message.warning('请先选择一个父级菜单')
-      return
-    }
-
-    const children = selectedMenu.children || []
-    const nextMenu = createMenu({
-      title: '新建子级菜单',
-      sort: getNextSort(children),
-    })
-
-    setSelectedId(null)
-    setDraftMenu({
-      depth: selectedInfo.depth + 1,
-      menu: nextMenu,
-      parentId: selectedMenu.id,
     })
   }
 
@@ -162,13 +135,9 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
   return (
     <div className="menu-config-page">
       <MenuToolbar
-        draftMenu={draftMenu}
-        onAddChild={handleAddChild}
-        onAddParent={handleAddParent}
+        onAdd={handleAddMenu}
         onReset={handleReset}
         saving={saving}
-        selectedInfo={selectedInfo}
-        selectedMenu={selectedMenu}
       />
 
       <div className="menu-config-layout">
@@ -186,7 +155,6 @@ const MenuConfig = ({ menus, onMenusChange, onMenusRefresh }) => {
 
         <MenuEditorPanel
           draftMenu={draftMenu}
-          editingInfo={editingInfo}
           editingMenu={editingMenu}
           form={form}
           onSave={handleSave}

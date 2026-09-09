@@ -1,37 +1,17 @@
 import { Button, Space } from 'antd'
-import {
-  BranchesOutlined,
-  PlusOutlined,
-  ReloadOutlined,
-} from '@ant-design/icons'
+import { PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 
-const MenuToolbar = ({
-  draftMenu,
-  onAddChild,
-  onAddParent,
-  onReset,
-  saving,
-  selectedInfo,
-  selectedMenu,
-}) => {
+const MenuToolbar = ({ onAdd, onReset, saving }) => {
   return (
     <div className="menu-config-toolbar">
       <Space wrap>
-        <Button disabled={saving} icon={<PlusOutlined />} onClick={onAddParent}>
-          父级
-        </Button>
         <Button
-          disabled={
-            saving ||
-            Boolean(draftMenu) ||
-            !selectedMenu ||
-            selectedInfo?.depth !== 0
-          }
-          icon={<BranchesOutlined />}
-          onClick={onAddChild}
+          disabled={saving}
+          icon={<PlusOutlined />}
+          onClick={onAdd}
           type="primary"
         >
-          子级
+          新增
         </Button>
         <Button disabled={saving} icon={<ReloadOutlined />} onClick={onReset}>
           重置

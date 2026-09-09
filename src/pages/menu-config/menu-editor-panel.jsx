@@ -7,7 +7,6 @@ import {
   Select,
   Space,
   Switch,
-  Tag,
   Typography,
 } from 'antd'
 import { SaveOutlined } from '@ant-design/icons'
@@ -27,7 +26,6 @@ const iconSelectOptions = MENU_ICON_OPTIONS.map((item) => ({
 
 const MenuEditorPanel = ({
   draftMenu,
-  editingInfo,
   editingMenu,
   form,
   onSave,
@@ -47,11 +45,6 @@ const MenuEditorPanel = ({
             <span>请选择一个菜单节点</span>
           )}
         </div>
-        {editingInfo && (
-          <Tag color="orange">
-            {editingInfo.depth === 0 ? '父级菜单' : '子级菜单'}
-          </Tag>
-        )}
       </div>
 
       {editingMenu ? (
@@ -70,7 +63,7 @@ const MenuEditorPanel = ({
           </Form.Item>
 
           <Form.Item label="路由地址" name="path">
-            <Input placeholder="例如 /menu-config，父级菜单可留空" />
+            <Input placeholder="例如 /menu-config" />
           </Form.Item>
 
           <div className="menu-form-row">
