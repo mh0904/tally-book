@@ -1,24 +1,24 @@
 .home-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 1.8rem;
 }
 
 .home-hero-grid,
 .home-main-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) minmax(36rem, 0.9fr);
+  gap: 1.8rem;
   align-items: stretch;
 }
 
 .asset-card {
   position: relative;
-  min-height: 150px;
+  min-height: 15rem;
   overflow: hidden;
-  border-radius: 18px;
+  border-radius: 1.8rem;
   background: #67bdd1;
-  box-shadow: 0 18px 34px rgba(255, 154, 61, 0.12);
+  box-shadow: 0 1.8rem 3.4rem rgba(255, 154, 61, 0.12);
   color: #fff;
 }
 
@@ -33,23 +33,23 @@
   &::before,
   &::after {
     position: absolute;
-    border-radius: 999px;
+    border-radius: 99.9rem;
     background: rgba(255, 255, 255, 0.3);
     content: '';
   }
 
   &::before {
-    right: 72px;
-    bottom: -28px;
-    width: 168px;
-    height: 168px;
+    right: 7.2rem;
+    bottom: -2.8rem;
+    width: 16.8rem;
+    height: 16.8rem;
   }
 
   &::after {
-    right: -36px;
-    bottom: 34px;
-    width: 112px;
-    height: 112px;
+    right: -3.6rem;
+    bottom: 3.4rem;
+    width: 11.2rem;
+    height: 11.2rem;
   }
 }
 
@@ -58,10 +58,10 @@
   z-index: 1;
   display: flex;
   height: 100%;
-  min-height: 150px;
+  min-height: 15rem;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 22px 24px;
+  padding: 2.2rem 2.4rem;
 
   span,
   em {
@@ -70,13 +70,13 @@
   }
 
   span {
-    font-size: 15px;
+    font-size: 1.3rem;
     font-weight: 650;
   }
 
   strong {
-    margin-top: 8px;
-    font-size: 42px;
+    margin-top: 0.8rem;
+    font-size: 3.2rem;
     font-weight: 800;
     line-height: 1;
   }
@@ -85,9 +85,9 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
-    margin-top: 14px;
-    font-size: 14px;
+    gap: 1.2rem;
+    margin-top: 1.4rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -100,12 +100,12 @@
 
 .period-row {
   display: grid;
-  min-height: 76px;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
+  min-height: 7.6rem;
+  grid-template-columns: 4rem minmax(0, 1fr) auto;
   align-items: center;
-  gap: 14px;
-  padding: 18px 22px;
-  border-bottom: 1px solid #f0f2f5;
+  gap: 1.4rem;
+  padding: 1.8rem 2.2rem;
+  border-bottom: 0.1rem solid #f0f2f5;
 
   &:last-child {
     border-bottom: 0;
@@ -118,39 +118,39 @@
 
   strong {
     color: #111827;
-    font-size: 17px;
+    font-size: 1.5rem;
     font-weight: 750;
   }
 
   em {
-    margin-top: 4px;
+    margin-top: 0.4rem;
     color: #9ca3af;
-    font-size: 13px;
+    font-size: 1.2rem;
     font-style: normal;
   }
 }
 
 .period-icon {
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 3.4rem;
+  height: 3.4rem;
   place-items: center;
-  border-radius: 10px;
+  border-radius: 1rem;
   background: #effafa;
   color: #2f9aa0;
-  font-size: 18px;
+  font-size: 1.6rem;
 }
 
 .period-amounts {
   display: grid;
-  gap: 4px;
+  gap: 0.4rem;
   color: #9ca3af;
-  font-size: 13px;
+  font-size: 1.2rem;
   text-align: right;
 
   b {
-    margin-left: 6px;
-    font-size: 16px;
+    margin-left: 0.6rem;
+    font-size: 1.4rem;
   }
 
   .income {
@@ -166,30 +166,30 @@
 .ranking-card,
 .member-card {
   min-width: 0;
-  padding: 22px;
+  padding: 2.2rem;
 }
 
 .daily-card {
-  min-height: 420px;
+  min-height: 42rem;
 }
 
 .home-card-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
 
   h3 {
     margin: 0;
     color: #111827;
-    font-size: 18px;
+    font-size: 1.6rem;
     font-weight: 800;
   }
 
   span {
     color: #9ca3af;
-    font-size: 13px;
+    font-size: 1.2rem;
   }
 }
 
@@ -201,26 +201,26 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 18px;
+  gap: 1.8rem;
 }
 
 .ranking-list,
 .member-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.6rem;
 }
 
 .ranking-row {
   display: grid;
-  grid-template-columns: 22px 34px minmax(0, 1fr);
+  grid-template-columns: 2.2rem 3.4rem minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 1.2rem;
 }
 
 .ranking-index {
   color: #9ca3af;
-  font-size: 14px;
+  font-size: 1.2rem;
 }
 
 .ranking-icon,
@@ -234,8 +234,8 @@
 }
 
 .ranking-icon {
-  width: 34px;
-  height: 34px;
+  width: 3.4rem;
+  height: 3.4rem;
 }
 
 .ranking-main {
@@ -245,14 +245,14 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 7px;
+    gap: 0.8rem;
+    margin-bottom: 0.7rem;
   }
 
   strong {
     overflow: hidden;
     color: #111827;
-    font-size: 15px;
+    font-size: 1.3rem;
     font-weight: 750;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -260,33 +260,33 @@
 
   span {
     color: #8a8f99;
-    font-size: 12px;
+    font-size: 1.1rem;
   }
 
   b {
     color: #374151;
-    font-size: 15px;
+    font-size: 1.3rem;
   }
 
   i {
     display: block;
-    height: 4px;
+    height: 0.4rem;
     max-width: 100%;
-    border-radius: 999px;
+    border-radius: 99.9rem;
     background: linear-gradient(90deg, #64c6c6, #819cff);
   }
 }
 
 .member-row {
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr) auto;
+  grid-template-columns: 3.8rem minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  gap: 1.2rem;
 }
 
 .member-avatar {
-  width: 38px;
-  height: 38px;
+  width: 3.8rem;
+  height: 3.8rem;
   background: #ffe8dc;
 }
 
@@ -304,75 +304,75 @@
 }
 
 .member-row em {
-  margin-top: 4px;
+  margin-top: 0.4rem;
   color: #9ca3af;
-  font-size: 12px;
+  font-size: 1.1rem;
   font-style: normal;
 }
 
 .member-amounts {
   display: grid;
-  gap: 4px;
+  gap: 0.4rem;
   color: #8a8f99;
-  font-size: 13px;
+  font-size: 1.2rem;
   text-align: right;
 }
 
 .home-empty {
   margin: 0;
   color: #9ca3af;
-  font-size: 14px;
+  font-size: 1.2rem;
 }
 
 .home-quick-grid {
   position: relative;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 14px;
+  gap: 1.4rem;
 }
 
 .home-quick-item {
   display: flex;
-  min-height: 116px;
+  min-height: 11.6rem;
   flex-direction: column;
   justify-content: center;
-  padding: 18px;
+  padding: 1.8rem;
   color: #111827;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 
   &:hover {
     border-color: var(--theme-primary-border);
     color: #111827;
-    box-shadow: 0 10px 24px var(--theme-primary-shadow-soft);
-    transform: translateY(-1px);
+    box-shadow: 0 1rem 2.4rem var(--theme-primary-shadow-soft);
+    transform: translateY(-0.1rem);
   }
 
   strong {
-    margin-top: 12px;
-    font-size: 15px;
+    margin-top: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 750;
   }
 
   em {
-    margin-top: 6px;
+    margin-top: 0.6rem;
     color: #8a8f99;
-    font-size: 12px;
+    font-size: 1.1rem;
     font-style: normal;
   }
 }
 
 .home-quick-icon {
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 3.8rem;
+  height: 3.8rem;
   place-items: center;
-  border-radius: 12px;
+  border-radius: 1.2rem;
   background: var(--theme-primary-soft);
   color: var(--theme-primary-deep);
-  font-size: 20px;
+  font-size: 1.8rem;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 73.75em) {
   .home-hero-grid,
   .home-main-grid {
     grid-template-columns: 1fr;
@@ -383,22 +383,22 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .asset-card {
-    min-height: 132px;
+    min-height: 13.2rem;
   }
 
   .asset-card-content {
-    min-height: 132px;
-    padding: 18px 20px;
+    min-height: 13.2rem;
+    padding: 1.8rem 2rem;
 
     strong {
-      font-size: 34px;
+      font-size: 2.8rem;
     }
   }
 
   .period-row {
-    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-columns: 3.6rem minmax(0, 1fr);
   }
 
   .period-amounts {
@@ -411,34 +411,34 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 35em) {
   .home-dashboard {
-    gap: 12px;
+    gap: 1.2rem;
   }
 
   .home-hero-grid,
   .home-main-grid {
-    gap: 12px;
+    gap: 1.2rem;
   }
 
   .daily-card,
   .ranking-card,
   .member-card {
-    padding: 16px;
+    padding: 1.6rem;
   }
 
   .home-card-heading {
     align-items: flex-start;
     flex-direction: column;
-    margin-bottom: 14px;
+    margin-bottom: 1.4rem;
   }
 
   .daily-card {
-    min-height: 360px;
+    min-height: 36rem;
   }
 
   .member-row {
-    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-columns: 3.6rem minmax(0, 1fr);
   }
 
   .member-amounts {

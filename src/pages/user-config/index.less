@@ -1,17 +1,17 @@
 .user-config-page {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.6rem;
 }
 
 .user-config-toolbar {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 16px;
-  padding: 16px 18px;
-  border: 1px solid #eef0f4;
-  border-radius: 14px;
+  gap: 1.6rem;
+  padding: 1.6rem 1.8rem;
+  border: 0.1rem solid #eef0f4;
+  border-radius: 1.4rem;
   background: #fff;
 
   a {
@@ -26,33 +26,33 @@
 
 .user-config-layout {
   display: grid;
-  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: minmax(30rem, 38rem) minmax(0, 1fr);
+  gap: 1.6rem;
   align-items: start;
 }
 
 .user-list-panel,
 .user-editor-panel {
-  min-height: 520px;
-  padding: 18px;
+  min-height: 52rem;
+  padding: 1.8rem;
 }
 
 .user-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1rem;
 }
 
 .user-list-item {
   display: grid;
   width: 100%;
-  min-height: 68px;
-  grid-template-columns: 34px minmax(0, 1fr) auto;
+  min-height: 6.8rem;
+  grid-template-columns: 3.4rem minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  gap: 1rem;
+  padding: 1rem;
+  border: 0.1rem solid #e5e7eb;
+  border-radius: 0.8rem;
   background: #fff;
   color: inherit;
   cursor: pointer;
@@ -64,20 +64,20 @@
   &.active {
     border-color: var(--theme-primary-border);
     background: var(--theme-primary-tint);
-    box-shadow: 0 1px 3px var(--theme-primary-shadow-soft);
+    box-shadow: 0 0.1rem 0.3rem var(--theme-primary-shadow-soft);
   }
 }
 
 .user-list-icon {
   display: inline-flex;
-  width: 34px;
-  height: 34px;
+  width: 3.4rem;
+  height: 3.4rem;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 0.8rem;
   background: var(--theme-primary-soft);
   color: var(--theme-primary-deep);
-  font-size: 16px;
+  font-size: 1.4rem;
 }
 
 .user-list-content {
@@ -93,40 +93,40 @@
 
   strong {
     color: #111827;
-    font-size: 14px;
+    font-size: 1.3rem;
     font-style: normal;
     font-weight: 650;
   }
 
   em {
-    margin-top: 4px;
+    margin-top: 0.4rem;
     color: #6b7280;
-    font-size: 12px;
+    font-size: 1.2rem;
     font-style: normal;
   }
 }
 
 .user-edit-form {
-  max-width: 760px;
+  max-width: 76rem;
 }
 
 .user-form-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 1.2rem;
 
   &.small {
-    grid-template-columns: 160px minmax(0, 1fr);
+    grid-template-columns: 16rem minmax(0, 1fr);
   }
 }
 
 .user-form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 1rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .user-config-toolbar {
     align-items: stretch;
     justify-content: flex-start;
@@ -144,20 +144,20 @@
   .user-list-panel,
   .user-editor-panel {
     min-height: auto;
-    padding: 16px;
+    padding: 1.6rem;
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 42.5em) {
   .user-config-page {
-    gap: 12px;
+    gap: 1.2rem;
   }
 
   .user-config-toolbar {
     .ant-space {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      gap: 0.8rem;
     }
 
     .ant-space-item,
@@ -168,7 +168,7 @@
 
   .user-list-panel,
   .user-editor-panel {
-    padding: 12px;
+    padding: 1.2rem;
   }
 
   .panel-heading {
@@ -189,13 +189,13 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 30em) {
   .user-config-toolbar .ant-space {
     grid-template-columns: 1fr;
   }
 
   .user-list-item {
-    grid-template-columns: 32px minmax(0, 1fr);
+    grid-template-columns: 3.2rem minmax(0, 1fr);
 
     .ant-tag {
       grid-column: 2;
@@ -205,7 +205,7 @@
   }
 
   .user-list-icon {
-    width: 32px;
-    height: 32px;
+    width: 3.2rem;
+    height: 3.2rem;
   }
 }

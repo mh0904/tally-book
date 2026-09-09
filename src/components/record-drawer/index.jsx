@@ -28,8 +28,8 @@ const RecordDrawer = ({
   const [saving, setSaving] = React.useState(false)
   const wasOpenRef = React.useRef(false)
   const drawerWidth = sidebarCollapsed
-    ? 'min(920px, calc(100vw - 72px))'
-    : 'min(920px, calc(100vw - 232px))'
+    ? 'min(92rem, calc(100vw - 7.2rem))'
+    : 'min(92rem, calc(100vw - 23.2rem))'
   const transactionType = Form.useWatch('type', form)
   const {
     activeCategoryOptions: formCategoryOptions,

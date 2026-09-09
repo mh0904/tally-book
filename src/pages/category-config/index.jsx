@@ -18,7 +18,7 @@ import {
 } from './category-utils'
 import './index.less'
 
-const MOBILE_LIST_QUERY = '(max-width: 900px)'
+const MOBILE_LIST_QUERY = '(max-width: 56.25em)'
 
 const CategoryConfig = ({
   categories = [],
