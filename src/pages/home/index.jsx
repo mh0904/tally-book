@@ -189,13 +189,6 @@ const Home = ({
 
   return (
     <div className="home-dashboard">
-      <div className="home-action-bar">
-        <div>
-          <span>{periodSummary.monthKey}</span>
-          <strong>家庭账本</strong>
-        </div>
-      </div>
-
       <section className="home-hero-grid">
         <div className="asset-card">
           <div className="asset-card-bg" />
