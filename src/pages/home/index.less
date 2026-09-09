@@ -1,24 +1,24 @@
 .home-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
+  gap: 18px;
 }
 
 .home-hero-grid,
 .home-main-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(36rem, 0.9fr);
-  gap: 1.8rem;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+  gap: 18px;
   align-items: stretch;
 }
 
 .asset-card {
   position: relative;
-  min-height: 15rem;
+  min-height: 150px;
   overflow: hidden;
-  border-radius: 1.8rem;
+  border-radius: 18px;
   background: #67bdd1;
-  box-shadow: 0 1.8rem 3.4rem rgba(255, 154, 61, 0.12);
+  box-shadow: 0 18px 34px rgba(255, 154, 61, 0.12);
   color: #fff;
 }
 
@@ -33,23 +33,23 @@
   &::before,
   &::after {
     position: absolute;
-    border-radius: 99.9rem;
+    border-radius: 999px;
     background: rgba(255, 255, 255, 0.3);
     content: '';
   }
 
   &::before {
-    right: 7.2rem;
-    bottom: -2.8rem;
-    width: 16.8rem;
-    height: 16.8rem;
+    right: 72px;
+    bottom: -28px;
+    width: 168px;
+    height: 168px;
   }
 
   &::after {
-    right: -3.6rem;
-    bottom: 3.4rem;
-    width: 11.2rem;
-    height: 11.2rem;
+    right: -36px;
+    bottom: 34px;
+    width: 112px;
+    height: 112px;
   }
 }
 
@@ -58,10 +58,10 @@
   z-index: 1;
   display: flex;
   height: 100%;
-  min-height: 15rem;
+  min-height: 150px;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 2.2rem 2.4rem;
+  padding: 22px 24px;
 
   span,
   em {
@@ -70,13 +70,13 @@
   }
 
   span {
-    font-size: max(var(--font-size-min), 1.3rem);
+    font-size: 13px;
     font-weight: 650;
   }
 
   strong {
-    margin-top: 0.8rem;
-    font-size: max(var(--font-size-min), 3.2rem);
+    margin-top: 8px;
+    font-size: 32px;
     font-weight: 800;
     line-height: 1;
   }
@@ -85,9 +85,9 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1.2rem;
-    margin-top: 1.4rem;
-    font-size: max(var(--font-size-min), 1.2rem);
+    gap: 12px;
+    margin-top: 14px;
+    font-size: 12px;
   }
 }
 
@@ -100,12 +100,12 @@
 
 .period-row {
   display: grid;
-  min-height: 7.6rem;
-  grid-template-columns: 4rem minmax(0, 1fr) auto;
+  min-height: 76px;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 1.4rem;
-  padding: 1.8rem 2.2rem;
-  border-bottom: 0.1rem solid #f0f2f5;
+  gap: 14px;
+  padding: 18px 22px;
+  border-bottom: 1px solid #f0f2f5;
 
   &:last-child {
     border-bottom: 0;
@@ -118,39 +118,39 @@
 
   strong {
     color: #111827;
-    font-size: max(var(--font-size-min), 1.5rem);
+    font-size: 15px;
     font-weight: 750;
   }
 
   em {
-    margin-top: 0.4rem;
+    margin-top: 4px;
     color: #9ca3af;
-    font-size: max(var(--font-size-min), 1.2rem);
+    font-size: 12px;
     font-style: normal;
   }
 }
 
 .period-icon {
   display: grid;
-  width: 3.4rem;
-  height: 3.4rem;
+  width: 34px;
+  height: 34px;
   place-items: center;
-  border-radius: 1rem;
+  border-radius: 10px;
   background: #effafa;
   color: #2f9aa0;
-  font-size: max(var(--font-size-min), 1.6rem);
+  font-size: 16px;
 }
 
 .period-amounts {
   display: grid;
-  gap: 0.4rem;
+  gap: 4px;
   color: #9ca3af;
-  font-size: max(var(--font-size-min), 1.2rem);
+  font-size: 12px;
   text-align: right;
 
   b {
-    margin-left: 0.6rem;
-    font-size: max(var(--font-size-min), 1.4rem);
+    margin-left: 6px;
+    font-size: 14px;
   }
 
   .income {
@@ -166,30 +166,30 @@
 .ranking-card,
 .member-card {
   min-width: 0;
-  padding: 2.2rem;
+  padding: 22px;
 }
 
 .daily-card {
-  min-height: 42rem;
+  min-height: 420px;
 }
 
 .home-card-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.2rem;
-  margin-bottom: 1.8rem;
+  gap: 12px;
+  margin-bottom: 18px;
 
   h3 {
     margin: 0;
     color: #111827;
-    font-size: max(var(--font-size-min), 1.6rem);
+    font-size: 16px;
     font-weight: 800;
   }
 
   span {
     color: #9ca3af;
-    font-size: max(var(--font-size-min), 1.2rem);
+    font-size: 12px;
   }
 }
 
@@ -201,26 +201,26 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 1.8rem;
+  gap: 18px;
 }
 
 .ranking-list,
 .member-list {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 16px;
 }
 
 .ranking-row {
   display: grid;
-  grid-template-columns: 2.2rem 3.4rem minmax(0, 1fr);
+  grid-template-columns: 22px 34px minmax(0, 1fr);
   align-items: center;
-  gap: 1.2rem;
+  gap: 12px;
 }
 
 .ranking-index {
   color: #9ca3af;
-  font-size: max(var(--font-size-min), 1.2rem);
+  font-size: 12px;
 }
 
 .ranking-icon,
@@ -234,8 +234,8 @@
 }
 
 .ranking-icon {
-  width: 3.4rem;
-  height: 3.4rem;
+  width: 34px;
+  height: 34px;
 }
 
 .ranking-main {
@@ -245,14 +245,14 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 0.7rem;
+    gap: 8px;
+    margin-bottom: 7px;
   }
 
   strong {
     overflow: hidden;
     color: #111827;
-    font-size: max(var(--font-size-min), 1.3rem);
+    font-size: 13px;
     font-weight: 750;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -260,33 +260,33 @@
 
   span {
     color: #8a8f99;
-    font-size: max(var(--font-size-min), 1.1rem);
+    font-size: 12px;
   }
 
   b {
     color: #374151;
-    font-size: max(var(--font-size-min), 1.3rem);
+    font-size: 13px;
   }
 
   i {
     display: block;
-    height: 0.4rem;
+    height: 4px;
     max-width: 100%;
-    border-radius: 99.9rem;
+    border-radius: 999px;
     background: linear-gradient(90deg, #64c6c6, #819cff);
   }
 }
 
 .member-row {
   display: grid;
-  grid-template-columns: 3.8rem minmax(0, 1fr) auto;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 1.2rem;
+  gap: 12px;
 }
 
 .member-avatar {
-  width: 3.8rem;
-  height: 3.8rem;
+  width: 38px;
+  height: 38px;
   background: #ffe8dc;
 }
 
@@ -304,75 +304,75 @@
 }
 
 .member-row em {
-  margin-top: 0.4rem;
+  margin-top: 4px;
   color: #9ca3af;
-  font-size: max(var(--font-size-min), 1.1rem);
+  font-size: 12px;
   font-style: normal;
 }
 
 .member-amounts {
   display: grid;
-  gap: 0.4rem;
+  gap: 4px;
   color: #8a8f99;
-  font-size: max(var(--font-size-min), 1.2rem);
+  font-size: 12px;
   text-align: right;
 }
 
 .home-empty {
   margin: 0;
   color: #9ca3af;
-  font-size: max(var(--font-size-min), 1.2rem);
+  font-size: 12px;
 }
 
 .home-quick-grid {
   position: relative;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1.4rem;
+  gap: 14px;
 }
 
 .home-quick-item {
   display: flex;
-  min-height: 11.6rem;
+  min-height: 116px;
   flex-direction: column;
   justify-content: center;
-  padding: 1.8rem;
+  padding: 18px;
   color: #111827;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 
   &:hover {
     border-color: var(--theme-primary-border);
     color: #111827;
-    box-shadow: 0 1rem 2.4rem var(--theme-primary-shadow-soft);
-    transform: translateY(-0.1rem);
+    box-shadow: 0 10px 24px var(--theme-primary-shadow-soft);
+    transform: translateY(-1px);
   }
 
   strong {
-    margin-top: 1.2rem;
-    font-size: max(var(--font-size-min), 1.3rem);
+    margin-top: 12px;
+    font-size: 13px;
     font-weight: 750;
   }
 
   em {
-    margin-top: 0.6rem;
+    margin-top: 6px;
     color: #8a8f99;
-    font-size: max(var(--font-size-min), 1.1rem);
+    font-size: 12px;
     font-style: normal;
   }
 }
 
 .home-quick-icon {
   display: grid;
-  width: 3.8rem;
-  height: 3.8rem;
+  width: 38px;
+  height: 38px;
   place-items: center;
-  border-radius: 1.2rem;
+  border-radius: 12px;
   background: var(--theme-primary-soft);
   color: var(--theme-primary-deep);
-  font-size: max(var(--font-size-min), 1.8rem);
+  font-size: 18px;
 }
 
-@media (max-width: 73.75em) {
+@media (max-width: 1180px) {
   .home-hero-grid,
   .home-main-grid {
     grid-template-columns: 1fr;
@@ -383,22 +383,22 @@
   }
 }
 
-@media (max-width: 56.25em) {
+@media (max-width: 900px) {
   .asset-card {
-    min-height: 13.2rem;
+    min-height: 132px;
   }
 
   .asset-card-content {
-    min-height: 13.2rem;
-    padding: 1.8rem 2rem;
+    min-height: 132px;
+    padding: 18px 20px;
 
     strong {
-      font-size: max(var(--font-size-min), 2.8rem);
+      font-size: 28px;
     }
   }
 
   .period-row {
-    grid-template-columns: 3.6rem minmax(0, 1fr);
+    grid-template-columns: 36px minmax(0, 1fr);
   }
 
   .period-amounts {
@@ -411,34 +411,34 @@
   }
 }
 
-@media (max-width: 35em) {
+@media (max-width: 560px) {
   .home-dashboard {
-    gap: 1.2rem;
+    gap: 12px;
   }
 
   .home-hero-grid,
   .home-main-grid {
-    gap: 1.2rem;
+    gap: 12px;
   }
 
   .daily-card,
   .ranking-card,
   .member-card {
-    padding: 1.6rem;
+    padding: 16px;
   }
 
   .home-card-heading {
     align-items: flex-start;
     flex-direction: column;
-    margin-bottom: 1.4rem;
+    margin-bottom: 14px;
   }
 
   .daily-card {
-    min-height: 36rem;
+    min-height: 360px;
   }
 
   .member-row {
-    grid-template-columns: 3.6rem minmax(0, 1fr);
+    grid-template-columns: 36px minmax(0, 1fr);
   }
 
   .member-amounts {

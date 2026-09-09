@@ -1,56 +1,56 @@
 .menu-config-page {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 16px;
 }
 
 .menu-config-toolbar {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1.6rem;
+  gap: 16px;
 }
 
 .menu-config-layout {
   display: grid;
-  grid-template-columns: minmax(28rem, 36rem) minmax(0, 1fr);
-  gap: 1.6rem;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 16px;
   align-items: start;
 }
 
 .menu-tree-panel,
 .menu-editor-panel {
-  min-height: 52rem;
-  padding: 1.8rem;
+  min-height: 520px;
+  padding: 18px;
 }
 
 .panel-heading {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1.2rem;
-  margin-bottom: 1.6rem;
+  gap: 12px;
+  margin-bottom: 16px;
 
   h3 {
     margin: 0;
     color: #111827;
-    font-size: max(var(--font-size-min), 1.4rem);
+    font-size: 14px;
     font-weight: 650;
   }
 
   span {
     display: block;
-    margin-top: 0.4rem;
+    margin-top: 4px;
     color: #6b7280;
-    font-size: max(var(--font-size-min), 1.2rem);
+    font-size: 12px;
   }
 }
 
 .menu-tree {
   .ant-tree-node-content-wrapper {
-    min-height: 3.4rem;
-    padding: 0.5rem 0.8rem;
-    border-radius: 0.6rem;
+    min-height: 34px;
+    padding: 5px 8px;
+    border-radius: 6px;
   }
 
   .ant-tree-node-selected {
@@ -62,13 +62,13 @@
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 0.8rem;
+  gap: 8px;
 }
 
 .menu-tree-icon {
   display: inline-flex;
-  width: 1.6rem;
-  flex: 0 0 1.6rem;
+  width: 16px;
+  flex: 0 0 16px;
   justify-content: center;
   color: #64748b;
 }
@@ -76,19 +76,19 @@
 .menu-tree-name {
   overflow: hidden;
   color: #1f2937;
-  font-size: max(var(--font-size-min), 1.3rem);
+  font-size: 13px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .menu-edit-form {
-  max-width: 62rem;
+  max-width: 620px;
 }
 
 .menu-form-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 14rem;
-  gap: 1.2rem;
+  grid-template-columns: minmax(0, 1fr) 140px;
+  gap: 12px;
 }
 
 .menu-form-actions {
@@ -96,7 +96,7 @@
   justify-content: flex-end;
 }
 
-@media (max-width: 56.25em) {
+@media (max-width: 900px) {
   .menu-config-toolbar {
     align-items: stretch;
     justify-content: flex-start;
@@ -114,20 +114,20 @@
   .menu-tree-panel,
   .menu-editor-panel {
     min-height: auto;
-    padding: 1.6rem;
+    padding: 16px;
   }
 }
 
-@media (max-width: 40em) {
+@media (max-width: 640px) {
   .menu-config-page {
-    gap: 1.2rem;
+    gap: 12px;
   }
 
   .menu-config-toolbar {
     .ant-space {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.8rem;
+      gap: 8px;
     }
 
     .ant-space-item,
@@ -138,7 +138,7 @@
 
   .menu-tree-panel,
   .menu-editor-panel {
-    padding: 1.2rem;
+    padding: 12px;
   }
 
   .panel-heading {
@@ -160,7 +160,7 @@
   }
 }
 
-@media (max-width: 26.25em) {
+@media (max-width: 420px) {
   .menu-config-toolbar .ant-space {
     grid-template-columns: 1fr;
   }

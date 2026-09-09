@@ -1,18 +1,16 @@
 // 全局样式
 :root {
-  --base: 1920;
   --app-font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     'Noto Sans SC', sans-serif;
-  --font-size-min: 12px;
-  --font-size-mini: max(var(--font-size-min), 1rem);
-  --font-size-xs: max(var(--font-size-min), 1.1rem);
-  --font-size-sm: max(var(--font-size-min), 1.2rem);
-  --font-size-base: max(var(--font-size-min), 1.3rem);
-  --font-size-md: max(var(--font-size-min), 1.4rem);
-  --font-size-lg: max(var(--font-size-min), 1.5rem);
-  --font-size-xl: max(var(--font-size-min), 1.7rem);
-  --font-size-title: max(var(--font-size-min), 1.8rem);
-  --font-size-display: max(var(--font-size-min), 3.2rem);
+  --font-size-mini: 12px;
+  --font-size-xs: 12px;
+  --font-size-sm: 12px;
+  --font-size-base: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 15px;
+  --font-size-xl: 17px;
+  --font-size-title: 18px;
+  --font-size-display: 32px;
   --theme-primary: #ff9a3d;
   --theme-primary-hover: #f58220;
   --theme-primary-deep: #c45b00;
@@ -24,18 +22,8 @@
   --app-bg: #fff7f1;
 }
 
-@media (max-width: 51.75em), (orientation: portrait) {
-  :root {
-    --base: 428;
-  }
-}
-
 * {
   box-sizing: border-box;
-}
-
-html {
-  font-size: calc(10 / var(--base) * 100vw);
 }
 
 html,
@@ -105,27 +93,27 @@ textarea {
   top: 0;
   z-index: 40;
   display: flex;
-  min-height: 7.4rem;
+  min-height: 74px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 0.1rem solid rgba(229, 231, 235, 0.82);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.82);
   background: rgba(255, 255, 255, 0.96);
-  padding: 0 2.8rem 0 2.2rem;
-  backdrop-filter: blur(1.2rem);
+  padding: 0 28px 0 22px;
+  backdrop-filter: blur(12px);
 }
 
 .book-brand {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 1.4rem;
+  gap: 14px;
 }
 
 .book-back,
 .support-button {
   display: inline-flex;
-  width: 3.4rem;
-  height: 3.4rem;
+  width: 34px;
+  height: 34px;
   align-items: center;
   justify-content: center;
   border: 0;
@@ -143,18 +131,18 @@ textarea {
 }
 
 .book-back {
-  border-right: 0.1rem solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
   border-radius: 0;
-  padding-right: 1.8rem;
+  padding-right: 18px;
 }
 
 .book-cover {
   display: grid;
-  width: 4.2rem;
-  height: 4.2rem;
+  width: 42px;
+  height: 42px;
   place-items: center;
-  flex: 0 0 4.2rem;
-  border-radius: 1rem;
+  flex: 0 0 42px;
+  border-radius: 10px;
   background:
     radial-gradient(circle at 72% 28%, rgba(255, 255, 255, 0.75), transparent 23%),
     linear-gradient(135deg, #ffd2a8, #ff9a3d);
@@ -167,7 +155,7 @@ textarea {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 0.8rem;
+  gap: 8px;
 
   strong {
     overflow: hidden;
@@ -181,14 +169,14 @@ textarea {
 
 .book-tag {
   margin-right: 0;
-  border-radius: 0.6rem;
+  border-radius: 6px;
   color: #8a8f99;
 }
 
 .admin-actions {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 12px;
 }
 
 .admin-page-title {
@@ -203,7 +191,7 @@ textarea {
 
 .current-role-tag {
   display: inline-flex;
-  max-width: 14rem;
+  max-width: 140px;
   align-items: center;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -212,12 +200,12 @@ textarea {
 
 .user-trigger {
   display: inline-flex;
-  height: 3.6rem;
+  height: 36px;
   align-items: center;
-  gap: 0.8rem;
-  padding: 0.3rem 0.9rem 0.3rem 0.3rem;
+  gap: 8px;
+  padding: 3px 9px 3px 3px;
   border: 0;
-  border-radius: 1.8rem;
+  border-radius: 18px;
   background: transparent;
   color: #4b5563;
   cursor: pointer;
@@ -231,8 +219,8 @@ textarea {
 
   .user-avatar {
     display: grid;
-    width: 6rem;
-    height: 6rem;
+    width: 60px;
+    height: 60px;
     place-items: center;
     flex: 0 0 auto;
     border-radius: 50%;
@@ -264,22 +252,22 @@ textarea {
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
-  padding: 2.4rem;
+  padding: 24px;
 }
 
 .page-panel {
-  border: 0.1rem solid #e5e7eb;
-  border-radius: 0.8rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   background: #fff;
-  box-shadow: 0 0.1rem 0.2rem rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .ant-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  border-radius: 99.9rem;
+  gap: 6px;
+  border-radius: 999px;
   font-size: var(--font-size-base);
   font-weight: 650;
   box-shadow: none;
@@ -290,7 +278,7 @@ textarea {
 .ant-btn-primary {
   border-color: var(--theme-primary);
   background: var(--theme-primary);
-  box-shadow: 0 0.8rem 1.8rem var(--theme-primary-shadow-soft);
+  box-shadow: 0 8px 18px var(--theme-primary-shadow-soft);
   color: #fff;
   font-weight: 700;
 }
@@ -298,7 +286,7 @@ textarea {
 .ant-btn-primary:not(:disabled):hover {
   border-color: var(--theme-primary-hover);
   background: var(--theme-primary-hover);
-  box-shadow: 0 1rem 2.2rem var(--theme-primary-shadow);
+  box-shadow: 0 10px 22px var(--theme-primary-shadow);
 }
 
 .ant-btn-default:not(:disabled):hover {
@@ -322,7 +310,7 @@ textarea {
 }
 
 .ant-btn-lg {
-  min-height: 4rem;
+  min-height: 40px;
 }
 
 .ant-input,
@@ -360,7 +348,7 @@ textarea {
   max-width: 100%;
 
   .ant-table {
-    border-radius: 0.8rem;
+    border-radius: 8px;
   }
 }
 
@@ -368,7 +356,7 @@ textarea {
   min-width: 0;
 }
 
-@media (max-width: 56.25em) {
+@media (max-width: 900px) {
   #root {
     height: 100svh;
   }
@@ -387,13 +375,13 @@ textarea {
   }
 
   .admin-topbar {
-    min-height: 6rem;
-    padding: 0 1.2rem;
+    min-height: 60px;
+    padding: 0 12px;
 
     .book-cover {
-      width: 3.4rem;
-      height: 3.4rem;
-      flex-basis: 3.4rem;
+      width: 34px;
+      height: 34px;
+      flex-basis: 34px;
       font-size: var(--font-size-xl);
     }
 
@@ -410,7 +398,7 @@ textarea {
 
   .admin-actions {
     width: auto;
-    gap: 0.8rem;
+    gap: 8px;
   }
 
   .admin-page-title {
@@ -418,62 +406,62 @@ textarea {
   }
 
   .current-role-tag {
-    max-width: 12rem;
+    max-width: 120px;
   }
 
   .user-trigger {
-    padding-right: 0.8rem;
+    padding-right: 8px;
   }
 
   .admin-content {
-    padding: 1.6rem 1.6rem calc(8.4rem + env(safe-area-inset-bottom));
+    padding: 16px 16px calc(84px + env(safe-area-inset-bottom));
   }
 }
 
-@media (max-width: 40em) {
+@media (max-width: 640px) {
   .admin-topbar {
-    padding: 0 1rem;
+    padding: 0 10px;
   }
 
   .book-back {
-    width: 2.8rem;
-    padding-right: 1rem;
+    width: 28px;
+    padding-right: 10px;
   }
 
   .user-name {
-    max-width: 9.2rem;
+    max-width: 92px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .admin-content {
-    padding: 1.2rem 1.2rem calc(8.4rem + env(safe-area-inset-bottom));
+    padding: 12px 12px calc(84px + env(safe-area-inset-bottom));
   }
 
   .page-panel {
-    border-radius: 0.6rem;
+    border-radius: 6px;
   }
 
   .ant-btn {
-    min-height: 3.6rem;
-    padding-inline: 1.3rem;
+    min-height: 36px;
+    padding-inline: 13px;
     font-size: var(--font-size-base);
   }
 
   .ant-modal {
-    max-width: calc(100vw - 2.4rem);
-    margin: 1.2rem auto;
+    max-width: calc(100vw - 24px);
+    margin: 12px auto;
   }
 
   .ant-modal-content {
-    padding: 1.6rem !important;
+    padding: 16px !important;
   }
 }
 
-@media (max-width: 26.25em) {
+@media (max-width: 420px) {
   .current-role-tag {
-    max-width: 9.6rem;
+    max-width: 96px;
   }
 
   .user-name {

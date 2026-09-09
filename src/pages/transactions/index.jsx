@@ -33,7 +33,7 @@ import TransactionMobileList from "./mobile-list";
 import TransactionSearchForm from "./search-form";
 
 const dateFormat = DATE_FORMAT;
-const MOBILE_LIST_QUERY = "(max-width: 56.25em)";
+const MOBILE_LIST_QUERY = "(max-width: 900px)";
 
 const Transactions = ({ transactionCategoryField }) => {
   const [transactions, setTransactions] = useState([]);
