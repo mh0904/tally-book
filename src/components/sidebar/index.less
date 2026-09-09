@@ -51,7 +51,7 @@
 
     .nav-icon {
       width: auto;
-      font-size: 1.6rem;
+      font-size: max(var(--font-size-min), 1.6rem);
     }
   }
 }
@@ -73,7 +73,7 @@
   color: var(--theme-primary);
   cursor: pointer;
   font-family: inherit;
-  font-size: 1.6rem;
+  font-size: max(var(--font-size-min), 1.6rem);
   font-weight: 750;
   transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 
@@ -117,7 +117,7 @@
   background: transparent;
   color: #4b5563;
   cursor: pointer;
-  font-size: 1.3rem;
+  font-size: max(var(--font-size-min), 1.3rem);
   font-weight: 500;
   text-align: left;
   transition: background 0.2s ease, color 0.2s ease;
@@ -143,26 +143,26 @@
 .depth-1 {
   min-height: 3.8rem;
   padding-left: 3.6rem;
-  font-size: 1.2rem;
+  font-size: max(var(--font-size-min), 1.2rem);
 }
 
 .depth-2 {
   min-height: 3.6rem;
   padding-left: 5.2rem;
-  font-size: 1.2rem;
+  font-size: max(var(--font-size-min), 1.2rem);
 }
 
 .nav-group-arrow {
   margin-left: auto;
   color: currentColor;
-  font-size: 1.1rem;
+  font-size: max(var(--font-size-min), 1.1rem);
 }
 
 .nav-icon {
   display: inline-flex;
   width: 1.8rem;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: max(var(--font-size-min), 1.5rem);
 }
 
 .nav-label {
@@ -190,7 +190,7 @@
   background: transparent;
   color: #6b7280;
   cursor: pointer;
-  font-size: 1.6rem;
+  font-size: max(var(--font-size-min), 1.6rem);
   transition: background 0.2s ease, color 0.2s ease;
 
   &:hover {
@@ -250,7 +250,7 @@
     color: #8b95a5;
     cursor: pointer;
     font-family: inherit;
-    font-size: 1.1rem;
+    font-size: max(var(--font-size-min), 1.1rem);
     line-height: 1.2;
     transition: color 0.2s ease;
 
@@ -276,7 +276,7 @@
         background: var(--theme-primary);
         box-shadow: 0 1rem 2.2rem var(--theme-primary-shadow);
         color: #fff;
-        font-size: 2.5rem;
+        font-size: max(var(--font-size-min), 2.5rem);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
@@ -289,7 +289,7 @@
     .nav-icon {
       width: auto;
       color: inherit;
-      font-size: 1.9rem;
+      font-size: max(var(--font-size-min), 1.9rem);
       line-height: 1;
     }
 
@@ -298,7 +298,7 @@
       max-width: 100%;
       overflow: hidden;
       color: inherit;
-      font-size: 1.1rem;
+      font-size: max(var(--font-size-min), 1.1rem);
       line-height: 1.2;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -311,7 +311,7 @@
     padding-inline: 0.2rem;
 
     .nav-icon {
-      font-size: 2rem;
+      font-size: max(var(--font-size-min), 2rem);
     }
 
     &.record {
@@ -320,7 +320,7 @@
       .nav-icon {
         width: 5.4rem;
         height: 5.4rem;
-        font-size: 2.4rem;
+        font-size: max(var(--font-size-min), 2.4rem);
       }
     }
   }

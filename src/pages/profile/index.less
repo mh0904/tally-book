@@ -15,10 +15,18 @@
 }
 
 .profile-avatar {
-  flex: 0 0 6.4rem;
+  display: grid;
+  width: 6.4rem;
+  height: 6.4rem;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
   color: #fff;
-  font-size: 2rem;
+  font-size: max(var(--font-size-min), 2rem);
   font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
 }
 
 .profile-info {
@@ -27,7 +35,7 @@
   h2 {
     margin: 0 0 0.8rem;
     color: #111827;
-    font-size: 1.8rem;
+    font-size: max(var(--font-size-min), 1.8rem);
     font-weight: 700;
   }
 }
@@ -55,14 +63,14 @@
 
   strong {
     color: #111827;
-    font-size: 1.3rem;
+    font-size: max(var(--font-size-min), 1.3rem);
     font-weight: 650;
   }
 
   em {
     margin-top: 0.4rem;
     color: #64748b;
-    font-size: 1.2rem;
+    font-size: max(var(--font-size-min), 1.2rem);
     font-style: normal;
     line-height: 1.5;
   }
@@ -76,7 +84,7 @@
   border-radius: 0.8rem;
   background: var(--theme-primary-soft);
   color: var(--theme-primary-deep);
-  font-size: 1.8rem;
+  font-size: max(var(--font-size-min), 1.8rem);
 }
 
 .profile-logout {

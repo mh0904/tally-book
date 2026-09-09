@@ -1,4 +1,4 @@
-import { Avatar, Button, Tag } from 'antd'
+import { Button, Tag } from 'antd'
 import {
   LogoutOutlined,
   SafetyOutlined,
@@ -15,13 +15,12 @@ const Profile = ({
 }) => (
   <div className="profile-page">
     <section className="profile-card">
-      <Avatar
+      <span
         className="profile-avatar"
-        size={64}
         style={{ backgroundColor: avatarColor }}
       >
         {avatarText}
-      </Avatar>
+      </span>
       <div className="profile-info">
         <h2>{userName}</h2>
         <Tag color={currentRole?.id === 'admin' ? 'gold' : 'orange'}>

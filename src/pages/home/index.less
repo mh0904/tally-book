@@ -70,13 +70,13 @@
   }
 
   span {
-    font-size: 1.3rem;
+    font-size: max(var(--font-size-min), 1.3rem);
     font-weight: 650;
   }
 
   strong {
     margin-top: 0.8rem;
-    font-size: 3.2rem;
+    font-size: max(var(--font-size-min), 3.2rem);
     font-weight: 800;
     line-height: 1;
   }
@@ -87,7 +87,7 @@
     align-items: center;
     gap: 1.2rem;
     margin-top: 1.4rem;
-    font-size: 1.2rem;
+    font-size: max(var(--font-size-min), 1.2rem);
   }
 }
 
@@ -118,14 +118,14 @@
 
   strong {
     color: #111827;
-    font-size: 1.5rem;
+    font-size: max(var(--font-size-min), 1.5rem);
     font-weight: 750;
   }
 
   em {
     margin-top: 0.4rem;
     color: #9ca3af;
-    font-size: 1.2rem;
+    font-size: max(var(--font-size-min), 1.2rem);
     font-style: normal;
   }
 }
@@ -138,19 +138,19 @@
   border-radius: 1rem;
   background: #effafa;
   color: #2f9aa0;
-  font-size: 1.6rem;
+  font-size: max(var(--font-size-min), 1.6rem);
 }
 
 .period-amounts {
   display: grid;
   gap: 0.4rem;
   color: #9ca3af;
-  font-size: 1.2rem;
+  font-size: max(var(--font-size-min), 1.2rem);
   text-align: right;
 
   b {
     margin-left: 0.6rem;
-    font-size: 1.4rem;
+    font-size: max(var(--font-size-min), 1.4rem);
   }
 
   .income {
@@ -183,13 +183,13 @@
   h3 {
     margin: 0;
     color: #111827;
-    font-size: 1.6rem;
+    font-size: max(var(--font-size-min), 1.6rem);
     font-weight: 800;
   }
 
   span {
     color: #9ca3af;
-    font-size: 1.2rem;
+    font-size: max(var(--font-size-min), 1.2rem);
   }
 }
 
@@ -220,7 +220,7 @@
 
 .ranking-index {
   color: #9ca3af;
-  font-size: 1.2rem;
+  font-size: max(var(--font-size-min), 1.2rem);
 }
 
 .ranking-icon,
@@ -252,7 +252,7 @@
   strong {
     overflow: hidden;
     color: #111827;
-    font-size: 1.3rem;
+    font-size: max(var(--font-size-min), 1.3rem);
     font-weight: 750;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -260,12 +260,12 @@
 
   span {
     color: #8a8f99;
-    font-size: 1.1rem;
+    font-size: max(var(--font-size-min), 1.1rem);
   }
 
   b {
     color: #374151;
-    font-size: 1.3rem;
+    font-size: max(var(--font-size-min), 1.3rem);
   }
 
   i {
@@ -306,7 +306,7 @@
 .member-row em {
   margin-top: 0.4rem;
   color: #9ca3af;
-  font-size: 1.1rem;
+  font-size: max(var(--font-size-min), 1.1rem);
   font-style: normal;
 }
 
@@ -314,14 +314,14 @@
   display: grid;
   gap: 0.4rem;
   color: #8a8f99;
-  font-size: 1.2rem;
+  font-size: max(var(--font-size-min), 1.2rem);
   text-align: right;
 }
 
 .home-empty {
   margin: 0;
   color: #9ca3af;
-  font-size: 1.2rem;
+  font-size: max(var(--font-size-min), 1.2rem);
 }
 
 .home-quick-grid {
@@ -349,14 +349,14 @@
 
   strong {
     margin-top: 1.2rem;
-    font-size: 1.3rem;
+    font-size: max(var(--font-size-min), 1.3rem);
     font-weight: 750;
   }
 
   em {
     margin-top: 0.6rem;
     color: #8a8f99;
-    font-size: 1.1rem;
+    font-size: max(var(--font-size-min), 1.1rem);
     font-style: normal;
   }
 }
@@ -369,7 +369,7 @@
   border-radius: 1.2rem;
   background: var(--theme-primary-soft);
   color: var(--theme-primary-deep);
-  font-size: 1.8rem;
+  font-size: max(var(--font-size-min), 1.8rem);
 }
 
 @media (max-width: 73.75em) {
@@ -393,7 +393,7 @@
     padding: 1.8rem 2rem;
 
     strong {
-      font-size: 2.8rem;
+      font-size: max(var(--font-size-min), 2.8rem);
     }
   }
 

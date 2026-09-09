@@ -27,7 +27,7 @@
     position: relative;
     padding: 0 0.2rem;
     color: #374151;
-    font-size: 1.4rem;
+    font-size: max(var(--font-size-min), 1.4rem);
     font-weight: 750;
   }
 
@@ -58,7 +58,7 @@
   h2 {
     margin: 0;
     color: #111827;
-    font-size: 1.8rem;
+    font-size: max(var(--font-size-min), 1.8rem);
     font-weight: 850;
   }
 }
@@ -106,20 +106,20 @@
 
   span {
     display: block;
-    font-size: 1.4rem;
+    font-size: max(var(--font-size-min), 1.4rem);
     font-weight: 800;
   }
 
   em {
     display: block;
     margin-top: 2.4rem;
-    font-size: 1.2rem;
+    font-size: max(var(--font-size-min), 1.2rem);
   }
 
   strong {
     display: block;
     margin-top: 0.8rem;
-    font-size: 3.2rem;
+    font-size: max(var(--font-size-min), 3.2rem);
     font-weight: 850;
     line-height: 1;
   }
@@ -129,7 +129,7 @@
     align-items: center;
     gap: 1.2rem;
     margin: 2rem 0 0;
-    font-size: 1.2rem;
+    font-size: max(var(--font-size-min), 1.2rem);
   }
 
   i {
@@ -173,13 +173,13 @@
   h3 {
     margin: 0;
     color: #111827;
-    font-size: 1.6rem;
+    font-size: max(var(--font-size-min), 1.6rem);
     font-weight: 850;
   }
 
   span {
     color: #9ca3af;
-    font-size: 1.2rem;
+    font-size: max(var(--font-size-min), 1.2rem);
   }
 }
 
@@ -205,7 +205,7 @@
   strong {
     overflow: hidden;
     color: #111827;
-    font-size: 1.3rem;
+    font-size: max(var(--font-size-min), 1.3rem);
     font-weight: 750;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -247,7 +247,7 @@
 
   b {
     color: #4b5563;
-    font-size: 1.4rem;
+    font-size: max(var(--font-size-min), 1.4rem);
   }
 }
 
@@ -302,7 +302,7 @@
   }
 
   .report-asset-card strong {
-    font-size: 2.8rem;
+    font-size: max(var(--font-size-min), 2.8rem);
   }
 
   .report-card {

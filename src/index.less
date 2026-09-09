@@ -3,15 +3,16 @@
   --base: 1920;
   --app-font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     'Noto Sans SC', sans-serif;
-  --font-size-mini: 1rem;
-  --font-size-xs: 1.1rem;
-  --font-size-sm: 1.2rem;
-  --font-size-base: 1.3rem;
-  --font-size-md: 1.4rem;
-  --font-size-lg: 1.5rem;
-  --font-size-xl: 1.7rem;
-  --font-size-title: 1.8rem;
-  --font-size-display: 3.2rem;
+  --font-size-min: 12px;
+  --font-size-mini: max(var(--font-size-min), 1rem);
+  --font-size-xs: max(var(--font-size-min), 1.1rem);
+  --font-size-sm: max(var(--font-size-min), 1.2rem);
+  --font-size-base: max(var(--font-size-min), 1.3rem);
+  --font-size-md: max(var(--font-size-min), 1.4rem);
+  --font-size-lg: max(var(--font-size-min), 1.5rem);
+  --font-size-xl: max(var(--font-size-min), 1.7rem);
+  --font-size-title: max(var(--font-size-min), 1.8rem);
+  --font-size-display: max(var(--font-size-min), 3.2rem);
   --theme-primary: #ff9a3d;
   --theme-primary-hover: #f58220;
   --theme-primary-deep: #c45b00;
@@ -229,11 +230,18 @@ textarea {
   }
 
   .user-avatar {
-    flex: 0 0 3rem;
+    display: grid;
+    width: 6rem;
+    height: 6rem;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 50%;
     color: #fff;
     font-size: var(--font-size-base);
     font-weight: 700;
-    line-height: 3rem;
+    line-height: 1;
+    text-transform: uppercase;
+    user-select: none;
   }
 
   .user-name {

@@ -10,7 +10,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom'
-import { Avatar, ConfigProvider, Dropdown, Tag, message } from 'antd'
+import { ConfigProvider, Dropdown, Tag, message } from 'antd'
 import {
   ArrowLeftOutlined,
   DownOutlined,
@@ -615,13 +615,12 @@ const App = () => {
             trigger={['click']}
           >
             <button className="user-trigger" type="button">
-              <Avatar
+              <span
                 className="user-avatar"
-                size={30}
                 style={{ backgroundColor: avatarColor }}
               >
                 {avatarText}
-              </Avatar>
+              </span>
               <span className="user-name">{userName}</span>
               <DownOutlined className="user-caret" />
             </button>
